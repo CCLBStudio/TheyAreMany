@@ -69,26 +69,15 @@ public class PlayerJumper : MonoBehaviour, IPlayerBehaviour
     
     private void FixedUpdate()
     {
-        foreach (var effect in jumpEffects)
+        TriggerFixedUpdateCallback();
+
+        if(RequireApexReachedCallback())
         {
-            effect.OnFixedUpdate(this);
+            _reachedApex = true;
+            TriggerApexReachCallback();
         }
-
-        if(IsJumping)
-        {
-            Vector2 dir = movementRb.position - (Vector2)_previousPosition;
-
-            if (dir.y < 0f && !_reachedApex)
-            {
-                _reachedApex = true;
-                foreach (var effect in jumpEffects)
-                {
-                    effect.ApexReached(this);
-                }
-            }
-
-            _previousPosition = movementRb.position;
-        }
+        
+        _previousPosition = movementRb.position;
     }
 
     #endregion
@@ -153,6 +142,33 @@ public class PlayerJumper : MonoBehaviour, IPlayerBehaviour
         foreach (var effect in jumpEffects)
         {
             effect.ChargingJump(this);
+        }
+    }
+
+    private bool RequireApexReachedCallback()
+    {
+        if (!IsJumping || _reachedApex)
+        {
+            return false;
+        }
+        
+        Vector2 dir = movementRb.position - (Vector2)_previousPosition;
+        return dir.y < 0f && !_reachedApex;
+    }
+
+    private void TriggerApexReachCallback()
+    {
+        foreach (var effect in jumpEffects)
+        {
+            effect.ApexReached(this);
+        }
+    }
+
+    private void TriggerFixedUpdateCallback()
+    {
+        foreach (var effect in jumpEffects)
+        {
+            effect.OnFixedUpdate(this);
         }
     }
 

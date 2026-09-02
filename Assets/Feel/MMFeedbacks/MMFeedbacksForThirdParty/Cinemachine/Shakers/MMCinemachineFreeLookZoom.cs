@@ -12,7 +12,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// <summary>
 	/// This class will allow you to trigger zooms on your cinemachine camera by sending MMCameraZoomEvents from any other class
 	/// </summary>
-	[AddComponentMenu("More Mountains/Feedbacks/Shakers/Cinemachine/MMCinemachineFreeLookZoom")]
+	[AddComponentMenu("More Mountains/Feedbacks/Shakers/Cinemachine/MM Cinemachine Free Look Zoom")]
 	#if MM_CINEMACHINE
 	[RequireComponent(typeof(Cinemachine.CinemachineFreeLook))]
 	#elif MM_CINEMACHINE3
@@ -86,7 +86,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 		protected float _zoomStartedAt = 0f;
 
 		/// <summary>
-		/// On Awake we grab our virtual camera
+		/// On Awake we grab our CM camera
 		/// </summary>
 		protected virtual void Awake()
 		{

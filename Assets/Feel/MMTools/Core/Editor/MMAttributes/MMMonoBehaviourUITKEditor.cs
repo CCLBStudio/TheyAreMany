@@ -34,7 +34,9 @@ namespace MoreMountains.Tools
 		public StyleSheet EditorStyleSheet;
 		
 		public bool DrawerInitialized;
+		[System.NonSerialized]
 		public Dictionary<string, MMInspectorGroupData> GroupData ;
+		[System.NonSerialized]
 		public List<SerializedProperty> PropertiesList;
 		private bool _requiresConstantRepaint;
 		private bool _requiresConstantRepaintOnlyWhenPlaying;
@@ -42,6 +44,8 @@ namespace MoreMountains.Tools
 		private bool _targetMonoBehaviourIsNotNull;
 		protected bool _shouldDrawBase = true;
 		protected string _targetTypeName;
+		private string[] _mmHiddenPropertiesToHide;
+		private bool _hasMMHiddenProperties = false;
 
 		public override bool RequiresConstantRepaint()
 		{
@@ -55,9 +59,6 @@ namespace MoreMountains.Tools
 			}
 		}
 		
-		private string[] _mmHiddenPropertiesToHide;
-		private bool _hasMMHiddenProperties = false;
-
 		protected virtual void Initialization()
 		{
 			if (DrawerInitialized && PropertiesList != null)
@@ -77,7 +78,7 @@ namespace MoreMountains.Tools
 			}
 			
 			_requiresConstantRepaint = serializedObject.targetObject.GetType().GetCustomAttribute<MMRequiresConstantRepaintAttribute>() != null;
-			_requiresConstantRepaintOnlyWhenPlaying = serializedObject.targetObject.GetType().GetCustomAttribute<MMRequiresConstantRepaintOnlyWhenPlayingAttribute>() != null;
+			_requiresConstantRepaintOnlyWhenPlaying = serializedObject.targetObject.GetType().GetCustomAttribute<MMRequiresConstantRepaintOnlyWhenPlayingAttribute>() != null; 
 			
 			List<FieldInfo> fieldInfoList;
 			MMInspectorGroupAttribute previousGroupAttribute = default;
@@ -117,7 +118,7 @@ namespace MoreMountains.Tools
 				{
 					bool fallbackOpenState = true;
 					if (group.ClosedByDefault) { fallbackOpenState = false; }
-					bool groupIsOpen = EditorPrefs.GetBool(string.Format($"{group.GroupName}{fieldInfoList[i].Name}{target.GetInstanceID()}"), fallbackOpenState);
+					bool groupIsOpen = EditorPrefs.GetBool(string.Format($"{group.GroupName}{fieldInfoList[i].Name}{target.GetEntityId()}"), fallbackOpenState);
 					GroupData.Add(group.GroupName, new MMInspectorGroupData
 					{
 						GroupAttribute = group,

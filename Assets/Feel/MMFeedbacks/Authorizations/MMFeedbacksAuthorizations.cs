@@ -194,7 +194,7 @@ namespace MoreMountains.Feedbacks
 		[MMInspectorGroup("TextMesh Pro", true, 30)] [MMInspectorButton("ToggleTextMeshPro")]
 		public bool ToggleTextMeshProButton;
 
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		public bool TMPAlpha = true;
 		public bool TMPCharacterSpacing = true;
 		public bool TMPColor = true;
@@ -397,7 +397,7 @@ namespace MoreMountains.Feedbacks
 			VideoPlayer = !VideoPlayer;
 		}
 		
-		#if (MM_TEXTMESHPRO || MM_UGUI2)
+		#if MM_UGUI2
 		private void ToggleTextMeshPro()
 		{
 			TMPAlpha = !TMPAlpha;
@@ -461,15 +461,18 @@ namespace MoreMountains.Feedbacks
 			MMF_Events.FeedbackTypeAuthorized = UnityEvents;
 			MMF_Broadcast.FeedbackTypeAuthorized = Broadcast;
 			MMF_Collider.FeedbackTypeAuthorized = Collider;
-			MMF_Collider2D.FeedbackTypeAuthorized = Collider2D;
 			MMF_Destroy.FeedbackTypeAuthorized = DestroyTargetObject;
 			MMF_Enable.FeedbackTypeAuthorized = EnableBehaviour;
 			MMF_FloatController.FeedbackTypeAuthorized = FloatController;
 			MMF_InstantiateObject.FeedbackTypeAuthorized = InstantiateObject;
 			MMF_RadioSignal.FeedbackTypeAuthorized = MMRadioSignal;
 			MMF_Rigidbody.FeedbackTypeAuthorized = Rigidbody;
-			MMF_Rigidbody2D.FeedbackTypeAuthorized = Rigidbody2D;
 			MMF_SetActive.FeedbackTypeAuthorized = SetActive;
+			
+			#if MM_PHYSICS2D
+			MMF_Collider2D.FeedbackTypeAuthorized = Collider2D;
+			MMF_Rigidbody2D.FeedbackTypeAuthorized = Rigidbody2D;
+			#endif
 		  
 			#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 			MMF_Haptics.FeedbackTypeAuthorized = HapticClip;
@@ -517,7 +520,11 @@ namespace MoreMountains.Feedbacks
 			MMF_RectTransformOffset.FeedbackTypeAuthorized = RectTransformOffset;
 			MMF_RectTransformPivot.FeedbackTypeAuthorized = RectTransformPivot;
 			MMF_RectTransformSizeDelta.FeedbackTypeAuthorized = RectTransformSizeDelta;
+			
+			
+			#if !UNITY_WEBGL
 			MMF_VideoPlayer.FeedbackTypeAuthorized = VideoPlayer;
+			#endif
 			
 			#if MM_UI
 			MMF_ShaderController.FeedbackTypeAuthorized = ShaderController;
@@ -565,7 +572,7 @@ namespace MoreMountains.Feedbacks
 			MMF_Vignette_URP.FeedbackTypeAuthorized = Vignette;
 			#endif
 			
-			#if (MM_TEXTMESHPRO || MM_UGUI2)
+			#if MM_UGUI2
 			MMF_TMPAlpha.FeedbackTypeAuthorized = TMPAlpha;
 			MMF_TMPCharacterSpacing.FeedbackTypeAuthorized = TMPCharacterSpacing;
 			MMF_TMPColor.FeedbackTypeAuthorized = TMPColor;

@@ -11,6 +11,7 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback allows you to destroy a target gameobject, either via Destroy, DestroyImmediate, or SetActive:False")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("GameObject/Destroy")]
 	public class MMF_Destroy : MMF_Feedback
 	{
@@ -55,9 +56,12 @@ namespace MoreMountains.Feedbacks
 				return;
 			}
 			ProceedWithDestruction(TargetGameObject);
-			foreach (GameObject go in ExtraTargetGameObjects)
+			if (ExtraTargetGameObjects != null)
 			{
-				ProceedWithDestruction(go);
+				foreach (GameObject go in ExtraTargetGameObjects)
+				{
+					ProceedWithDestruction(go);
+				}	
 			}
 		}
         

@@ -102,15 +102,44 @@ namespace MoreMountains.Tools
 			emitter.Level = returnValue;
 			return returnValue;
 		}
+		
+		public override float GetLevel(MMPropertyReceiver receiver, MMProperty property)
+		{
+			_vector4 = _getterSetterInitialized ? GetVector4Delegate() : (Vector4)GetPropertyValue(property);
+
+			float newValue = 0f;
+
+			if (receiver.ModifyX)
+			{
+				newValue = _vector4.x;
+			}
+			else if (receiver.ModifyY)
+			{
+				newValue = _vector4.y;
+			}
+			else if (receiver.ModifyZ)
+			{
+				newValue = _vector4.z;
+			}
+			else if (receiver.ModifyW)
+			{
+				newValue = _vector4.w;
+			}
+
+			float returnValue = newValue;
+			returnValue = MMMaths.Remap(returnValue, receiver.FloatRemapZero, receiver.FloatRemapOne, 0f, 1f);
+
+			return returnValue;
+		}
 
 		public override void SetLevel(MMPropertyReceiver receiver, MMProperty property, float level)
 		{
 			base.SetLevel(receiver, property, level);
 
-			_newValue.x = receiver.ModifyX ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.x, receiver.Vector4RemapOne.x) : 0f;
-			_newValue.y = receiver.ModifyY ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.y, receiver.Vector4RemapOne.y) : 0f;
-			_newValue.z = receiver.ModifyZ ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.z, receiver.Vector4RemapOne.z) : 0f;
-			_newValue.w = receiver.ModifyW ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.w, receiver.Vector4RemapOne.w) : 0f;
+			_newValue.x = receiver.ModifyX ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.x, receiver.Vector4RemapOne.x) : _initialValue.x;
+			_newValue.y = receiver.ModifyY ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.y, receiver.Vector4RemapOne.y) : _initialValue.y;
+			_newValue.z = receiver.ModifyZ ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.z, receiver.Vector4RemapOne.z) : _initialValue.z;
+			_newValue.w = receiver.ModifyW ? MMMaths.Remap(level, 0f, 1f, receiver.Vector4RemapZero.w, receiver.Vector4RemapOne.w) : _initialValue.w;
 
 			if (receiver.RelativeValue)
 			{

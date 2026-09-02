@@ -1,5 +1,10 @@
 ﻿using MoreMountains.FeedbacksForThirdParty;
 using MoreMountains.Tools;
+#if MM_CINEMACHINE
+using Cinemachine;
+#elif MM_CINEMACHINE3
+using Unity.Cinemachine;
+#endif
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -10,6 +15,7 @@ namespace MoreMountains.Feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Camera/Field of View")]
 	[FeedbackHelp(
 		"This feedback lets you control a camera's field of view over time. You'll need a MMCameraFieldOfViewShaker on your camera.")]
@@ -126,23 +132,23 @@ namespace MoreMountains.Feedbacks
 			bool virtualCameraFound = false;
 			#endif
 			
-			#if MMCINEMACHINE 
+			#if MM_CINEMACHINE 
 				CinemachineVirtualCamera virtualCamera = (CinemachineVirtualCamera)Object.FindObjectOfType(typeof(CinemachineVirtualCamera));
 				virtualCameraFound = (virtualCamera != null);
-			#elif MMCINEMACHINE3
-				CinemachineCamera virtualCamera = (CinemachineCamera)Object.FindObjectOfType(typeof(CinemachineCamera));
+			#elif MM_CINEMACHINE3
+				CinemachineCamera virtualCamera = (CinemachineCamera)Object.FindAnyObjectByType(typeof(CinemachineCamera), FindObjectsInactive.Include);
 				virtualCameraFound = (virtualCamera != null);
 			#endif
 			
 			#if MM_CINEMACHINE || MM_CINEMACHINE3
 			if (virtualCameraFound)
 			{
-				MMCinemachineHelpers.AutomaticCinemachineShakersSetup(Owner, "CinemachineImpulse");
+				MMCinemachineHelpers.AutomaticCinemachineShakersSetup(Owner, "FieldOfView");
 				return;
 			}
 			#endif
 			
-			MMCameraFieldOfViewShaker fieldOfViewShaker = (MMCameraFieldOfViewShaker)Object.FindObjectOfType(typeof(MMCameraFieldOfViewShaker));
+			MMCameraFieldOfViewShaker fieldOfViewShaker = (MMCameraFieldOfViewShaker)Object.FindAnyObjectByType(typeof(MMCameraFieldOfViewShaker));
 			if (fieldOfViewShaker != null)
 			{
 				return;

@@ -86,6 +86,7 @@ namespace MoreMountains.Tools
 		public string CurrentSongName;
 		/// the current state of this playlist
 		[MMReadOnly]
+		[System.NonSerialized]
 		public MMStateMachine<PlaylistManagerStates> PlaylistManagerState;
 		
 		/// the time of the currently playing song
@@ -186,6 +187,7 @@ namespace MoreMountains.Tools
 		protected float _lastTestVolumeControl = 1f;
 		protected float _lastTestPlaybackSpeedControl = 1f;
 		internal bool _listeningToEvents = false;
+		protected bool _initialized = false;
 
 		#region INITIALIZATION
 
@@ -199,7 +201,7 @@ namespace MoreMountains.Tools
 				{
 					if (_instance == null)
 					{
-						_instance = FindObjectOfType<MMSMPlaylistManager> ();
+						_instance = FindAnyObjectByType<MMSMPlaylistManager>();
 						if (_instance == null)
 						{
 							GameObject obj = new GameObject ();
@@ -282,6 +284,7 @@ namespace MoreMountains.Tools
 				InitializeRandomSeed();
 				Playlist.Initialization();
 				InitializePlaylistManagerState();
+				_initialized = true;
 			}
 
 			/// <summary>
@@ -328,6 +331,14 @@ namespace MoreMountains.Tools
 			/// </summary>
 			protected virtual void Update()
 			{
+				if (AudioListener.pause)
+				{
+					return;
+				}
+				if (MMSoundManager.Instance.IsPaused(Playlist.Track))
+				{
+					return;
+				}
 				if (PlaylistManagerState.CurrentState == PlaylistManagerStates.Idle)
 				{
 					this.enabled = false;
@@ -385,6 +396,10 @@ namespace MoreMountains.Tools
 				{
 					if (FadeIn && FadeOut && (CurrentTimeLeft < FadeDuration))
 					{
+						if (FadeOut)
+						{
+							Stop();	
+						}
 						HandleNextSong(1, false);
 					}
 					return;
@@ -439,7 +454,6 @@ namespace MoreMountains.Tools
 			}
 
 		#endregion
-		
 		
 		#region CONTROLS
 		
@@ -764,6 +778,7 @@ namespace MoreMountains.Tools
 			protected virtual void OnMMPlaylistVolumeMultiplierEvent(int channel, float newVolumeMultiplier, bool applyVolumeMultiplierInstantly = false)
 			{
 				if (channel != Channel) { return; }
+				if (CurrentSongIndex < 0) { return; }
 				VolumeMultiplier = newVolumeMultiplier;
 				if (applyVolumeMultiplierInstantly)
 				{
@@ -774,6 +789,7 @@ namespace MoreMountains.Tools
 			protected virtual void OnMMPlaylistPitchMultiplierEvent(int channel, float newPitchMultiplier, bool applyPitchMultiplierInstantly = false)
 			{
 				if (channel != Channel) { return; }
+				if (CurrentSongIndex < 0) { return; }
 				PitchMultiplier = newPitchMultiplier;
 				if (applyPitchMultiplierInstantly)
 				{
@@ -843,6 +859,11 @@ namespace MoreMountains.Tools
 			protected virtual void OnApplicationPause(bool pauseStatus)
 			{
 				if (!AutoHandleApplicationPause)
+				{
+					return;
+				}
+
+				if (!_initialized)
 				{
 					return;
 				}

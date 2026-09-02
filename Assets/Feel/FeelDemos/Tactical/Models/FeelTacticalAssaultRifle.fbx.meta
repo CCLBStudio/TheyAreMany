@@ -1,12 +1,5 @@
 fileFormatVersion: 2
 guid: 29093db279d5d0540b9a25a9d7355362
-AssetOrigin:
-  serializedVersion: 1
-  productId: 183370
-  packageName: Feel
-  packageVersion: 4.3
-  assetPath: Assets/Feel/FeelDemos/Tactical/Models/FeelTacticalAssaultRifle.fbx
-  uploadId: 689191
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -112,3 +105,10 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 183370
+  packageName: Feel
+  packageVersion: 6.1
+  assetPath: Assets/Feel/FeelDemos/Tactical/Models/FeelTacticalAssaultRifle.fbx
+  uploadId: 985420

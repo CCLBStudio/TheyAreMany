@@ -45,6 +45,9 @@ I'd be happy to see any effects used in your project, so feel free to drop me a 
 
 UPDATE NOTES
 ------------
+1.8.1
+- Fixed errors in Unity 6.2+
+
 1.8.04
 - Removed 'JMOAssets.dll', became obsolete with the Asset Store update notification system
 

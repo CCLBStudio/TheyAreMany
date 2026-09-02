@@ -11,6 +11,7 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you control the texture scale of a target material over time.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Texture Scale")]
 	public class MMF_TextureScale : MMF_Feedback
 	{
@@ -93,6 +94,12 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			
+			if (!TargetExists(TargetRenderer, nameof(TargetRenderer)))
+			{
+				return;
+			}
+			
 			if (UseMaterialPropertyBlocks)
 			{
 				_propertyBlock = new MaterialPropertyBlock();
@@ -119,13 +126,25 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
+
+			if (TargetRenderer == null)
+			{
+				return;
+			}
             
 			float intensityMultiplier = ComputeIntensity(feedbacksIntensity, position);
             
 			switch (Mode)
 			{
-				case Modes.Instant:      
-					ApplyValue(InstantScale * intensityMultiplier);
+				case Modes.Instant:
+					if (NormalPlayDirection)
+					{
+						ApplyValue(InstantScale * intensityMultiplier);	
+					}
+					else
+					{
+						ApplyValue(_initialValue);
+					}
 					break;
 				case Modes.OverTime:
 					if (!AllowAdditivePlays && (_coroutine != null))
@@ -156,7 +175,7 @@ namespace MoreMountains.Feedbacks
 				yield return null;
 			}
 			SetMaterialValues(FinalNormalizedTime, intensityMultiplier);
-			IsPlaying = true;
+			IsPlaying = false;
 			_coroutine = null;
 			yield return null;
 		}

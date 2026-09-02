@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1790f84a4a5a54575b17d67f83745807, type: 3}
+  m_Name: ScreenViewService
+  m_EditorClassIdentifier: 
+  screenViewPrefabs: []
+  uiContainers:
+    initialPairs:
+    - key: Main
+      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b, type: 3}
+    debugDisplay:
+    - key: Main
+      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b, type: 3}
+  defaultClickSound: {fileID: 8300000, guid: ebbdf343834382d46ac306569de41222, type: 3}

@@ -23,7 +23,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 			
 			#if MM_CINEMACHINE 
 				//looks for a Cinemachine Brain in the scene
-				CinemachineBrain cinemachineBrain = (CinemachineBrain)Object.FindObjectOfType(typeof(CinemachineBrain));
+				CinemachineBrain cinemachineBrain = (CinemachineBrain)Object.FindAnyObjectByType(typeof(CinemachineBrain));
 				if (cinemachineBrain == null)
 				{
 					cinemachineBrain = Camera.main.gameObject.AddComponent<CinemachineBrain>();
@@ -31,7 +31,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 				}
 			
 				// looks for a vcam in the scene
-				CinemachineVirtualCamera virtualCamera = (CinemachineVirtualCamera)Object.FindObjectOfType(typeof(CinemachineVirtualCamera));
+				CinemachineVirtualCamera virtualCamera = (CinemachineVirtualCamera)Object.FindAnyObjectByType(typeof(CinemachineVirtualCamera));
 				if (virtualCamera == null)
 				{
 					GameObject newVirtualCamera = new GameObject("CinemachineVirtualCamera");
@@ -52,14 +52,14 @@ namespace MoreMountains.FeedbacksForThirdParty
 			}
 			#elif MM_CINEMACHINE3
 				//looks for a Cinemachine Brain in the scene
-				CinemachineBrain cinemachineBrain = (CinemachineBrain)Object.FindObjectOfType(typeof(CinemachineBrain));
+				CinemachineBrain cinemachineBrain = (CinemachineBrain)Object.FindAnyObjectByType(typeof(CinemachineBrain));
 				if (cinemachineBrain == null)
 				{
 					cinemachineBrain = Camera.main.gameObject.AddComponent<CinemachineBrain>();
 					additions += "Added a Cinemachine Brain to the scene. ";
 				}
 				// looks for a vcam in the scene
-				CinemachineCamera virtualCamera = (CinemachineCamera)Object.FindObjectOfType(typeof(CinemachineCamera));
+				CinemachineCamera virtualCamera = (CinemachineCamera)Object.FindAnyObjectByType(typeof(CinemachineCamera));
 				if (virtualCamera == null)
 				{
 					GameObject newVirtualCamera = new GameObject("CinemachineCamera");
@@ -78,6 +78,21 @@ namespace MoreMountains.FeedbacksForThirdParty
 					impulseListener = virtualCamera.gameObject.AddComponent<CinemachineImpulseListener>();
 					additions += "Added an impulse listener. ";
 				}
+				switch (feedbackName)
+				{
+					case "CameraZoom":
+						virtualCameraGo.MMGetOrAddComponent<MMCinemachineZoom>();
+						break;
+					case "FieldOfView":
+						virtualCameraGo.MMGetOrAddComponent<MMCinemachineFieldOfViewShaker>();
+						break;
+					case "OrthographicSize":
+						virtualCameraGo.MMGetOrAddComponent<MMCinemachineOrthographicSizeShaker>();
+						break;
+					case "Dutch":
+						virtualCameraGo.MMGetOrAddComponent<MMCinemachineDutchShaker>();
+						break;
+				}
 			#endif
 
 			#if MM_CINEMACHINE || MM_CINEMACHINE3
@@ -88,6 +103,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 				virtualCameraGo.MMGetOrAddComponent<MMCinemachinePriorityListener>();
 				virtualCameraGo.MMGetOrAddComponent<MMCinemachineClippingPlanesShaker>();
 				virtualCameraGo.MMGetOrAddComponent<MMCinemachineFieldOfViewShaker>();	
+				virtualCameraGo.MMGetOrAddComponent<MMCinemachineDutchShaker>();	
 				additions += "Added camera shaker, zoom, priority listener, clipping planes shaker and field of view shaker to the Cinemachine Camera. ";
 			}
 			

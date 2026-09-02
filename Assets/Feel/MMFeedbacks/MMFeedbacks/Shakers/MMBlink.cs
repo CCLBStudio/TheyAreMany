@@ -40,7 +40,7 @@ namespace MoreMountains.Feedbacks
 	/// <summary>
 	/// Add this class to a GameObject to make it blink, either by enabling/disabling a gameobject, changing its alpha, emission intensity, or a value on a shader)
 	/// </summary>
-	[AddComponentMenu("More Mountains/Feedbacks/Shakers/Various/MMBlink")]
+	[AddComponentMenu("More Mountains/Feedbacks/Shakers/Various/MM Blink")]
 	public class MMBlink : MMMonoBehaviour
 	{
 		/// the possible states of the blinking object
@@ -294,58 +294,62 @@ namespace MoreMountains.Feedbacks
 					break;
 				case Methods.MaterialAlpha:
 					_currentColor.a = value;
-					ApplyCurrentColor(TargetRenderer);
+					ApplyCurrentColor(TargetRenderer, MaterialIndex);
 					for (var index = 0; index < ExtraRenderers.Count; index++)
 					{
 						var blinkRenderer = ExtraRenderers[index];
-						ApplyCurrentColor(blinkRenderer.TargetRenderer);
+						ApplyCurrentColor(blinkRenderer.TargetRenderer, blinkRenderer.TargetMaterialIndex);
 					}
 					break;
 				case Methods.MaterialEmissionIntensity:
 					_currentColor = _initialColor * value;
-					ApplyCurrentColor(TargetRenderer);
+					ApplyCurrentColor(TargetRenderer, MaterialIndex);
 					for (var index = 0; index < ExtraRenderers.Count; index++)
 					{
 						var blinkRenderer = ExtraRenderers[index];
-						ApplyCurrentColor(blinkRenderer.TargetRenderer);
+						ApplyCurrentColor(blinkRenderer.TargetRenderer, blinkRenderer.TargetMaterialIndex);
 					}
 					break;
 				case Methods.ShaderFloatValue:
-					ApplyFloatValue(TargetRenderer, value);
+					ApplyFloatValue(TargetRenderer, value, MaterialIndex);
 					for (var index = 0; index < ExtraRenderers.Count; index++)
 					{
 						var blinkRenderer = ExtraRenderers[index];
-						ApplyFloatValue(blinkRenderer.TargetRenderer, value);
+						ApplyFloatValue(blinkRenderer.TargetRenderer, value, blinkRenderer.TargetMaterialIndex);
 					}
 					break;
 			}
 		}
 
-		protected virtual void ApplyFloatValue(Renderer targetRenderer, float value)
+		protected virtual void ApplyFloatValue(Renderer targetRenderer, float value, int materialIndex)
 		{
+			if (targetRenderer == null) return;
 			if (UseMaterialPropertyBlocks)
 			{
-				targetRenderer.GetPropertyBlock(_propertyBlock, MaterialIndex);
+				if (_propertyBlock == null) _propertyBlock = new MaterialPropertyBlock();
+				targetRenderer.GetPropertyBlock(_propertyBlock, materialIndex);
 				_propertyBlock.SetFloat(_propertyID, value);
 				targetRenderer.SetPropertyBlock(_propertyBlock);
 			}
 			else
 			{
-				targetRenderer.materials[MaterialIndex].SetFloat(_propertyID, value); 
+				targetRenderer.materials[materialIndex].SetFloat(_propertyID, value); 
 			}
 		}
 
-		protected virtual void ApplyCurrentColor(Renderer targetRenderer)
+		protected virtual void ApplyCurrentColor(Renderer targetRenderer, int materialIndex)
 		{
+			if (targetRenderer == null) return;
 			if (UseMaterialPropertyBlocks)
 			{
-				targetRenderer.GetPropertyBlock(_propertyBlock, MaterialIndex);
+				if (_propertyBlock == null) _propertyBlock = new MaterialPropertyBlock();
+				targetRenderer.GetPropertyBlock(_propertyBlock, materialIndex);
 				_propertyBlock.SetColor(_propertyID, _currentColor);
 				targetRenderer.SetPropertyBlock(_propertyBlock);
 			}
 			else
 			{
-				targetRenderer.materials[MaterialIndex].SetColor(_propertyID, _currentColor);    
+				targetRenderer.materials[materialIndex].SetColor(_propertyID, _currentColor);    
 			}
 		}
 
@@ -455,6 +459,11 @@ namespace MoreMountains.Feedbacks
 			_currentPhaseStartedAt = GetTime();
 			CurrentPhaseIndex = 0;
 			_repeatCount = RepeatCount;
+
+			if (_propertyBlock == null)
+			{
+				_propertyBlock = new MaterialPropertyBlock();
+			}
 
 			float value = 1f;
 			if (Method == Methods.ShaderFloatValue)

@@ -11,6 +11,7 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you control the texture offset of a target material over time.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Texture Offset")]
 	public class MMF_TextureOffset : MMF_Feedback
 	{
@@ -93,6 +94,11 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			
+			if (!TargetExists(TargetRenderer, nameof(TargetRenderer)))
+			{
+				return;
+			}
             
 			if (UseMaterialPropertyBlocks)
 			{
@@ -120,13 +126,25 @@ namespace MoreMountains.Feedbacks
 			{
 				return;
 			}
+
+			if (TargetRenderer == null)
+			{
+				return;
+			}
             
 			float intensityMultiplier = ComputeIntensity(feedbacksIntensity, position);
             
 			switch (Mode)
 			{
 				case Modes.Instant:
-					ApplyValue(InstantOffset * intensityMultiplier);
+					if (NormalPlayDirection)
+					{
+						ApplyValue(InstantOffset * intensityMultiplier);	
+					}
+					else
+					{
+						ApplyValue(_initialValue);
+					}
 					break;
 				case Modes.OverTime:
 					if (!AllowAdditivePlays && (_coroutine != null))

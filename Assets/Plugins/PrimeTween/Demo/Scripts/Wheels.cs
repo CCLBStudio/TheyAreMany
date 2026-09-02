@@ -1,15 +1,16 @@
-#if PRIME_TWEEN_INSTALLED
+#if PRIME_TWEEN_INSTALLED && UNITY_UGUI_INSTALLED
 using PrimeTween;
 using UnityEngine;
 
 namespace PrimeTweenDemo {
     public class Wheels : Animatable {
+        [SerializeField] Demo demo;
         [SerializeField] Transform[] wheels;
         bool isAnimating;
         Sequence sequence;
 
         public override void OnClick() {
-            Demo.instance.AnimateAll(!isAnimating);
+            demo.AnimateAll(!isAnimating);
         }
 
         public override Sequence Animate(bool _isAnimating) {

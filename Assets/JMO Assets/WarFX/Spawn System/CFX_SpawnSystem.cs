@@ -24,7 +24,11 @@ public class CFX_SpawnSystem : MonoBehaviour
 	/// </param>
 	static public GameObject GetNextObject(GameObject sourceObj, bool activateObject = true)
 	{
+#if UNITY_6000_2_OR_NEWER
+		int uniqueId = sourceObj.GetEntityId().GetHashCode();
+#else
 		int uniqueId = sourceObj.GetInstanceID();
+#endif
 		
 		if(!instance.poolCursors.ContainsKey(uniqueId))
 		{
@@ -133,7 +137,11 @@ public class CFX_SpawnSystem : MonoBehaviour
 	
 	private void addObjectToPool(GameObject sourceObject, int number)
 	{
+#if UNITY_6000_2_OR_NEWER
+		int uniqueId = sourceObject.GetEntityId().GetHashCode();
+#else
 		int uniqueId = sourceObject.GetInstanceID();
+#endif
 
 		//Add new entry if it doesn't exist
 		if(!instantiatedObjects.ContainsKey(uniqueId))
@@ -174,7 +182,11 @@ public class CFX_SpawnSystem : MonoBehaviour
 	
 	private void removeObjectsFromPool(GameObject sourceObject)
 	{
+#if UNITY_6000_2_OR_NEWER
+		int uniqueId = sourceObject.GetEntityId().GetHashCode();
+#else
 		int uniqueId = sourceObject.GetInstanceID();
+#endif
 		
 		if(!instantiatedObjects.ContainsKey(uniqueId))
 		{

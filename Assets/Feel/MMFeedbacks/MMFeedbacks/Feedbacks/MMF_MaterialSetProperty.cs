@@ -1,7 +1,10 @@
-﻿using MoreMountains.Tools;
+﻿using System;
+using MoreMountains.Tools;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.Serialization;
 
 namespace MoreMountains.Feedbacks
 {
@@ -11,6 +14,7 @@ namespace MoreMountains.Feedbacks
 	[AddComponentMenu("")]
 	[FeedbackHelp("This feedback will let you set a property on the target renderer's material")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Renderer/Material Set Property")]
 	public class MMF_MaterialSetProperty : MMF_Feedback
 	{
@@ -28,17 +32,31 @@ namespace MoreMountains.Feedbacks
 		protected override void AutomateTargetAcquisition() => TargetRenderer = FindAutomatedTarget<Renderer>();
 		
 		public enum PropertyTypes { Color, Float, Integer, Texture, TextureOffset, TextureScale, Vector }
+
+		[Serializable]
+		public class ExtraRendererData
+		{
+			public Renderer TargetRenderer;
+			public int MaterialID = 0;
+		}
 		
 		[MMFInspectorGroup("Material", true, 12, true)]
 		/// the renderer to change the material on
 		[Tooltip("the renderer to change the material on")]
 		public Renderer TargetRenderer;
+		/// the renderer to change the material on
+		[Tooltip("a list of extra renderers to change the material on")]
+		public List<ExtraRendererData> ExtraTargetRenderers;
 		/// the ID of the material to target on the renderer
 		[Tooltip("the ID of the material to target on the renderer")]
 		public int MaterialID = 0;
-		/// the ID of the property to set, as exposed by the Visual Effect Graph
-		[Tooltip("the ID of the property to set, as exposed by the Visual Effect Graph")] 
-		public string PropertyID;
+		/// whether to use a MaterialPropertyBlock, to avoid creating a new instance of the material, thus breaking GPU instancing
+		[Tooltip("whether to use a MaterialPropertyBlock, to avoid creating a new instance of the material, thus breaking GPU instancing")]
+		public bool UseMaterialPropertyBlock = false;
+		/// the name of the property to set, as exposed by your material's shader (should be something like _Emission, or _Color, or _MainText, etc)
+		[Tooltip("the name of the property to set, as exposed by your material's shader (should be something like _Emission, or _Color, or _MainText, etc)")] 
+		[FormerlySerializedAs("PropertyID")]
+		public string PropertyName;
 		/// the type of the property to set
 		[Tooltip("the type of the property to set")]
 		public PropertyTypes PropertyType = PropertyTypes.Float;
@@ -46,6 +64,7 @@ namespace MoreMountains.Feedbacks
 		/// if the property is a color, the new color to set
 		[Tooltip("if the property is a color, the new color to set")]
 		[MMFEnumCondition("PropertyType", (int)PropertyTypes.Color)]
+		[ColorUsage(true, true)]
 		public Color NewColor = Color.red;
 		/// if the property is a float, the new float to set
 		[Tooltip("if the property is a float, the new float to set")]
@@ -82,8 +101,7 @@ namespace MoreMountains.Feedbacks
 		public float Duration = 2f;
 		/// the curve over which to interpolate the value
 		[Tooltip("the curve over which to interpolate the value")]
-		[MMFCondition("InterpolateValue", true)]
-		public MMTweenType InterpolationCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)));
+		public MMTweenType InterpolationCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.3f, 1f), new Keyframe(1, 0)), "InterpolateValue");
 		
 		public override float FeedbackDuration { get { return (InterpolateValue) ? ApplyTimeMultiplier(Duration) : 0f; } set { if (InterpolateValue) { Duration = value; } } }
 		
@@ -98,7 +116,21 @@ namespace MoreMountains.Feedbacks
 		protected Coroutine _coroutine;
 		protected Color _newColor;
 		protected Vector2 _newVector2;
-		protected Vector2 _newVector4;
+		protected Vector4 _newVector4;
+		protected MaterialPropertyBlock _propertyBlock;
+		protected Dictionary<Renderer, MaterialPropertyBlock> _extraPropertyBlocks;
+
+		/// <summary>
+		/// Returns sharedMaterials[index] in edit mode (to avoid leaking instantiated materials) or materials[index] in play mode.
+		/// </summary>
+		protected virtual Material GetTargetMaterial(Renderer renderer, int materialIndex)
+		{
+			#if UNITY_EDITOR
+			if (!Application.isPlaying)
+				return renderer.sharedMaterials[materialIndex];
+			#endif
+			return renderer.materials[materialIndex];
+		}
 		
 		/// <summary>
 		/// On init we turn the sprite renderer off if needed
@@ -108,36 +140,71 @@ namespace MoreMountains.Feedbacks
 		{
 			base.CustomInitialization(owner);
 
-			_propertyID = Shader.PropertyToID(PropertyID);
-			
+			_propertyID = Shader.PropertyToID(PropertyName);
+	
+			if (!TargetExists(TargetRenderer, nameof(TargetRenderer)))
+			{
+				return;
+			}
+
+			// we initialize property blocks if needed
+			if (UseMaterialPropertyBlock)
+			{
+				_propertyBlock = new MaterialPropertyBlock();
+		
+				if (ExtraTargetRenderers != null && ExtraTargetRenderers.Count > 0)
+				{
+					_extraPropertyBlocks = new Dictionary<Renderer, MaterialPropertyBlock>();
+					foreach (ExtraRendererData data in ExtraTargetRenderers)
+					{
+						if (data.TargetRenderer != null)
+						{
+							_extraPropertyBlocks[data.TargetRenderer] = new MaterialPropertyBlock();
+						}
+					}
+				}
+			}
+	
 			// we store the initial value of the property based on its type
 			if (Active)
 			{
 				switch (PropertyType)
 				{
 					case PropertyTypes.Color:
-						_initialColor = TargetRenderer.materials[MaterialID].GetColor(_propertyID);
+						_initialColor = GetTargetMaterial(TargetRenderer, MaterialID).GetColor(_propertyID);
 						break;
 					case PropertyTypes.Float:
-						_initialFloat = TargetRenderer.materials[MaterialID].GetFloat(_propertyID);
+						_initialFloat = GetTargetMaterial(TargetRenderer, MaterialID).GetFloat(_propertyID);
 						break;
 					case PropertyTypes.Integer:
-						_initialInt = TargetRenderer.materials[MaterialID].GetInt(_propertyID);
+						_initialInt = GetTargetMaterial(TargetRenderer, MaterialID).GetInt(_propertyID);
 						break;
 					case PropertyTypes.Texture:
-						_initialTexture = TargetRenderer.materials[MaterialID].GetTexture(_propertyID);
+						_initialTexture = GetTargetMaterial(TargetRenderer, MaterialID).GetTexture(_propertyID);
 						break;
 					case PropertyTypes.TextureOffset:
-						_initialOffset = TargetRenderer.materials[MaterialID].GetTextureOffset(_propertyID);
+						_initialOffset = GetTargetMaterial(TargetRenderer, MaterialID).GetTextureOffset(_propertyID);
 						break;
 					case PropertyTypes.TextureScale:
-						_initialScale = TargetRenderer.materials[MaterialID].GetTextureScale(_propertyID);
+						_initialScale = GetTargetMaterial(TargetRenderer, MaterialID).GetTextureScale(_propertyID);
 						break;
 					case PropertyTypes.Vector:
-						_initialVector = TargetRenderer.materials[MaterialID].GetVector(_propertyID);
+						_initialVector = GetTargetMaterial(TargetRenderer, MaterialID).GetVector(_propertyID);
 						break;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Generic helper to get a property value from renderer, handling both material and property block modes
+		/// </summary>
+		protected virtual T GetPropertyFromRenderer<T>(System.Func<Renderer, int, T> getMaterial, System.Func<MaterialPropertyBlock, int, T> getPropertyBlock)
+		{
+			if (UseMaterialPropertyBlock)
+			{
+				return getPropertyBlock(_propertyBlock, _propertyID);
+			}
+			return getMaterial(TargetRenderer, _propertyID);
 		}
 		
 		/// <summary>
@@ -166,25 +233,25 @@ namespace MoreMountains.Feedbacks
 				switch (PropertyType)
 				{
 					case PropertyTypes.Color:
-						TargetRenderer.materials[MaterialID].SetColor(_propertyID, NewColor);
+						SetColor(NewColor);
 						break;
 					case PropertyTypes.Float:
-						TargetRenderer.materials[MaterialID].SetFloat(_propertyID, NewFloat);
+						SetFloat(NewFloat);
 						break;
 					case PropertyTypes.Integer:
-						TargetRenderer.materials[MaterialID].SetInt(_propertyID, NewInt);
+						SetInt(NewInt);
 						break;
 					case PropertyTypes.Texture:
-						TargetRenderer.materials[MaterialID].SetTexture(_propertyID, NewTexture);
+						SetTexture(NewTexture);
 						break;
 					case PropertyTypes.TextureOffset:
-						TargetRenderer.materials[MaterialID].SetTextureOffset(_propertyID, NewOffset);
+						SetTextureOffset(NewOffset);
 						break;
 					case PropertyTypes.TextureScale:
-						TargetRenderer.materials[MaterialID].SetTextureScale(_propertyID, NewScale);
+						SetTextureScale(NewScale);
 						break;
 					case PropertyTypes.Vector:
-						TargetRenderer.materials[MaterialID].SetVector(_propertyID, NewVector);
+						SetVector(NewVector);
 						break;
 				}
 			}
@@ -227,30 +294,30 @@ namespace MoreMountains.Feedbacks
 				case PropertyTypes.Color:
 					float evaluated = MMTween.Tween(t, 0f, 1f, _initialFloat, NewFloat, InterpolationCurve);
 					_newColor = Color.Lerp(_initialColor, NewColor, evaluated);
-					TargetRenderer.materials[MaterialID].SetColor(_propertyID, _newColor);
+					SetColor(_newColor);
 					break;
 				case PropertyTypes.Float:
 					float newFloatValue = MMTween.Tween(t, 0f, 1f, _initialFloat, NewFloat, InterpolationCurve);
-					TargetRenderer.materials[MaterialID].SetFloat(_propertyID, newFloatValue);
+					SetFloat(newFloatValue);
 					break;
 				case PropertyTypes.Integer:
 					int newIntValue = (int)MMTween.Tween(t, 0f, 1f, _initialInt, NewInt, InterpolationCurve);
-					TargetRenderer.materials[MaterialID].SetInt(_propertyID, newIntValue);
+					SetInt(newIntValue);
 					break;
 				case PropertyTypes.Texture:
-					TargetRenderer.materials[MaterialID].SetTexture(_propertyID, NewTexture);
+					SetTexture(NewTexture);
 					break;
 				case PropertyTypes.TextureOffset:
 					_newVector2 = MMTween.Tween(t, 0f, 1f, _initialOffset, NewOffset, InterpolationCurve);
-					TargetRenderer.materials[MaterialID].SetTextureOffset(_propertyID, _newVector2);
+					SetTextureOffset(_newVector2);
 					break;
 				case PropertyTypes.TextureScale:
 					_newVector2 = MMTween.Tween(t, 0f, 1f, _initialScale, NewScale, InterpolationCurve);
-					TargetRenderer.materials[MaterialID].SetTextureScale(_propertyID, _newVector2);
+					SetTextureScale(_newVector2);
 					break;
 				case PropertyTypes.Vector:
 					_newVector4 = MMTween.Tween(t, 0f, 1f, _initialVector, NewVector, InterpolationCurve);
-					TargetRenderer.materials[MaterialID].SetVector(_propertyID, _newVector4);
+					SetVector(_newVector4);
 					break;
 			}
 		}
@@ -285,26 +352,160 @@ namespace MoreMountains.Feedbacks
 			switch (PropertyType)
 			{
 				case PropertyTypes.Color:
-					TargetRenderer.materials[MaterialID].SetColor(_propertyID, _initialColor);
+					SetColor(_initialColor);
 					break;
 				case PropertyTypes.Float:
-					TargetRenderer.materials[MaterialID].SetFloat(_propertyID, _initialFloat);
+					SetFloat(_initialFloat);
 					break;
 				case PropertyTypes.Integer:
-					TargetRenderer.materials[MaterialID].SetInt(_propertyID, _initialInt);
+					SetInt(_initialInt);
 					break;
 				case PropertyTypes.Texture:
-					TargetRenderer.materials[MaterialID].SetTexture(_propertyID, _initialTexture);
+					SetTexture(_initialTexture);
 					break;
 				case PropertyTypes.TextureOffset:
-					TargetRenderer.materials[MaterialID].SetTextureOffset(_propertyID, _initialOffset);
+					SetTextureOffset(_initialOffset);
 					break;
 				case PropertyTypes.TextureScale:
-					TargetRenderer.materials[MaterialID].SetTextureScale(_propertyID, _initialScale);
+					SetTextureScale(_initialScale);
 					break;
 				case PropertyTypes.Vector:
-					TargetRenderer.materials[MaterialID].SetVector(_propertyID, _initialVector);
+					SetVector(_initialVector);
 					break;
+			}
+		}
+
+		/// <summary>
+		/// Generic helper to get a property value from renderer, handling both material and property block modes
+		/// </summary>
+		protected virtual T GetPropertyFromRenderer<T>(System.Func<Renderer, int, T> getMaterial, System.Func<Renderer, MaterialPropertyBlock, int, T> getPropertyBlock)
+		{
+			if (UseMaterialPropertyBlock)
+			{
+				return getPropertyBlock(TargetRenderer, _propertyBlock, _propertyID);
+			}
+			return getMaterial(TargetRenderer, _propertyID);
+		}
+
+		/// <summary>
+		/// Generic helper to set a property on all renderers, handling both material and property block modes
+		/// </summary>
+		protected virtual void SetPropertyOnRenderers<T>(T value, 
+			System.Action<Material, int, T> setMaterial, 
+			System.Action<MaterialPropertyBlock, int, T> setPropertyBlock)
+		{
+			if (UseMaterialPropertyBlock)
+			{
+				TargetRenderer.GetPropertyBlock(_propertyBlock);
+				setPropertyBlock(_propertyBlock, _propertyID, value);
+				TargetRenderer.SetPropertyBlock(_propertyBlock);
+
+				if (ExtraTargetRenderers != null)
+				{
+					foreach (ExtraRendererData data in ExtraTargetRenderers)
+					{
+						if (data.TargetRenderer != null && _extraPropertyBlocks.ContainsKey(data.TargetRenderer))
+						{
+							MaterialPropertyBlock block = _extraPropertyBlocks[data.TargetRenderer];
+							data.TargetRenderer.GetPropertyBlock(block);
+							setPropertyBlock(block, _propertyID, value);
+							data.TargetRenderer.SetPropertyBlock(block);
+						}
+					}
+				}
+			}
+			else
+			{
+				setMaterial(GetTargetMaterial(TargetRenderer, MaterialID), _propertyID, value);
+				if (ExtraTargetRenderers != null)
+				{
+					foreach (ExtraRendererData data in ExtraTargetRenderers)
+					{
+						if (data.TargetRenderer != null)
+						{
+							setMaterial(GetTargetMaterial(data.TargetRenderer, data.MaterialID), _propertyID, value);
+						}
+					}
+				}
+			}
+		}
+
+		protected virtual void SetColor(Color newColor)
+		{
+			SetPropertyOnRenderers(newColor, 
+				(m, id, v) => m.SetColor(id, v), 
+				(b, id, v) => b.SetColor(id, v));
+		}
+
+		protected virtual void SetFloat(float newFloat)
+		{
+			SetPropertyOnRenderers(newFloat,
+				(m, id, v) => m.SetFloat(id, v),
+				(b, id, v) => b.SetFloat(id, v));
+		}
+
+		protected virtual void SetInt(int newInt)
+		{
+			SetPropertyOnRenderers(newInt,
+				(m, id, v) => m.SetInt(id, v),
+				(b, id, v) => b.SetInt(id, v));
+		}
+
+		protected virtual void SetTexture(Texture newTexture)
+		{
+			SetPropertyOnRenderers(newTexture,
+				(m, id, v) => m.SetTexture(id, v),
+				(b, id, v) => b.SetTexture(id, v));
+		}
+
+		protected virtual void SetTextureOffset(Vector2 newOffset)
+		{
+			// MaterialPropertyBlock doesn't support texture offset/scale, always use material
+			GetTargetMaterial(TargetRenderer, MaterialID).SetTextureOffset(_propertyID, newOffset);
+			if (ExtraTargetRenderers != null)
+			{
+				foreach (ExtraRendererData data in ExtraTargetRenderers)
+				{
+					if (data.TargetRenderer != null)
+					{
+						GetTargetMaterial(data.TargetRenderer, data.MaterialID).SetTextureOffset(_propertyID, newOffset);
+					}
+				}
+			}
+		}
+
+		protected virtual void SetTextureScale(Vector2 newScale)
+		{
+			// MaterialPropertyBlock doesn't support texture offset/scale, always use material
+			GetTargetMaterial(TargetRenderer, MaterialID).SetTextureScale(_propertyID, newScale);
+			if (ExtraTargetRenderers != null)
+			{
+				foreach (ExtraRendererData data in ExtraTargetRenderers)
+				{
+					if (data.TargetRenderer != null)
+					{
+						GetTargetMaterial(data.TargetRenderer, data.MaterialID).SetTextureScale(_propertyID, newScale);
+					}
+				}
+			}
+		}
+
+		protected virtual void SetVector(Vector4 newVector)
+		{
+			SetPropertyOnRenderers(newVector,
+				(m, id, v) => m.SetVector(id, v),
+				(b, id, v) => b.SetVector(id, v));
+		}
+		
+		/// <summary>
+		/// On Validate, we migrate our deprecated animation curves to our tween types if needed
+		/// </summary>
+		public override void OnValidate()
+		{
+			base.OnValidate();
+			if (string.IsNullOrEmpty(InterpolationCurve.ConditionPropertyName))
+			{
+				InterpolationCurve.ConditionPropertyName = "InterpolateValue";
 			}
 		}
 	}

@@ -12,6 +12,7 @@ namespace MoreMountains.FeedbacksForThirdParty
 	/// This feedback is a base for UI Toolkit feedbacks
 	/// </summary>
 	[AddComponentMenu("")]
+	[Serializable]
 	[FeedbackHelp("This feedback is a base for UI Toolkit feedbacks")]
 	public class MMF_UIToolkit : MMF_Feedback
 	{
@@ -64,6 +65,11 @@ namespace MoreMountains.FeedbacksForThirdParty
 		/// </summary>
 		protected virtual void PerformQuery()
 		{
+			if (!TargetExists(TargetDocument, nameof(TargetDocument)))
+			{
+				return;
+			}
+			
 			switch (QueryMode)
 			{
 				case QueryModes.Name:

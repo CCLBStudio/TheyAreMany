@@ -14,10 +14,15 @@ namespace MoreMountains.Tools
 	{
 		[HideInInspector]
 		public bool Initialized;
+
+		[HideInInspector]
+		public AudioResource AudioResourceToPlay;
 		
 		[Header("Track")]
 		/// the track on which to play the sound
 		public MMSoundManager.MMSoundManagerTracks MmSoundManagerTrack;
+		/// when MmSoundManagerTrack is set to Other, an optional custom track SO to route through
+		public MMSoundManagerCustomTrackSO CustomTrack;
 		/// an audiogroup to use if you don't want to play on any of the preset tracks
 		public AudioMixerGroup AudioGroup;
 		
@@ -54,6 +59,8 @@ namespace MoreMountains.Tools
 		public AudioSource RecycleAudioSource;
 		
 		[Header("Time")]
+		/// a delay in seconds to apply before playing a song
+		public float InitialDelay;
 		/// The time (in seconds) at which to start playing the sound
 		public float PlaybackTime;
 		/// The time (in seconds after which to stop playing the sound
@@ -149,7 +156,9 @@ namespace MoreMountains.Tools
 			{
 				MMSoundManagerPlayOptions defaultOptions = new MMSoundManagerPlayOptions();
 				defaultOptions.Initialized = true;
+				defaultOptions.AudioResourceToPlay = null;
 				defaultOptions.MmSoundManagerTrack = MMSoundManager.MMSoundManagerTracks.Sfx;
+				defaultOptions.CustomTrack = null;
 				defaultOptions.Location = Vector3.zero;
 				defaultOptions.Loop = false;
 				defaultOptions.Volume = 1.0f;
@@ -162,6 +171,7 @@ namespace MoreMountains.Tools
 				defaultOptions.RecycleAudioSource = null;
 				defaultOptions.AudioGroup = null;
 				defaultOptions.Pitch = 1f;
+				defaultOptions.InitialDelay = 0f;
 				defaultOptions.PanStereo = 0f;
 				defaultOptions.SpatialBlend = 0.0f;
 				defaultOptions.SoloSingleTrack = false;

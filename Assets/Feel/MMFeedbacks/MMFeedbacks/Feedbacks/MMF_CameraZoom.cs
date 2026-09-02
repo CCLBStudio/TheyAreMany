@@ -1,5 +1,10 @@
 ﻿using MoreMountains.FeedbacksForThirdParty;
 using MoreMountains.Tools;
+#if MM_CINEMACHINE
+using Cinemachine;
+#elif MM_CINEMACHINE3
+using Unity.Cinemachine;
+#endif
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -15,6 +20,7 @@ namespace MoreMountains.Feedbacks
 	              "For this to work, you'll need to add a MMCameraZoom component to your Camera, or a MMCinemachineZoom if you're " +
 	              "using virtual cameras.")]
 	[MovedFrom(false, null, "MoreMountains.Feedbacks")]
+	[System.Serializable]
 	[FeedbackPath("Camera/Camera Zoom")]
 	public class MMF_CameraZoom : MMF_Feedback
 	{
@@ -107,23 +113,23 @@ namespace MoreMountains.Feedbacks
 			bool virtualCameraFound = false;
 			#endif
 			
-			#if MMCINEMACHINE 
+			#if MM_CINEMACHINE 
 				CinemachineVirtualCamera virtualCamera = (CinemachineVirtualCamera)Object.FindObjectOfType(typeof(CinemachineVirtualCamera));
 				virtualCameraFound = (virtualCamera != null);
-			#elif MMCINEMACHINE3
-				CinemachineCamera virtualCamera = (CinemachineCamera)Object.FindObjectOfType(typeof(CinemachineCamera));
+			#elif MM_CINEMACHINE3
+				CinemachineCamera virtualCamera = (CinemachineCamera)Object.FindAnyObjectByType(typeof(CinemachineCamera), FindObjectsInactive.Include);
 				virtualCameraFound = (virtualCamera != null);
 			#endif
 			
 			#if MM_CINEMACHINE || MM_CINEMACHINE3
 			if (virtualCameraFound)
 			{
-				MMCinemachineHelpers.AutomaticCinemachineShakersSetup(Owner, "CinemachineImpulse");
+				MMCinemachineHelpers.AutomaticCinemachineShakersSetup(Owner, "CameraZoom");
 				return;
 			}
 			#endif
 			
-			MMCameraZoom camZoom = (MMCameraZoom)Object.FindObjectOfType(typeof(MMCameraZoom));
+			MMCameraZoom camZoom = (MMCameraZoom)Object.FindAnyObjectByType(typeof(MMCameraZoom));
 			if (camZoom != null)
 			{
 				return;

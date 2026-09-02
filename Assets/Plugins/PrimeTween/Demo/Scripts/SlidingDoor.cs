@@ -1,16 +1,17 @@
-#if PRIME_TWEEN_INSTALLED
+#if PRIME_TWEEN_INSTALLED && UNITY_UGUI_INSTALLED
 using PrimeTween;
 using UnityEngine;
 
 namespace PrimeTweenDemo {
     public class SlidingDoor : Animatable {
+        [SerializeField] Demo demo;
         [SerializeField] Transform animationAnchor;
         [SerializeField] Vector3 openedPos, midPos, closedPos;
         bool isClosed;
         Sequence sequence;
 
         public override void OnClick() {
-            if (!Demo.instance.animateAllSequence.isAlive) {
+            if (!demo.animateAllSequence.isAlive) {
                 Animate(!isClosed);
             }
         }
@@ -24,8 +25,8 @@ namespace PrimeTweenDemo {
                 sequence.Stop();
             }
             var tweenSettings = new TweenSettings(0.4f, Ease.OutBack, endDelay: 0.1f);
-            sequence = Tween.LocalPosition(animationAnchor, midPos, tweenSettings)
-                .Chain(Tween.LocalPosition(animationAnchor, _isClosed ? closedPos : openedPos, tweenSettings));
+            sequence = Tween.LocalPosition(animationAnchor, new TweenSettings<Vector3>(midPos, tweenSettings))
+                .Chain(Tween.LocalPosition(animationAnchor, new TweenSettings<Vector3>(_isClosed ? closedPos : openedPos, tweenSettings)));
             return sequence;
         }
     }

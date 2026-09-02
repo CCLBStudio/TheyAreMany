@@ -9,7 +9,7 @@ namespace MoreMountains.Tools
 	/// <summary>
 	/// This component lets you restart a scene by pressing a key
 	/// </summary>
-	[AddComponentMenu("More Mountains/Tools/Utilities/MMSceneRestarter")]
+	[AddComponentMenu("More Mountains/Tools/Utilities/MM Scene Restarter")]
 	public class MMSceneRestarter : MonoBehaviour
 	{
 		/// the possible restart modes
@@ -51,9 +51,12 @@ namespace MoreMountains.Tools
 		{
 			bool keyPressed = false;
 			#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
-				keyPressed = Keyboard.current[RestarterKey].wasPressedThisFrame;
+				if (RestarterKey != Key.None)
+				{
+					keyPressed = Keyboard.current[RestarterKey].wasPressedThisFrame;
+				}
 			#else
-			keyPressed = Input.GetKeyDown(RestarterKeyCode);
+				keyPressed = Input.GetKeyDown(RestarterKeyCode);
 			#endif
 			if (keyPressed)
 			{
