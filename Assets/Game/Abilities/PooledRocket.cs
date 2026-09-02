@@ -1,7 +1,7 @@
 using PrimeTween;
 using UnityEngine;
 
-public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamageDealer
+public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamageSource
 {
     [SerializeField] private Collider2D rocketCollider;
     [SerializeField] private Rigidbody2D rb;
@@ -68,15 +68,17 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         Collider2D[] inRange = Physics2D.OverlapCircleAll(transform.position, _scriptableAbility.ExplosionRange, collisionMask);
         foreach (var col in inRange)
         {
-            var damageables = col.gameObject.GetComponents<IDamageable>();
-            foreach (var d in damageables)
+            var damageTargets = col.gameObject.GetComponents<IDamageTarget>();
+            var knockbackTargets = col.gameObject.GetComponents<IKnockbackTarget>();
+            
+            foreach (var d in damageTargets)
             {
-                d.GetHit(this);
-
-                if (d.GetRigidbody())
-                {
-                    d.GetRigidbody().AddExplosionForce(_scriptableAbility.KnockbackForce, rb.position, _scriptableAbility.ExplosionRange, 1f);
-                }
+                d.ReceiveDamages(this);
+            }
+            
+            foreach (var k in knockbackTargets)
+            {
+                k.GetRigidbody().AddExplosionForce(_scriptableAbility.KnockbackForce, rb.position, _scriptableAbility.ExplosionRange, 1f);
             }
         }
     }

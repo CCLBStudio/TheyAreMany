@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public class EnemyHealth : MonoBehaviour, IEnemyBehaviour
+public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
 {
     public EnemyFacade Facade { get; set; }
 
+    [SerializeField] private UnityEvent onDeath;
 
     private float _currentHealth;
     
@@ -25,17 +27,17 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour
     {
     }
 
-    public void ApplyDamagesFromDealer(IDamageDealer damageDealer)
+    public void ReceiveDamages(IDamageSource damageSource)
     {
         if (_currentHealth <= 0f)
         {
             return;
         }
         
-        _currentHealth -= damageDealer.GetDamages();
+        _currentHealth -= damageSource.GetDamages();
         if (_currentHealth <= 0f)
         {
-            Facade.ReleaseSelf();
+            onDeath?.Invoke();
         }
     }
 }

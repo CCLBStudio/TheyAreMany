@@ -1,7 +1,7 @@
 using CCLBStudio.ScriptablePooling;
 using UnityEngine;
 
-public class PlayParticleOnDamageHit : MonoBehaviour, IDamageable
+public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
 {
     [SerializeField] private ScriptablePool effectPool;
     [SerializeField] private bool orientTowardsBullet = true;
@@ -18,7 +18,7 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageable
         }
     }
 
-    public void GetHit(IDamageDealer damageOrigin)
+    public void ReceiveDamages(IDamageSource damageOrigin)
     {
         if (damageOrigin.GetDamageType() != DamageType.Impact)
         {
@@ -37,10 +37,5 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageable
         }
         
         effect.Play();
-    }
-
-    public Rigidbody2D GetRigidbody()
-    {
-        return null;
     }
 }

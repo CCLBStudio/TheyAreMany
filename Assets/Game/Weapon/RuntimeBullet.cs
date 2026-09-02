@@ -1,7 +1,7 @@
 using CCLBStudio.ScriptablePooling;
 using UnityEngine;
 
-public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageDealer
+public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSource
 {
     public ScriptablePool Pool { get; set; }
     public Vector2 Direction { get; set; }
@@ -40,7 +40,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageDeal
 
         _isAlive = false;
         
-        var interactors = other.gameObject.GetComponents<IDamageable>();
+        var interactors = other.gameObject.GetComponents<IDamageTarget>();
         if (interactors.Length <= 0)
         {
             var effect = _currentWeapon.GroundImpactPool.RequestObjectAs<PooledParticleSystem>();
@@ -52,7 +52,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageDeal
 
         foreach (var i in interactors)
         {
-            i.GetHit(this);
+            i.ReceiveDamages(this);
         }
         
         Pool.ReleaseObject(this);

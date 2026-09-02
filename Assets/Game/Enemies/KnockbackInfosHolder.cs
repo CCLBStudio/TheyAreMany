@@ -1,12 +1,8 @@
 using UnityEngine;
 
-public class KnockbackInfosHolder : MonoBehaviour, IDamageable
+public class KnockbackInfosHolder : MonoBehaviour, IKnockbackTarget
 {
     [SerializeField] private Rigidbody2D rb;
-    public void GetHit(IDamageDealer damageDealer)
-    {
-        
-    }
 
     public Rigidbody2D GetRigidbody()
     {

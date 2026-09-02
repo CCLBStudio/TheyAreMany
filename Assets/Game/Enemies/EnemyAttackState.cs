@@ -5,8 +5,8 @@ public class EnemyAttackState : MonoBehaviour, IEnemyBehaviour, IEnemyState
 {
     public virtual EnemyFacade Facade { get; set; }
     public virtual EnemyStateMachine StateMachine { get; set; }
-    protected Transform Target => targetSelector.Target;
-    protected ScriptableEnemy EnemyData => Facade.EnemyData;
+    protected Transform Target => targetSelector?.Target;
+    protected ScriptableEnemy EnemyData => Facade?.EnemyData;
 
     [SerializeField] protected EnemyTargetSelector targetSelector;
     [SerializeField] private EnemyAnimator animPlayer;
@@ -73,7 +73,7 @@ public class EnemyAttackState : MonoBehaviour, IEnemyBehaviour, IEnemyState
 
     private void OnDrawGizmosSelected()
     {
-        if (!Application.isPlaying)
+        if (!Application.isPlaying || !rb || !EnemyData)
         {
             return;
         }

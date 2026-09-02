@@ -13,8 +13,6 @@ public class EnemyStateMachine : MonoBehaviour, IEnemyBehaviour
     
     public void TransitionToState(IEnemyState newState)
     {
-        if (_currentState != null && _currentState.GetStateId() == EnemyStateId.Attack && newState.GetStateId() == EnemyStateId.Chase)
-        Debug.Log("to state : " + newState.GetStateId());
         _currentState?.ExitState();
         _currentState = newState;
         _currentState?.EnterState();
@@ -61,5 +59,10 @@ public class EnemyStateMachine : MonoBehaviour, IEnemyBehaviour
     public void OnFixedUpdated()
     {
         _currentState.UpdateState();
+    }
+
+    public void ToDeathState()
+    {
+        TransitionToState(DieState);
     }
 }

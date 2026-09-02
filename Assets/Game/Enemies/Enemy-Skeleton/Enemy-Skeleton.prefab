@@ -50,6 +50,8 @@ GameObject:
   - component: {fileID: 4752302678668734128}
   - component: {fileID: 4388007597322882468}
   - component: {fileID: 5851865607832927506}
+  - component: {fileID: 2111678839398766429}
+  - component: {fileID: 361235001457151818}
   m_Layer: 8
   m_Name: Enemy-Skeleton
   m_TagString: Untagged
@@ -149,6 +151,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c38918ed5856dea4ba248dab747521f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4082761580400867617}
+        m_TargetAssemblyTypeName: EnemyStateMachine, Assembly-CSharp
+        m_MethodName: ToDeathState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2111678839398766429}
+        m_TargetAssemblyTypeName: Game.Enemies.EnemyFlyingDeathAnimation, Assembly-CSharp
+        m_MethodName: Trigger
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8164720436173187075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,6 +283,36 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1.7}
   m_EdgeRadius: 0
+--- !u!114 &2111678839398766429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2882988783833478545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5e78ad174bbd04b919db217ed5b173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Enemies.EnemyFlyingDeathAnimation
+  rb: {fileID: 4388007597322882468}
+  collider: {fileID: 5851865607832927506}
+  flyingForce: 65
+  rotationSpeed: 1000
+  gravityScale: 2
+  linearDamping: 0
+--- !u!114 &361235001457151818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2882988783833478545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64ea84c05c6fdb74194a98304bbc5c34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathState
 --- !u!1001 &3791072663806690311
 PrefabInstance:
   m_ObjectHideFlags: 0
