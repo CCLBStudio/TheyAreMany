@@ -1,5 +1,5 @@
 using PrimeTween;
-using ReaaliStudio.Systems.ScriptableValue;
+using CCLBStudio.ScriptableValue;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "They Are Many/Player/Jump/Effects/Add Torque Jump Effect", fileName = "NewAddTorqueJumpEffect")]

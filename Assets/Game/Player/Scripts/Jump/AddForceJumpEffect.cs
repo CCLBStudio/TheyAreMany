@@ -1,6 +1,6 @@
 
 using PrimeTween;
-using ReaaliStudio.Systems.ScriptableValue;
+using CCLBStudio.ScriptableValue;
 using System;
 using UnityEngine;
 

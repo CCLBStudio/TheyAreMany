@@ -1,4 +1,4 @@
-using ReaaliStudio.Systems.ScriptableValue;
+using CCLBStudio.ScriptableValue;
 using UnityEngine;
 
 public class PlayerFacade : MonoBehaviour

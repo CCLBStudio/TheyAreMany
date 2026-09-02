@@ -1,5 +1,5 @@
 using System.Linq;
-using ReaaliStudio.Systems.ScriptableValue;
+using CCLBStudio.ScriptableValue;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]

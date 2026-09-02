@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6f6c0a30dafa3420fb0fcab3ead16e81
+guid: 233c43fe5858d4e269a2ecdbf5243f07
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -137,6 +137,6 @@ AssetOrigin:
   serializedVersion: 1
   productId: 194741
   packageName: GUI Pro - Survival Clean
-  packageVersion: 2.0.4
+  packageVersion: 2.0.7
   assetPath: Assets/Layer Lab/GUI Pro-SurvivalClean/ResourcesData/Sprites/Demo/Demo_ItemIcon/Item_ShopIcon_Coin03.png
-  uploadId: 706930
+  uploadId: 914924

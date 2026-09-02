@@ -1,5 +1,5 @@
 using System;
-using ReaaliStudio.Systems.ScriptableValue;
+using CCLBStudio.ScriptableValue;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
