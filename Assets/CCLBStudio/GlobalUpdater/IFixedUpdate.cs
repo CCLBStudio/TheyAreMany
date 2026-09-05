@@ -1,6 +1,6 @@
 namespace CCLBStudio.GlobalUpdater
 {
-    public interface IFixedUpdatable
+    public interface IFixedUpdate
     {
         public void FixedTick();
     }

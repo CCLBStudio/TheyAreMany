@@ -2,83 +2,83 @@ namespace CCLBStudio.GlobalUpdater
 {
     public static class GlobalUpdater
     {
-        public static void RegisterComplexUpdatable(object listener)
+        public static void RegisterUpdatedObject(object listener)
         {
-            if (listener is IUpdatable u) RegisterUpdatable(u);
-            if (listener is IFixedUpdatable f) RegisterFixedUpdatable(f);
-            if (listener is ILateUpdatable l) RegisterLateUpdatable(l);
+            if (listener is IUpdate u) RegisterUpdate(u);
+            if (listener is IFixedUpdate f) RegisterFixedUpdate(f);
+            if (listener is ILateUpdate l) RegisterLateUpdate(l);
         }
 
-        public static void UnregisterComplexUpdatable(object listener)
+        public static void UnregisterUpdatedObject(object listener)
         {
-            if (listener is IUpdatable u) UnregisterUpdatable(u);
-            if (listener is IFixedUpdatable f) UnregisterFixedUpdatable(f);
-            if (listener is ILateUpdatable l) UnregisterLateUpdatable(l);
+            if (listener is IUpdate u) UnregisterUpdate(u);
+            if (listener is IFixedUpdate f) UnregisterFixedUpdate(f);
+            if (listener is ILateUpdate l) UnregisterLateUpdate(l);
         }
 
-        public static void RegisterUpdatable(IUpdatable u)
+        public static void RegisterUpdate(IUpdate u)
         {
-            DefaultUpdater.RegisterUpdatable(u);
+            DefaultUpdater.RegisterUpdate(u);
         }
 
-        public static void UnregisterUpdatable(IUpdatable u)
+        public static void UnregisterUpdate(IUpdate u)
         {
-            DefaultUpdater.UnregisterUpdatable(u);
+            DefaultUpdater.UnregisterUpdate(u);
         }
 
-        public static void RegisterFixedUpdatable(IFixedUpdatable u)
+        public static void RegisterFixedUpdate(IFixedUpdate u)
         {
-            FixedUpdater.RegisterUpdatable(u);
+            FixedUpdater.RegisterUpdate(u);
         }
 
-        public static void UnregisterFixedUpdatable(IFixedUpdatable u)
+        public static void UnregisterFixedUpdate(IFixedUpdate u)
         {
-            FixedUpdater.UnregisterUpdatable(u);
+            FixedUpdater.UnregisterUpdate(u);
         }
 
-        public static void RegisterLateUpdatable(ILateUpdatable u)
+        public static void RegisterLateUpdate(ILateUpdate u)
         {
-            LateUpdater.RegisterUpdatable(u);
+            LateUpdater.RegisterUpdate(u);
         }
 
-        public static void UnregisterLateUpdatable(ILateUpdatable u)
+        public static void UnregisterLateUpdate(ILateUpdate u)
         {
-            LateUpdater.UnregisterUpdatable(u);
+            LateUpdater.UnregisterUpdate(u);
         }
 
-        public static void RegisterUpdatableMonoBehaviour(UpdatableMonoBehaviour u)
+        public static void RegisterUpdatedMonoBehaviour(UpdatedMonoBehaviour u)
         {
             if ((u.UpdateType & GlobalUpdateType.Update) == GlobalUpdateType.Update)
             {
-                DefaultUpdater.RegisterUpdatable(u);
+                DefaultUpdater.RegisterUpdate(u);
             }
             
             if ((u.UpdateType & GlobalUpdateType.FixedUpdate) == GlobalUpdateType.FixedUpdate)
             {
-                FixedUpdater.RegisterUpdatable(u);
+                FixedUpdater.RegisterUpdate(u);
             }
             
             if ((u.UpdateType & GlobalUpdateType.LateUpdate) == GlobalUpdateType.LateUpdate)
             {
-                LateUpdater.RegisterUpdatable(u);
+                LateUpdater.RegisterUpdate(u);
             }
         }
 
-        public static void UnregisterUpdatableMonoBehaviour(UpdatableMonoBehaviour u)
+        public static void UnregisterUpdatedMonoBehaviour(UpdatedMonoBehaviour u)
         {
             if ((u.UpdateType & GlobalUpdateType.Update) == GlobalUpdateType.Update)
             {
-                DefaultUpdater.UnregisterUpdatable(u);
+                DefaultUpdater.UnregisterUpdate(u);
             }
             
             if ((u.UpdateType & GlobalUpdateType.FixedUpdate) == GlobalUpdateType.FixedUpdate)
             {
-                FixedUpdater.UnregisterUpdatable(u);
+                FixedUpdater.UnregisterUpdate(u);
             }
             
             if ((u.UpdateType & GlobalUpdateType.LateUpdate) == GlobalUpdateType.LateUpdate)
             {
-                LateUpdater.UnregisterUpdatable(u);
+                LateUpdater.UnregisterUpdate(u);
             }
         }
     }

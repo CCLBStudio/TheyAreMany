@@ -1,11 +1,11 @@
+using CCLBStudio.GlobalUpdater;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class PlayerMover : MonoBehaviour, IPlayerBehaviour
+public class PlayerMover : MonoBehaviour, IPlayerBehaviour, IFixedUpdate
 {
     public bool IsMoving { get; private set; }
     public PlayerFacade Facade { get; set; }
-    
+
     [SerializeField] private InputReader inputReader;
     [SerializeField] private float groundedMoveSpeed = 250f;
     [SerializeField] private float inAirHorizontalVelocityTarget = 10f;
@@ -16,14 +16,14 @@ public class PlayerMover : MonoBehaviour, IPlayerBehaviour
     private bool _propulsorInRange;
     private bool _chargingPropulsion;
 
-    private void Start()
+    public void Initialize()
     {
         inputReader.MoveEvent += OnMoveInput;
         inputReader.PropulsionBeginEvent += OnPropulsionInputPressed;
         inputReader.PropulsionReleaseEvent += OnPropulsionInputReleased;
     }
 
-    private void FixedUpdate()
+    public void FixedTick()
     {
         if (!IsMoving || jumper.IsChargingJump || _chargingPropulsion)
         {

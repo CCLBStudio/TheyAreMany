@@ -1,6 +1,7 @@
+using CCLBStudio.GlobalUpdater;
 using UnityEngine;
 
-public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour
+public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour, IUpdate
 {
     public Transform WeaponHolder => weaponHolder;
     public Rigidbody2D PlayerRb => playerRb;
@@ -18,17 +19,15 @@ public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour
     private float _shootingTimer;
     private Vector2 _shootingDirection;
     private RuntimeWeapon _currentWeapon;
-
-    #region Unity Events
-
-    void Start()
+    
+    public void Initialize()
     {
         inputReader.AimEvent += OnAim;
         _currentWeapon = startWeapon.Equip(this);
         Jumper = GetComponent<PlayerJumper>();
     }
 
-    private void Update()
+    public void Tick()
     {
         weaponPivot.rotation = Quaternion.FromToRotation(Vector3.right, _shootingDirection);
         
@@ -46,8 +45,6 @@ public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour
         _currentWeapon.Shoot(_shootingDirection);
         _shootingTimer = 1f / _currentWeapon.AttackSpeed;
     }
-
-    #endregion
     
     private void OnAim(Vector2 direction)
     {

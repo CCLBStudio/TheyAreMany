@@ -1,3 +1,5 @@
+using System;
+using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptableValue;
 using UnityEngine;
 
@@ -15,6 +17,16 @@ public class PlayerFacade : MonoBehaviour
         foreach (var b in _behaviours)
         {
             b.Facade = this;
+            b.Initialize();
+            GlobalUpdater.RegisterUpdatedObject(b);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var b in _behaviours)
+        {
+            GlobalUpdater.UnregisterUpdatedObject(b);
         }
     }
 }

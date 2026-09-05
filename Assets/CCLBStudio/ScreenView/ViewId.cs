@@ -21,6 +21,7 @@ namespace CCLBStudio.ScreenView
         [SerializeField] private string id;
         
         public static readonly ViewId Empty = new("");
+        public static readonly ViewId Monid = new("Monid");
         public ViewId(string viewId) => id = viewId;
 
         public override string ToString() => string.IsNullOrEmpty(id) ? "<None>" : id;

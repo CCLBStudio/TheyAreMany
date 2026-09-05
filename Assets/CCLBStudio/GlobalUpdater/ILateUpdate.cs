@@ -1,6 +1,6 @@
 namespace CCLBStudio.GlobalUpdater
 {
-    public interface ILateUpdatable
+    public interface ILateUpdate
     {
         public void LateTick();
     }

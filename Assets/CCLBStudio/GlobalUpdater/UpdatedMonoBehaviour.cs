@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CCLBStudio.GlobalUpdater
 {
-    public class UpdatableMonoBehaviour : MonoBehaviour, IUpdatable, IFixedUpdatable, ILateUpdatable
+    public class UpdatedMonoBehaviour : MonoBehaviour, IUpdate, IFixedUpdate, ILateUpdate
     {
         public GlobalUpdateType UpdateType => updateType;
         
@@ -10,7 +10,7 @@ namespace CCLBStudio.GlobalUpdater
 
         protected virtual void OnEnable()
         {
-            GlobalUpdater.RegisterUpdatableMonoBehaviour(this);
+            GlobalUpdater.RegisterUpdatedMonoBehaviour(this);
         }
 
         protected void OnDisable()

@@ -2,9 +2,9 @@
 
 namespace CCLBStudio.GlobalUpdater
 {
-    internal class DefaultUpdater : Updater<IUpdatable>
+    internal class DefaultUpdater : Updater<IUpdate>
     {
-        public static void TickUpdatables()
+        public static void TickUpdates()
         {
             int count = PrepareBuffer();
             
@@ -20,11 +20,11 @@ namespace CCLBStudio.GlobalUpdater
 
                 if (IsNull(updatable))
                 {
-                    requireUpdatableFlush = true;
+                    requireUpdateFlush = true;
                     continue;
                 }
 
-                if (updatables.Contains(updatable))
+                if (updates.Contains(updatable))
                 {
                     updatable.Tick();
                 }
@@ -32,9 +32,9 @@ namespace CCLBStudio.GlobalUpdater
                 buffer[i] = null;
             }
 
-            if (requireUpdatableFlush)
+            if (requireUpdateFlush)
             {
-                FlushUpdatables();
+                FlushUpdates();
             }
         }
     }

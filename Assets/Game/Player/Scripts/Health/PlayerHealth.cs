@@ -14,7 +14,7 @@ namespace Game.Player.Scripts.Health
         private float _maxHealth;
         private bool _isDead;
 
-        private void Awake()
+        public void Initialize()
         {
             _maxHealth = playerHealth.Value;
         }
@@ -71,6 +71,5 @@ namespace Game.Player.Scripts.Health
         
         #endif
         #endregion
-
     }
 }

@@ -6,46 +6,46 @@ namespace CCLBStudio.GlobalUpdater
 {
     internal abstract class Updater<T>
     {
-        protected static HashSet<T> updatables = new();
+        protected static HashSet<T> updates = new();
         protected static T[] buffer = Array.Empty<T>();
-        protected static bool requireUpdatableFlush;
+        protected static bool requireUpdateFlush;
 
-        internal static void RegisterUpdatable(T updatable)
+        internal static void RegisterUpdate(T Update)
         {
-            if (updatable == null)
+            if (Update == null)
             {
                 return;
             }
             
-            updatables.Add(updatable);
+            updates.Add(Update);
         }
 
-        internal static void UnregisterUpdatable(T updatable)
+        internal static void UnregisterUpdate(T Update)
         {
-            if (updatable == null)
+            if (Update == null)
             {
                 return;
             }
             
-            updatables.Remove(updatable);
+            updates.Remove(Update);
         }
 
         internal static void Clear()
         {
-            updatables.Clear();
+            updates.Clear();
             buffer = Array.Empty<T>();
         }
 
         protected static int PrepareBuffer()
         {
-            int count = updatables.Count;
+            int count = updates.Count;
 
             if (buffer.Length < count)
             {
                 buffer = new T[count];
             }
 
-            updatables.CopyTo(buffer);
+            updates.CopyTo(buffer);
             return count;
         }
 
@@ -59,11 +59,11 @@ namespace CCLBStudio.GlobalUpdater
             return obj == null;
         }
 
-        protected static void FlushUpdatables()
+        protected static void FlushUpdates()
         {
-            Debug.Log("Flushing updatables");
-            var newSet = new HashSet<T>(updatables.Count);
-            foreach (var u in updatables)
+            Debug.Log("Flushing Updates");
+            var newSet = new HashSet<T>(updates.Count);
+            foreach (var u in updates)
             {
                 if (!IsNull(u))
                 {
@@ -71,15 +71,15 @@ namespace CCLBStudio.GlobalUpdater
                 }
             }
 
-            updatables = newSet;
-            requireUpdatableFlush = false;
+            updates = newSet;
+            requireUpdateFlush = false;
 
-            if (buffer.Length < updatables.Count)
+            if (buffer.Length < updates.Count)
             {
-                buffer = new T[updatables.Count];
+                buffer = new T[updates.Count];
             }
             
-            Debug.Log($"Updatables has now {updatables.Count} elements");
+            Debug.Log($"Updates has now {updates.Count} elements");
         }
     }
 }

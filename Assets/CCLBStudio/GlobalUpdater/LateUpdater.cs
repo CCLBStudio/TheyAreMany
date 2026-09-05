@@ -1,8 +1,8 @@
 ﻿namespace CCLBStudio.GlobalUpdater
 {
-    internal class LateUpdater : Updater<ILateUpdatable>
+    internal class LateUpdater : Updater<ILateUpdate>
     {
-        public static void TickLateUpdatables()
+        public static void TickLateUpdates()
         {
             int count = PrepareBuffer();
             
@@ -11,19 +11,19 @@
                 var updatable = buffer[i];
                 if (IsNull(updatable))
                 {
-                    requireUpdatableFlush = true;
+                    requireUpdateFlush = true;
                     continue;
                 }
 
-                if (updatables.Contains(updatable))
+                if (updates.Contains(updatable))
                 {
                     updatable.LateTick();
                 }
             }
 
-            if (requireUpdatableFlush)
+            if (requireUpdateFlush)
             {
-                FlushUpdatables();
+                FlushUpdates();
             }
         }
     }

@@ -1,9 +1,10 @@
 using CCLBStudio.ScriptableValue;
 using System.Collections.Generic;
+using CCLBStudio.GlobalUpdater;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerGroundChecker))]
-public class PlayerJumper : MonoBehaviour, IPlayerBehaviour
+public class PlayerJumper : MonoBehaviour, IPlayerBehaviour, IFixedUpdate
 {
     public bool IsJumping => _isJumping;
     public bool ReachedApex => _reachedApex;
@@ -35,11 +36,8 @@ public class PlayerJumper : MonoBehaviour, IPlayerBehaviour
     private bool _hasPressedPropulseInput;
     private PlayerGroundChecker _groundChecker;
     private Dictionary<Propulsor, bool> _hasPropulsed = new();
-
-
-    #region Unity Events
-
-    private void Start()
+    
+    public void Initialize()
     {
         _previousPosition = movementRb.linearVelocity;
         _groundChecker = GetComponent<PlayerGroundChecker>();
@@ -54,20 +52,7 @@ public class PlayerJumper : MonoBehaviour, IPlayerBehaviour
         inputReader.MoveEvent += OrientPropulsion;
     }
     
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            OnJumpInputPressed();
-        }
-        
-        if (Input.GetKeyUp(KeyCode.Space))
-        {
-            OnJumpInputReleased();
-        }
-    }
-    
-    private void FixedUpdate()
+    public void FixedTick()
     {
         TriggerFixedUpdateCallback();
 
@@ -79,9 +64,7 @@ public class PlayerJumper : MonoBehaviour, IPlayerBehaviour
         
         _previousPosition = movementRb.position;
     }
-
-    #endregion
-
+    
     #region Jump Methods
 
     public void OnGrounded()

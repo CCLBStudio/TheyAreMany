@@ -1,8 +1,8 @@
 ﻿namespace CCLBStudio.GlobalUpdater
 {
-    internal class FixedUpdater : Updater<IFixedUpdatable>
+    internal class FixedUpdater : Updater<IFixedUpdate>
     {
-        public static void TickFixedUpdatables()
+        public static void TickFixedUpdates()
         {
             int count = PrepareBuffer();
             
@@ -11,19 +11,19 @@
                 var updatable = buffer[i];
                 if (IsNull(updatable))
                 {
-                    requireUpdatableFlush = true;
+                    requireUpdateFlush = true;
                     continue;
                 }
 
-                if (updatables.Contains(updatable))
+                if (updates.Contains(updatable))
                 {
                     updatable.FixedTick();
                 }
             }
 
-            if (requireUpdatableFlush)
+            if (requireUpdateFlush)
             {
-                FlushUpdatables();
+                FlushUpdates();
             }
         }
     }

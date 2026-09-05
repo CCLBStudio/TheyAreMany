@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour
@@ -13,20 +12,12 @@ public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour
 
     private RuntimeAbility _currentAbility;
 
-    private void Start()
+    public void Initialize()
     {
         _currentAbility = startAbility.Equip(this);
         
         inputReader.PrimaryAbilityPressEvent += _currentAbility.OnInputPressed;
         inputReader.PrimaryAbilityReleaseEvent += _currentAbility.OnInputReleased;
         inputReader.AimEvent += _currentAbility.OnAim;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _currentAbility.OnInputPressed();
-        }
     }
 }

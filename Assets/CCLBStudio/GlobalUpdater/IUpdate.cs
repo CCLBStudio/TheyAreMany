@@ -1,6 +1,6 @@
 namespace CCLBStudio.GlobalUpdater
 {
-    public interface IUpdatable
+    public interface IUpdate
     {
         public void Tick();
     }

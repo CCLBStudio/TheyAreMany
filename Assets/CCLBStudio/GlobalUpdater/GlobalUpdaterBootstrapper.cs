@@ -82,7 +82,7 @@ namespace CCLBStudio.GlobalUpdater
             _defaultUpdaterSystem = new PlayerLoopSystem
             {
                 type = typeof(DefaultUpdater),
-                updateDelegate = DefaultUpdater.TickUpdatables,
+                updateDelegate = DefaultUpdater.TickUpdates,
                 subSystemList = null
             };
             
@@ -99,7 +99,7 @@ namespace CCLBStudio.GlobalUpdater
             _fixedUpdaterSystem = new PlayerLoopSystem
             {
                 type = typeof(FixedUpdater),
-                updateDelegate = FixedUpdater.TickFixedUpdatables,
+                updateDelegate = FixedUpdater.TickFixedUpdates,
                 subSystemList = null
             };
             
@@ -116,7 +116,7 @@ namespace CCLBStudio.GlobalUpdater
             _lateUpdaterSystem = new PlayerLoopSystem
             {
                 type = typeof(LateUpdater),
-                updateDelegate = LateUpdater.TickLateUpdatables,
+                updateDelegate = LateUpdater.TickLateUpdates,
                 subSystemList = null
             };
             
