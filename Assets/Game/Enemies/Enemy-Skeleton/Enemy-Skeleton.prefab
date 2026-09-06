@@ -116,6 +116,7 @@ MonoBehaviour:
   targetSelector: {fileID: 4752302678668734128}
   animPlayer: {fileID: 8164720436173187075}
   rb: {fileID: 4388007597322882468}
+  weaponCollider: {fileID: 0}
 --- !u!114 &5466280723640532300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +169,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2111678839398766429}
         m_TargetAssemblyTypeName: Game.Enemies.EnemyFlyingDeathAnimation, Assembly-CSharp
-        m_MethodName: Trigger
+        m_MethodName: TriggerDeathAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -321,6 +322,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8027559162463396373}
     m_Modifications:
+    - target: {fileID: 6285209290496798474, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -28.101347
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798474, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798474, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798476, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 28.10135
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798476, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798482, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -370,6 +396,81 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798490, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 89.10343
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798490, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798490, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798492, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -89.104744
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798492, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798500, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 28.10135
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798500, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798564, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -28.101347
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798564, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798564, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798566, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 28.10135
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798566, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798590, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 83.14808
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798590, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -86.89023
+      objectReference: {fileID: 0}
+    - target: {fileID: 6285209290496798590, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -177.50664
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496832128, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
@@ -669,7 +770,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6285209290496832306, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3383918084907459784}
   m_SourcePrefab: {fileID: 100100000, guid: cdce7d2919347e144a212f720c296e97, type: 3}
 --- !u!95 &7180167226584548585 stripped
 Animator:
@@ -677,6 +782,29 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 3791072663806690311}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7180167226591819573 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6285209290496832306, guid: cdce7d2919347e144a212f720c296e97,
+    type: 3}
+  m_PrefabInstance: {fileID: 3791072663806690311}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3383918084907459784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180167226591819573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4377a4a0aed08ae4e942075a1a5e2f75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.AnimationEvent.AnimationEventReceiver
+  animationEvents:
+  - eventName: AttackBeginDangerous
+    unityEvent:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!4 &7180167226592307989 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6285209290496798482, guid: cdce7d2919347e144a212f720c296e97,

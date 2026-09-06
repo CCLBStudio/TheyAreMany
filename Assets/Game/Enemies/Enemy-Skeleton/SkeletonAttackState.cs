@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class SkeletonAttackState : EnemyAttackState
 {
+    [SerializeField] private Collider weaponCollider;
+    
     private Vector2 _desiredPosition;
     
     private void ComputeDesiredPosition()

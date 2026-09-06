@@ -5,7 +5,7 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
 {
     public EnemyFacade Facade { get; set; }
 
-    [SerializeField] private UnityEvent onDeath;
+    [SerializeField] private UnityEvent<IDamageSource> onDeath;
 
     private float _currentHealth;
     
@@ -23,10 +23,6 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
     {
     }
 
-    public void OnFixedUpdated()
-    {
-    }
-
     public void ReceiveDamages(IDamageSource damageSource)
     {
         if (_currentHealth <= 0f)
@@ -37,7 +33,7 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
         _currentHealth -= damageSource.GetDamages();
         if (_currentHealth <= 0f)
         {
-            onDeath?.Invoke();
+            onDeath?.Invoke(damageSource);
         }
     }
 }

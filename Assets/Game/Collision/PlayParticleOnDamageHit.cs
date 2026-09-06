@@ -20,7 +20,7 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
 
     public void ReceiveDamages(IDamageSource damageOrigin)
     {
-        if (damageOrigin.GetDamageType() != DamageType.Impact)
+        if (damageOrigin.GetDamageType() != DamageType.Bullet)
         {
             return;
         }

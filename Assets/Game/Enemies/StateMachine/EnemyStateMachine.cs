@@ -1,6 +1,7 @@
+using CCLBStudio.GlobalUpdater;
 using UnityEngine;
 
-public class EnemyStateMachine : MonoBehaviour, IEnemyBehaviour
+public class EnemyStateMachine : MonoBehaviour, IFixedUpdate, IEnemyBehaviour
 {
     public EnemyFacade Facade { get; set; }
 
@@ -56,7 +57,7 @@ public class EnemyStateMachine : MonoBehaviour, IEnemyBehaviour
     {
     }
 
-    public void OnFixedUpdated()
+    public void FixedTick()
     {
         _currentState.UpdateState();
     }

@@ -33,7 +33,7 @@ public class EnemyChaseState : MonoBehaviour, IEnemyBehaviour, IEnemyState
         rb.AddForce(direction.normalized * speed);
     }
 
-    protected virtual void OrientTowardsTarget()
+    protected void OrientTowardsTarget()
     {
         if (Target == null)
         {
@@ -64,10 +64,6 @@ public class EnemyChaseState : MonoBehaviour, IEnemyBehaviour, IEnemyState
     }
 
     public virtual void OnEnemyReleased()
-    {
-    }
-
-    public virtual void OnFixedUpdated()
     {
     }
     

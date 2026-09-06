@@ -1,6 +1,7 @@
-using System;
+using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptablePooling;
 using UnityEngine;
+using ZLinq;
 
 public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
 {
@@ -11,18 +12,6 @@ public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
     
     [SerializeField] protected ScriptableEnemy enemyData;
     [SerializeField] private EnemyStateMachine stateMachine;
-
-    #region Unity Events
-
-    private void FixedUpdate()
-    {
-        foreach (var b in _behaviours)
-        {
-            b.OnFixedUpdated();
-        }
-    }
-
-    #endregion
 
     #region Behaviour Methods
 
@@ -49,16 +38,18 @@ public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
 
     public void OnObjectRequested()
     {
-        foreach (var b in _behaviours)
+        foreach (var b in _behaviours.AsValueEnumerable().Where(x => x.AutoRegisterToGlobalUpdater()))
         {
+            GlobalUpdater.RegisterUpdatedObject(b);
             b.OnEnemyRequested();
         }
     }
 
     public void OnObjectReleased()
     {
-        foreach (var b in _behaviours)
+        foreach (var b in _behaviours.AsValueEnumerable().Where(x => x.AutoRegisterToGlobalUpdater()))
         {
+            GlobalUpdater.UnregisterUpdatedObject(b);
             b.OnEnemyReleased();
         }
     }

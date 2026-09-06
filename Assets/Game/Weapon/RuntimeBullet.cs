@@ -72,7 +72,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
 
     public DamageType GetDamageType()
     {
-        return DamageType.Impact;
+        return DamageType.Bullet;
     }
 
     public float GetDamages()

@@ -10,24 +10,24 @@ namespace CCLBStudio.GlobalUpdater
         protected static T[] buffer = Array.Empty<T>();
         protected static bool requireUpdateFlush;
 
-        internal static void RegisterUpdate(T Update)
+        internal static void RegisterUpdate(T u)
         {
-            if (Update == null)
+            if (u == null)
             {
                 return;
             }
             
-            updates.Add(Update);
+            updates.Add(u);
         }
 
-        internal static void UnregisterUpdate(T Update)
+        internal static void UnregisterUpdate(T u)
         {
-            if (Update == null)
+            if (u == null)
             {
                 return;
             }
             
-            updates.Remove(Update);
+            updates.Remove(u);
         }
 
         internal static void Clear()

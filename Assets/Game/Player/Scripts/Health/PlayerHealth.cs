@@ -1,7 +1,7 @@
-using System;
 using CCLBStudio.ScriptableValue;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game.Player.Scripts.Health
 {
@@ -10,6 +10,8 @@ namespace Game.Player.Scripts.Health
         public PlayerFacade Facade { get; set; }
 
         [SerializeField] private FloatValue playerHealth;
+        [SerializeField] private UnityEvent<IDamageSource, PlayerHealth> onDamagesTaken;
+        [SerializeField] private UnityEvent<IDamageSource> onDeath;
 
         private float _maxHealth;
         private bool _isDead;
@@ -19,18 +21,42 @@ namespace Game.Player.Scripts.Health
             _maxHealth = playerHealth.Value;
         }
 
-        private void TakeDamages(float amount)
+        private void TakeDamages(IDamageSource source)
         {
-            playerHealth.Value = Mathf.Max(playerHealth.Value - amount, 0);
-            if (playerHealth.Value <= 0)
+            if(_isDead)
             {
-                _isDead = true;
+                return;
             }
+            
+            playerHealth.Value = Mathf.Max(playerHealth.Value - source.GetDamages(), 0);
+            
+            if (CheckDeath())
+            {
+                TriggerDeath();
+            }
+            
+            TriggerDamagesTaken(source);
         }
 
         private void Heal(float amount)
         {
             playerHealth.Value = Mathf.Min(playerHealth.Value + amount, _maxHealth);
+        }
+        
+        private bool CheckDeath()
+        {
+            return playerHealth.Value <= 0 && !_isDead;
+        }
+
+        private void TriggerDeath()
+        {
+            _isDead = true;
+            onDeath?.Invoke(new DebugDamageSource(Vector3.zero, DamageType.Slash, 0));
+        }
+        
+        private void TriggerDamagesTaken(IDamageSource source)
+        {
+            onDamagesTaken?.Invoke(source, this);
         }
 
         #region Editor Methods
@@ -44,7 +70,7 @@ namespace Game.Player.Scripts.Health
                 return;
             }
             
-            TakeDamages(amount);
+            TakeDamages(new DebugDamageSource(Vector3.zero, DamageType.Slash, amount));
         }
         
         [Button("Heal")]

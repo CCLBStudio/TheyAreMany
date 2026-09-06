@@ -1,8 +1,10 @@
+using System;
+using CCLBStudio.GlobalUpdater;
 using UnityEngine;
 
 namespace Game.Enemies
 {
-    public class EnemyFlyingDeathAnimation : MonoBehaviour, IEnemyBehaviour, IDeathAnimation
+    public class EnemyFlyingDeathAnimation : MonoBehaviour, IFixedUpdate, IEnemyBehaviour, IDeathAnimation
     {
         public EnemyFacade Facade { get; set; }
 
@@ -13,19 +15,29 @@ namespace Game.Enemies
         private bool _triggered;
         private float _initialGravity, _initialLinearDamping;
         
-        public void Trigger()
+        public void TriggerDeathAnimation(IDamageSource killer)
         {
             collider.enabled = false;
             rb.gravityScale = gravityScale;
             rb.linearDamping = linearDamping;
             _triggered = true;
-            rb.AddForce(new Vector2(.4f, 1f).normalized * flyingForce, ForceMode2D.Impulse);
-            Invoke(nameof(Release), 5f);
+            float x = killer.GetPosition().x > transform.position.x ? -1f : 1f;
+            rb.AddForce(new Vector2(x * .4f, 1f).normalized * flyingForce, ForceMode2D.Impulse);
+            AwaitAndRelease();
         }
 
-        private void Release()
+        private async void AwaitAndRelease()
         {
-            Facade.ReleaseSelf();
+            try
+            {
+                await Awaitable.WaitForSecondsAsync(3f);
+                Facade.ReleaseSelf();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error while waiting for enemy release: {e.Message}");
+            }
+
         }
 
         public void OnEnemyCreated()
@@ -47,7 +59,7 @@ namespace Game.Enemies
 
         }
 
-        public void OnFixedUpdated()
+        public void FixedTick()
         {
             if (!_triggered)
             {

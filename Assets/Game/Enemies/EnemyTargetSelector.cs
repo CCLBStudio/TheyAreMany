@@ -1,9 +1,10 @@
 using System;
+using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptableValue;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class EnemyTargetSelector : MonoBehaviour, IEnemyBehaviour
+public class EnemyTargetSelector : MonoBehaviour, IFixedUpdate, IEnemyBehaviour
 {
     public EnemyFacade Facade { get; set; }
     public Transform Target { get; set; }
@@ -14,12 +15,9 @@ public class EnemyTargetSelector : MonoBehaviour, IEnemyBehaviour
 
     private Action _targetSelectionMethod;
 
-    private void FixedUpdate()
+    public void FixedTick()
     {
-        if (targetSelectionMethod == TargetSelection.Closest)
-        {
-            _targetSelectionMethod?.Invoke();
-        }
+        _targetSelectionMethod?.Invoke();
     }
 
     private void ChooseTargetSelectionMethod()
@@ -64,13 +62,17 @@ public class EnemyTargetSelector : MonoBehaviour, IEnemyBehaviour
     {
         ChooseTargetSelectionMethod();
         _targetSelectionMethod?.Invoke();
+
+        if (targetSelectionMethod == TargetSelection.Closest)
+        {
+            GlobalUpdater.RegisterFixedUpdate(this);
+        }
     }
 
     public void OnEnemyReleased()
     {
+        GlobalUpdater.UnregisterFixedUpdate(this);
     }
 
-    public void OnFixedUpdated()
-    {
-    }
+    public bool AutoRegisterToGlobalUpdater() => false;
 }

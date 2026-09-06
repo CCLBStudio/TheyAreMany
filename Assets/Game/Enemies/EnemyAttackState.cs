@@ -1,7 +1,8 @@
 using System;
+using CCLBStudio.GlobalUpdater;
 using UnityEngine;
 
-public class EnemyAttackState : MonoBehaviour, IEnemyBehaviour, IEnemyState
+public class EnemyAttackState : MonoBehaviour, IEnemyBehaviour, IFixedUpdate, IEnemyState
 {
     public virtual EnemyFacade Facade { get; set; }
     public virtual EnemyStateMachine StateMachine { get; set; }
@@ -36,7 +37,7 @@ public class EnemyAttackState : MonoBehaviour, IEnemyBehaviour, IEnemyState
     {
     }
 
-    public virtual void OnFixedUpdated()
+    public void FixedTick()
     {
         if (attackTimer > 0f)
         {

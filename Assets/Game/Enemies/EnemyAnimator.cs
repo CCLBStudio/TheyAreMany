@@ -76,10 +76,6 @@ public class EnemyAnimator : MonoBehaviour, IEnemyBehaviour
     public void OnEnemyReleased()
     {
     }
-
-    public void OnFixedUpdated()
-    {
-    }
     
     [Serializable]
     private struct AnimationInfo

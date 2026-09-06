@@ -33,8 +33,4 @@ public class EnemyDeathState : MonoBehaviour, IEnemyBehaviour, IEnemyState
     public void OnEnemyReleased()
     {
     }
-
-    public void OnFixedUpdated()
-    {
-    }
 }

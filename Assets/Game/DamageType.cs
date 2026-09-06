@@ -1,4 +1,4 @@
 public enum DamageType
 {
-    Impact, Explosion
+    Bullet, Explosion, Slash
 }
