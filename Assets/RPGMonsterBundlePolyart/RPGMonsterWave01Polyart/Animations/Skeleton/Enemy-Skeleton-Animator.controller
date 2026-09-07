@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.AnimationEvent.AnimationEventStateBehaviour
   eventName: AttackBeginDangerous
-  triggerTime: 0
+  triggerTime: 0.427
 --- !u!1101 &-230213364683811035
 AnimatorStateTransition:
   m_ObjectHideFlags: 1

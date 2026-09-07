@@ -17,6 +17,11 @@ public class SkeletonAttackState : EnemyAttackState
         return Vector2.Distance(rb.position, _desiredPosition);
     }
 
+    public void OnAttackBeginDangerous()
+    {
+        Debug.Log("BAM");
+    }
+
     public override void EnterState()
     {
         ComputeDesiredPosition();
