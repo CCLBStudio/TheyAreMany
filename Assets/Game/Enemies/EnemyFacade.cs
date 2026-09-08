@@ -38,18 +38,26 @@ public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
 
     public void OnObjectRequested()
     {
-        foreach (var b in _behaviours.AsValueEnumerable().Where(x => x.AutoRegisterToGlobalUpdater()))
+        foreach (var b in _behaviours)
         {
-            GlobalUpdater.RegisterUpdatedObject(b);
+            if (b.AutoRegisterToGlobalUpdater())
+            {
+                GlobalUpdater.RegisterUpdatedObject(b);
+            }
+            
             b.OnEnemyRequested();
         }
     }
 
     public void OnObjectReleased()
     {
-        foreach (var b in _behaviours.AsValueEnumerable().Where(x => x.AutoRegisterToGlobalUpdater()))
+        foreach (var b in _behaviours)
         {
-            GlobalUpdater.UnregisterUpdatedObject(b);
+            if (b.AutoRegisterToGlobalUpdater())
+            {
+                GlobalUpdater.UnregisterUpdatedObject(b);
+            }
+            
             b.OnEnemyReleased();
         }
     }
