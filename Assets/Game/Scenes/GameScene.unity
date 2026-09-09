@@ -57475,6 +57475,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1448095689}
   - component: {fileID: 1448095690}
+  - component: {fileID: 1448095691}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -57518,6 +57519,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetFps: 144
   tweenCapacity: 800
+--- !u!114 &1448095691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448095688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 516321d991552c94ab6fcb0e8f24c4e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HelloFromGenerated
 --- !u!1 &1448352892
 GameObject:
   m_ObjectHideFlags: 0
