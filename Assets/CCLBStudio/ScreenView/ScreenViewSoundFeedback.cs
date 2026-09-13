@@ -15,7 +15,7 @@ namespace CCLBStudio.ScreenView
         [SerializeField] private AudioClip clip;
         [SerializeField] private float volume = 1f;
 
-        [Inject] private ScreenViewService _service;
+        [InjectLegacy] private ScreenViewService _service;
         [NonSerialized] private bool _injected;
         
         public void PlayFeedback()

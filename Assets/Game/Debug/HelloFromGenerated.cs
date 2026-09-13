@@ -1,11 +1,12 @@
+using CCLBStudio.DependencyInjection;
 using UnityEngine;
-using XJector;
 
-public class HelloFromGenerated : MonoBehaviour
+public partial class HelloFromGenerated : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Inject] private TestProvider _testProvider;
+    
     void Start()
     {
-        Debug.Log("hey");
+        _testProvider.Print();
     }
 }

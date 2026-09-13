@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("XJector.Sample")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+21509830b3c8c8eea6c1b1bb3dbd55b9152cc5e7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f14f02b43e0648b7a4a728cbec8c289c85327a43")]
 [assembly: System.Reflection.AssemblyProductAttribute("XJector.Sample")]
 [assembly: System.Reflection.AssemblyTitleAttribute("XJector.Sample")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

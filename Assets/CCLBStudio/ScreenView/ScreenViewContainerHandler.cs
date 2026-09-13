@@ -31,7 +31,7 @@ namespace CCLBStudio.ScreenView
         protected GraphicRaycaster raycaster;
         protected List<ScreenView> displayedViews;
         
-        [NonSerialized][Inject]
+        [NonSerialized][InjectLegacy]
         private ScreenViewService _screenViewService;
 
 

@@ -154,7 +154,7 @@ namespace CCLBStudio.DependencyInjection
         {
             var type = target.GetType();
 
-            var injectableFields = type.GetFields(Flags).Where(f => Attribute.IsDefined(f, typeof(InjectAttribute)));
+            var injectableFields = type.GetFields(Flags).Where(f => Attribute.IsDefined(f, typeof(InjectLegacyAttribute)));
             foreach (var field in injectableFields)
             {
                 var fieldType = field.FieldType;
@@ -182,7 +182,7 @@ namespace CCLBStudio.DependencyInjection
         {
             var type = target.GetType();
             
-            var injectableProperties = type.GetProperties(Flags).Where(p => Attribute.IsDefined(p, typeof(InjectAttribute)));
+            var injectableProperties = type.GetProperties(Flags).Where(p => Attribute.IsDefined(p, typeof(InjectLegacyAttribute)));
             foreach (var property in injectableProperties)
             {
                 var propertyType = property.PropertyType;
@@ -207,7 +207,7 @@ namespace CCLBStudio.DependencyInjection
         {
             var type = target.GetType();
             
-            var injectableMethods = type.GetMethods(Flags).Where(m => Attribute.IsDefined(m, typeof(InjectAttribute)));
+            var injectableMethods = type.GetMethods(Flags).Where(m => Attribute.IsDefined(m, typeof(InjectLegacyAttribute)));
             foreach (var method in injectableMethods)
             {
                 var methodParameters = method.GetParameters().Select(p => p.ParameterType).ToArray();
@@ -296,7 +296,7 @@ namespace CCLBStudio.DependencyInjection
             var methods = provider.GetType().GetMethods(Flags);
             foreach (var method in methods)
             {
-                if(!Attribute.IsDefined(method, typeof(ProvideAttribute)))
+                if(!Attribute.IsDefined(method, typeof(ProvideLegacyAttribute)))
                 {
                     continue;
                 }
@@ -350,7 +350,7 @@ namespace CCLBStudio.DependencyInjection
         private static bool IsInjectable(MonoBehaviour obj)
         {
             var members = obj.GetType().GetMembers(Flags);
-            return members.Any(m => Attribute.IsDefined(m, typeof(InjectAttribute)));
+            return members.Any(m => Attribute.IsDefined(m, typeof(InjectLegacyAttribute)));
         }
 
         /// Determines if the given object is injectable by checking if it has members marked with the InjectAttribute.
@@ -361,7 +361,7 @@ namespace CCLBStudio.DependencyInjection
         private static bool IsInjectable(object obj)
         {
             var members = obj.GetType().GetMembers(Flags);
-            return members.Any(m => Attribute.IsDefined(m, typeof(InjectAttribute)));
+            return members.Any(m => Attribute.IsDefined(m, typeof(InjectLegacyAttribute)));
         }
 
         /// Determines if the specified dependency provider is already registered with the Injector.

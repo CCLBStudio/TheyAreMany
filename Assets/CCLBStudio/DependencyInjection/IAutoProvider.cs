@@ -3,6 +3,6 @@ using UnityEngine;
 
 public interface IAutoProvider<out T> where T : IDependencyProvider
 {
-    [Provide]
+    [ProvideLegacy]
     public T Provide();
 }

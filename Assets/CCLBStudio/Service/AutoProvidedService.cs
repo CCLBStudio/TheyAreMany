@@ -5,7 +5,7 @@ namespace Scripts.Services
 {
     public abstract class AutoProvidedService<T> : AppService, IAutoProvider<T> where T : AutoProvidedService<T>
     {
-        [Provide]
+        [ProvideLegacy]
         public T Provide() => (T)this;
     }
 }

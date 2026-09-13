@@ -11,7 +11,7 @@ namespace CCLBStudio.ScreenView
         [SerializeField] private ViewId viewId;
         [SerializeField] private ViewAction action = ViewAction.Show;
         
-        [NonSerialized] [Inject]
+        [NonSerialized] [InjectLegacy]
         private ScreenViewService _screenViewService;
         
         private enum ViewAction {Show, Close}

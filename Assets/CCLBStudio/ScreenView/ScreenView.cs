@@ -191,7 +191,7 @@ namespace CCLBStudio.ScreenView
         public Action onSubmit;
         public Action onCancel;
 
-        [NonSerialized][Inject]
+        [NonSerialized][InjectLegacy]
         private ScreenViewService _screenViewService;
 
         private ScreenViewAnimator _showAnimator;
