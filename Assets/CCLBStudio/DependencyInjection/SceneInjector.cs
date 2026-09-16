@@ -6,7 +6,6 @@ namespace CCLBStudio.DependencyInjection
     [DefaultExecutionOrder(-10)]
     public class SceneInjector : MonoBehaviour
     {
-        [HideInInspector]
         public List<MonoBehaviour> bakedInjectables = new();
 
         private void Awake()

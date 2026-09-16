@@ -10,6 +10,13 @@ namespace CCLBStudio.DependencyInjection
         
         public static void Provide<T>(T instance)
         {
+            if(instance == null)
+            {
+                Debug.LogWarning($"[XJectorContainer] Attempted to provide a null instance of type {typeof(T)}.");
+                return;
+            }
+            
+            Debug.Log($"[XJectorContainer] Provide instance of type {typeof(T)}.");
             _registry[typeof(T)] = instance;
             Debug.Log($"[XJectorContainer] Added object of type {typeof(T)} to registry.");
         }
@@ -29,15 +36,18 @@ namespace CCLBStudio.DependencyInjection
     [Provide]
     public partial class TestProvider
     {
-        // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        // public static void Provide()
-        // {
-        //     XJectorContainer.Provide(new TestProvider());
-        // }
-
         public void Print()
         {
             Debug.Log($"[XJectorContainer] Debug Print");
+        }
+    }
+    
+    [Provide]
+    public partial class TestProvider2
+    {
+        public void Print()
+        {
+            Debug.Log($"[XJectorContainer] Prout");
         }
     }
 }

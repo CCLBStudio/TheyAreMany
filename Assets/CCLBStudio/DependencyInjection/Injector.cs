@@ -57,6 +57,7 @@ namespace CCLBStudio.DependencyInjection
         /// If any dependency cannot be resolved during injection, an exception may be thrown.
         protected override void Awake()
         {
+            Debug.Log("obsolete");
             base.Awake();
             Providers.Clear();
 
