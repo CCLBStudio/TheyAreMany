@@ -25,7 +25,6 @@ namespace Services
         {
             foreach (var service in services)
             {
-                service.RegisterToInjector();
                 service.Initialize();
             }
             

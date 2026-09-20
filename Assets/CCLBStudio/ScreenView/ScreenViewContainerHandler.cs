@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace CCLBStudio.ScreenView
 {
-    public class ScreenViewContainerHandler : SelfInjectedMonoBehaviour, IViewServiceListener
+    public partial class ScreenViewContainerHandler : InjectedMonoBehaviour, IViewServiceListener
     {
         #region Editor
 
@@ -31,7 +31,7 @@ namespace CCLBStudio.ScreenView
         protected GraphicRaycaster raycaster;
         protected List<ScreenView> displayedViews;
         
-        [NonSerialized][InjectLegacy]
+        [NonSerialized][Inject]
         private ScreenViewService _screenViewService;
 
 

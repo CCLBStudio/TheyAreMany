@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Services
 {
-    public abstract class AppService : ScriptableObject, IDependencyProvider
+    public abstract class AppService : ScriptableObject
     {
         public virtual void Initialize()
         {

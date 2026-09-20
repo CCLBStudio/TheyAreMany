@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CCLBStudio.DependencyInjection;
 using CCLBStudio.SerializablePairs;
 using CCLBStudio.Utils;
-using Scripts.Services;
+using Services;
 using UnityEngine;
 using Utils;
 
 namespace CCLBStudio.ScreenView
 {
     [CreateAssetMenu(menuName = "CCLB Studio/Screen View/Service SO", fileName = "ScreenViewService")]
-    public class ScreenViewService : AutoProvidedService<ScreenViewService>
+    [Provide]
+    public class ScreenViewService : AppService
     {
 #region Editor Properties
 #if UNITY_EDITOR
