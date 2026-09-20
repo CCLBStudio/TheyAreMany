@@ -23,8 +23,6 @@ public class ProviderSourceGenerator : IIncrementalGenerator
             .Select(static (c, _) => c.AssemblyName);
         var combined = assemblyName.Combine(classDeclarations.Collect());
         
-        //var compilationAndClasses = context.CompilationProvider.Combine(classDeclarations.Collect());
-        
         context.RegisterSourceOutput(combined, static (spc, source) =>
         {
             Execute(source.Left, source.Right, spc);
@@ -54,8 +52,92 @@ public class ProviderSourceGenerator : IIncrementalGenerator
             .Select(r => r.GetSyntax())
             .OfType<ClassDeclarationSyntax>()
             .Any(c => c.Modifiers.Any(m => m.Text == "partial"));
-        
-        return new ProviderClassInfo(className, namespaceName, isPartial);
+
+        ProviderKind kind = GetProviderKind(classSymbol);
+
+        var provideAttribute = classSymbol.GetAttributes()
+            .FirstOrDefault(a => a.AttributeClass?.Name is "ProvideAttribute" or "Provide");
+
+        int monoStrategy = GetIntArgument(provideAttribute, "MonoStrategy", 0);
+        int registerOn = GetIntArgument(provideAttribute, "RegisterOn", 0);
+        bool dontDestroyOnLoad = GetBoolArgument(provideAttribute, "DontDestroyOnLoad", true);
+        string resourcesPath = GetStringArgument(provideAttribute, "ResourcesPath");
+
+        string eventName = RegistrationEventName(registerOn);
+        bool userDefinesEvent = classSymbol.GetMembers(eventName).OfType<IMethodSymbol>().Any();
+
+        return new ProviderClassInfo(className, namespaceName, isPartial)
+        {
+            Kind = kind,
+            MonoStrategy = monoStrategy,
+            RegisterOn = registerOn,
+            DontDestroyOnLoad = dontDestroyOnLoad,
+            ResourcesPath = resourcesPath,
+            EventName = eventName,
+            UserDefinesEvent = userDefinesEvent
+        };
+    }
+
+    private static ProviderKind GetProviderKind(INamedTypeSymbol classSymbol)
+    {
+        for (var baseType = classSymbol.BaseType; baseType != null; baseType = baseType.BaseType)
+        {
+            switch (baseType.ToDisplayString())
+            {
+                case "UnityEngine.MonoBehaviour":
+                    return ProviderKind.MonoBehaviour;
+                case "UnityEngine.ScriptableObject":
+                    return ProviderKind.ScriptableObject;
+            }
+        }
+
+        return ProviderKind.PlainClass;
+    }
+
+    private static string RegistrationEventName(int registerOn) => registerOn switch
+    {
+        1 => "OnEnable",
+        2 => "Start",
+        _ => "Awake"
+    };
+
+    private static int GetIntArgument(AttributeData attribute, string name, int defaultValue)
+    {
+        if (attribute == null) return defaultValue;
+        foreach (var arg in attribute.NamedArguments)
+        {
+            if (arg.Key == name && arg.Value.Value != null)
+            {
+                return System.Convert.ToInt32(arg.Value.Value);
+            }
+        }
+        return defaultValue;
+    }
+
+    private static bool GetBoolArgument(AttributeData attribute, string name, bool defaultValue)
+    {
+        if (attribute == null) return defaultValue;
+        foreach (var arg in attribute.NamedArguments)
+        {
+            if (arg.Key == name && arg.Value.Value is bool b)
+            {
+                return b;
+            }
+        }
+        return defaultValue;
+    }
+
+    private static string GetStringArgument(AttributeData attribute, string name)
+    {
+        if (attribute == null) return null;
+        foreach (var arg in attribute.NamedArguments)
+        {
+            if (arg.Key == name && arg.Value.Value is string s)
+            {
+                return s;
+            }
+        }
+        return null;
     }
     
     private static void Execute(string assemblyName, ImmutableArray<ProviderClassInfo> fields, SourceProductionContext context)
@@ -72,7 +154,15 @@ public class ProviderSourceGenerator : IIncrementalGenerator
 
             foreach (var group in groupedFields)
             {
-                // Security: if the user forgot "partial", we generate a Roslyn error (the famous red underline in the IDE)
+                ProviderClassInfo info = group.First();
+
+                // SO are handled by some Unity Editor code, so we don't generate code for them here.
+                if (info.Kind == ProviderKind.ScriptableObject)
+                {
+                    continue;
+                }
+
+                // Security: if the user forgot "partial", we generate a Roslyn error
                 if (!group.Key.IsPartial)
                 {
                     var diagnostic = Diagnostic.Create(
@@ -81,31 +171,15 @@ public class ProviderSourceGenerator : IIncrementalGenerator
                     context.ReportDiagnostic(diagnostic);
                     continue;
                 }
-                
-                string code = new CodeWriter()
-                    .WriteComment("<auto-generated/>")
-                    .WriteUsings("UnityEngine", "CCLBStudio.DependencyInjection")
-                    .OpenNamespace(group.Key.Namespace)
-                    
-                    .OpenClass(group.Key.ClassName)
-                    .WithAccessModifier(CodeWriter.AccessModifier.Public)
-                    .WithPartial(true)
-                    .Build()
-                    
-                    .WriteMethod("Provide")
-                    .WithAccessModifier(CodeWriter.AccessModifier.Public)
-                    .WithStatic(true)
-                    .WithReturnType("void")
-                    .WithAttributes("RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)")
-                    .WithInstruction($"XJectorContainer.Provide(new {group.Key.ClassName}());")
-                    .Build()
-                    
-                    .CloseBlock()
-                    .CloseNamespace()
-                    .Build();
 
-                // Ajouter le fichier généré à la compilation
-                context.AddSource($"{group.Key.ClassName}_Provide.g.cs", SourceText.From(code, Encoding.UTF8));
+
+                ICodeSource codeSource = CreateCodeText(info, context);
+                if (codeSource == null)
+                {
+                    continue;
+                }
+
+                context.AddSource($"{group.Key.ClassName}_Provide.g.cs", SourceText.From(codeSource.GetCode(), Encoding.UTF8));
 
                 string fullName = string.IsNullOrEmpty(group.Key.Namespace)
                     ? group.Key.ClassName
@@ -115,6 +189,48 @@ public class ProviderSourceGenerator : IIncrementalGenerator
 
             EmitReport(generatedClasses, context);
         }
+
+    private static ICodeSource CreateCodeText(ProviderClassInfo info, SourceProductionContext context)
+    {
+        switch (info.Kind)
+        {
+            case ProviderKind.MonoBehaviour:
+                if (info.MonoStrategy == 1)
+                {
+                    // Self-register: warn the user when their own lifecycle method needs to call XJectorRegister().
+                    if (info.UserDefinesEvent)
+                    {
+                        context.ReportDiagnostic(Diagnostic.Create(
+                            new DiagnosticDescriptor("DI003", "Forbidden lifecycle method override",
+                                $"Class {info.ClassName} uses a [Provide] attribute specifying to perform the providing at '{info.EventName}' but already defines '{info.EventName}'. This is forbidden. Either remove your own '{info.EventName}' method, change the [Provide] attribute to use a different lifecycle event you don't already define, or derive from ProvidedMonoBehaviour.",
+                                "DependencyInjection", DiagnosticSeverity.Error, true),
+                            Location.None));
+
+                        return null;
+                    }
+
+                    return new ProviderForMonoBehaviourSelfRegister(info.Namespace, info.ClassName, info.EventName, info.UserDefinesEvent);
+                }
+
+                return new ProviderForMonoBehaviourBootstrap(info.Namespace, info.ClassName, info.DontDestroyOnLoad);
+
+            case ProviderKind.ScriptableObject:
+                // if (string.IsNullOrEmpty(info.ResourcesPath))
+                // {
+                //     context.ReportDiagnostic(Diagnostic.Create(
+                //         new DiagnosticDescriptor("DI002", "Missing Resources path",
+                //             $"ScriptableObject {info.ClassName} must set [Provide(ResourcesPath = \"...\")] pointing to the asset to provide.",
+                //             "DependencyInjection", DiagnosticSeverity.Error, true),
+                //         Location.None));
+                //     return null;
+                // }
+                //
+                // return new ProviderForScriptableObject(info.Namespace, info.ClassName, info.ResourcesPath);
+
+            default:
+                return new ProviderForClassWithEmptyConstructor(info.Namespace, info.ClassName);
+        }
+    }
     
     private static void EmitReportForEmptyAssembly(string assemblyName, SourceProductionContext context)
     {
@@ -151,9 +267,24 @@ public class ProviderSourceGenerator : IIncrementalGenerator
         }
 }
 
-public class ProviderClassInfo(string ClassName, string Namespace, bool IsPartial)
+public enum ProviderKind
 {
-    public string ClassName { get; } = ClassName;
-    public string Namespace { get; } = Namespace;
-    public bool IsPartial { get; } = IsPartial;
+    PlainClass,
+    MonoBehaviour,
+    ScriptableObject
+}
+
+public class ProviderClassInfo(string className, string @namespace, bool isPartial)
+{
+    public string ClassName { get; } = className;
+    public string Namespace { get; } = @namespace;
+    public bool IsPartial { get; } = isPartial;
+
+    public ProviderKind Kind { get; set; } = ProviderKind.PlainClass;
+    public int MonoStrategy { get; set; }
+    public int RegisterOn { get; set; }
+    public bool DontDestroyOnLoad { get; set; } = true;
+    public string ResourcesPath { get; set; }
+    public string EventName { get; set; } = "Awake";
+    public bool UserDefinesEvent { get; set; }
 }

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class SkeletonAttackState : EnemyAttackState
 {
+    [SerializeField] private Collider2D attackCollider;
+    
     private Vector2 _desiredPosition;
     
     private void ComputeDesiredPosition()
@@ -17,7 +19,12 @@ public class SkeletonAttackState : EnemyAttackState
 
     public void OnAttackBeginDangerous()
     {
-        Debug.Log("BAM");
+        if (!attackCollider)
+        {
+            Debug.LogError("Attack collider is not assigned.");
+            return;
+        }
+        attackCollider.enabled = true;
     }
 
     public override void EnterState()

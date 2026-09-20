@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-[CreateAssetMenu(fileName = "NewInputReader", menuName = "CCLBStudio/Inputs/InputReader")]
+[CreateAssetMenu(fileName = "NewInputReader", menuName = "CCLB Studio/Inputs/InputReader")]
 public class InputReader : ScriptableObject, PlayerControls.IPlayerActions
 {
     [SerializeField] private bool autoInit = true;

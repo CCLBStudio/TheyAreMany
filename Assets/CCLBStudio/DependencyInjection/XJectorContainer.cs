@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace CCLBStudio.DependencyInjection
 {
@@ -10,15 +12,30 @@ namespace CCLBStudio.DependencyInjection
         
         public static void Provide<T>(T instance)
         {
-            if(instance == null)
+            AddToRegistry(typeof(T), instance);
+        }
+        
+        public static void Provide(Type type, object instance)
+        {
+            AddToRegistry(type, instance);
+        }
+        
+        private static void AddToRegistry(Type type, object instance)
+        {
+            if (instance is Object o && !o)
             {
-                Debug.LogWarning($"[XJectorContainer] Attempted to provide a null instance of type {typeof(T)}.");
+                Debug.LogWarning($"[XJectorContainer] Attempted to add a destroyed UnityEngine.Object of type {type} to registry.");
                 return;
             }
             
-            Debug.Log($"[XJectorContainer] Provide instance of type {typeof(T)}.");
-            _registry[typeof(T)] = instance;
-            Debug.Log($"[XJectorContainer] Added object of type {typeof(T)} to registry.");
+            if(instance == null)
+            {
+                Debug.LogWarning($"[XJectorContainer] Attempted to add a null instance of type {type} to registry.");
+                return;
+            }
+            
+            _registry[type] = instance;
+            Debug.Log($"[XJectorContainer] Added object of type {type} to registry.");
         }
 
         public static T Resolve<T>()
@@ -31,23 +48,18 @@ namespace CCLBStudio.DependencyInjection
             Debug.LogWarning($"[XJectorContainer] No object of type {typeof(T)} found in registry.");
             return default;
         }
-    }
-    
-    [Provide]
-    public partial class TestProvider
-    {
-        public void Print()
+
+        #region Editor
+        #if UNITY_EDITOR
+        
+        [InitializeOnEnterPlayMode]
+        private static void ClearRegistry()
         {
-            Debug.Log($"[XJectorContainer] Debug Print");
+            _registry.Clear();
+            Debug.Log($"[XJectorContainer] Cleared registry on entering play mode.");
         }
-    }
-    
-    [Provide]
-    public partial class TestProvider2
-    {
-        public void Print()
-        {
-            Debug.Log($"[XJectorContainer] Prout");
-        }
+        
+        #endif
+        #endregion
     }
 }
