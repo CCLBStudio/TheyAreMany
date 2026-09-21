@@ -215,17 +215,7 @@ public class ProviderSourceGenerator : IIncrementalGenerator
                 return new ProviderForMonoBehaviourBootstrap(info.Namespace, info.ClassName, info.DontDestroyOnLoad);
 
             case ProviderKind.ScriptableObject:
-                // if (string.IsNullOrEmpty(info.ResourcesPath))
-                // {
-                //     context.ReportDiagnostic(Diagnostic.Create(
-                //         new DiagnosticDescriptor("DI002", "Missing Resources path",
-                //             $"ScriptableObject {info.ClassName} must set [Provide(ResourcesPath = \"...\")] pointing to the asset to provide.",
-                //             "DependencyInjection", DiagnosticSeverity.Error, true),
-                //         Location.None));
-                //     return null;
-                // }
-                //
-                // return new ProviderForScriptableObject(info.Namespace, info.ClassName, info.ResourcesPath);
+                return null;
 
             default:
                 return new ProviderForClassWithEmptyConstructor(info.Namespace, info.ClassName);

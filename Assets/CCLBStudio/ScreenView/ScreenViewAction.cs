@@ -18,11 +18,6 @@ namespace CCLBStudio.ScreenView
         
         public override void Execute()
         {
-            if (!_screenViewService)
-            {
-                Injector.InjectNewConsumer(this);
-            }
-            
             switch(action)
             {
                 case ViewAction.Show:

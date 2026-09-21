@@ -4,8 +4,8 @@ namespace CCLBStudio.DependencyInjection
 {
     public abstract class InjectedMonoBehaviour : MonoBehaviour
     {
-        [SerializeField] private InjectAt injectAt = InjectAt.Start;
-        private enum InjectAt
+        [SerializeField] private MonoInjectEvent injectAt = MonoInjectEvent.Start;
+        private enum MonoInjectEvent
         {
             Awake,
             OnEnable,
@@ -14,7 +14,7 @@ namespace CCLBStudio.DependencyInjection
         
         protected virtual void Awake()
         {
-            if (injectAt == InjectAt.Awake)
+            if (injectAt == MonoInjectEvent.Awake)
             {
                 TryInject();
             }
@@ -22,7 +22,7 @@ namespace CCLBStudio.DependencyInjection
         
         protected virtual void OnEnable()
         {
-            if (injectAt == InjectAt.OnEnable)
+            if (injectAt == MonoInjectEvent.OnEnable)
             {
                 TryInject();
             }
@@ -30,7 +30,7 @@ namespace CCLBStudio.DependencyInjection
         
         protected virtual void Start()
         {
-            if (injectAt == InjectAt.Start)
+            if (injectAt == MonoInjectEvent.Start)
             {
                 TryInject();
             }

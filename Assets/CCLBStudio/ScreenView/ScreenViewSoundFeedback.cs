@@ -7,7 +7,7 @@ using UnityEngine;
 namespace CCLBStudio.ScreenView
 {
     [Serializable]
-    public class ScreenViewSoundFeedback : IScreenViewFeedback
+    public partial class ScreenViewSoundFeedback : IScreenViewFeedback
     {
         [NullInfo("Will create a default one")]
         [SerializeField] private GameObject audioSource;
@@ -15,19 +15,19 @@ namespace CCLBStudio.ScreenView
         [SerializeField] private AudioClip clip;
         [SerializeField] private float volume = 1f;
 
-        [InjectLegacy] private ScreenViewService _service;
+        [Inject] private ScreenViewService _service;
         [NonSerialized] private bool _injected;
         
         public void PlayFeedback()
         {
+            if(!_injected)
+            {
+                InjectDependencies(); // TODO: should be automated by the DI system somehow
+                _injected = true;
+            }
+            
             if (!clip)
             {
-                if(!_injected)
-                {
-                    _injected = true;
-                    Injector.InjectNewConsumer(this);
-                }
-
                 clip = _service.DefaultClickSound;
             }
             

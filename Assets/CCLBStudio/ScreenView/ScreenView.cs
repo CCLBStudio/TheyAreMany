@@ -41,7 +41,7 @@ namespace CCLBStudio.ScreenView
     #endregion
 
     [RequireComponent(typeof(CanvasGroup))]
-    public class ScreenView : MonoBehaviour
+    public partial class ScreenView : MonoBehaviour
     {
         #region Editor
 
@@ -191,7 +191,7 @@ namespace CCLBStudio.ScreenView
         public Action onSubmit;
         public Action onCancel;
 
-        [NonSerialized][InjectLegacy]
+        [NonSerialized][Inject]
         private ScreenViewService _screenViewService;
 
         private ScreenViewAnimator _showAnimator;
@@ -223,7 +223,6 @@ namespace CCLBStudio.ScreenView
         protected virtual void Initialize()
         {
             _isInit = true;
-            Injector.InjectNewConsumer(this);
             
             VerifyContainer();
             InitializeAnimations();

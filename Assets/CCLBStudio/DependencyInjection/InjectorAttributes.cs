@@ -12,6 +12,11 @@ namespace CCLBStudio.DependencyInjection
     {
     }
     
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public sealed class InjectAllAttribute : Attribute
+    {
+    }
+    
     /// <summary>
     /// Strategy used to provide a MonoBehaviour instance to the container.
     /// </summary>
