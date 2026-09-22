@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using XJector.Extensions;
 
 namespace XJector;
 
@@ -15,7 +16,7 @@ public class ProviderSourceGenerator : IIncrementalGenerator
     {
         var classDeclarations = context.SyntaxProvider
             .CreateSyntaxProvider(
-                predicate: static (s, _) => IsClassWithAttributes(s),
+                predicate: static (s, _) => s.IsClassWithProvideAttribute(),
                 transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx))
             .Where(static m => m != null);
         
@@ -29,14 +30,14 @@ public class ProviderSourceGenerator : IIncrementalGenerator
         });
     }
     
-    private static bool IsClassWithAttributes(SyntaxNode node)
-    {
-        return node is ClassDeclarationSyntax classDeclaration 
-               && classDeclaration.AttributeLists.Count > 0
-               && classDeclaration.AttributeLists
-                   .SelectMany(al => al.Attributes)
-                   .Any(attr => attr.Name.ToString() is "Provide" or "ProvideAttribute");
-    }
+    // private static bool IsClassWithAttributes(SyntaxNode node)
+    // {
+    //     return node is ClassDeclarationSyntax classDeclaration 
+    //            && classDeclaration.AttributeLists.Count > 0
+    //            && classDeclaration.AttributeLists
+    //                .SelectMany(al => al.Attributes)
+    //                .Any(attr => attr.Name.ToString() is "Provide" or "ProvideAttribute");
+    // }
     
     private static ProviderClassInfo GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
     {
@@ -53,15 +54,18 @@ public class ProviderSourceGenerator : IIncrementalGenerator
             .OfType<ClassDeclarationSyntax>()
             .Any(c => c.Modifiers.Any(m => m.Text == "partial"));
 
-        ProviderKind kind = GetProviderKind(classSymbol);
+        //ProviderKind kind = GetProviderKind(classSymbol);
+        ProviderKind kind = classSymbol.GetProviderKind();
 
         var provideAttribute = classSymbol.GetAttributes()
             .FirstOrDefault(a => a.AttributeClass?.Name is "ProvideAttribute" or "Provide");
 
-        int monoStrategy = GetIntArgument(provideAttribute, "MonoStrategy", 0);
-        int registerOn = GetIntArgument(provideAttribute, "RegisterOn", 0);
-        bool dontDestroyOnLoad = GetBoolArgument(provideAttribute, "DontDestroyOnLoad", true);
-        string resourcesPath = GetStringArgument(provideAttribute, "ResourcesPath");
+        //int monoStrategy = GetIntArgument(provideAttribute, "MonoStrategy", 0);
+        int monoStrategy = provideAttribute.GetIntArgument("MonoStrategy");
+        //int registerOn = GetIntArgument(provideAttribute, "RegisterOn", 0);
+        int registerOn = provideAttribute.GetIntArgument("RegisterOn");
+        bool dontDestroyOnLoad = provideAttribute.GetBoolArgument("DontDestroyOnLoad", true);
+        string resourcesPath = provideAttribute.GetStringArgument("ResourcesPath");
 
         string eventName = RegistrationEventName(registerOn);
         bool userDefinesEvent = classSymbol.GetMembers(eventName).OfType<IMethodSymbol>().Any();
@@ -78,21 +82,21 @@ public class ProviderSourceGenerator : IIncrementalGenerator
         };
     }
 
-    private static ProviderKind GetProviderKind(INamedTypeSymbol classSymbol)
-    {
-        for (var baseType = classSymbol.BaseType; baseType != null; baseType = baseType.BaseType)
-        {
-            switch (baseType.ToDisplayString())
-            {
-                case "UnityEngine.MonoBehaviour":
-                    return ProviderKind.MonoBehaviour;
-                case "UnityEngine.ScriptableObject":
-                    return ProviderKind.ScriptableObject;
-            }
-        }
-
-        return ProviderKind.PlainClass;
-    }
+    // private static ProviderKind GetProviderKind(INamedTypeSymbol classSymbol)
+    // {
+    //     for (var baseType = classSymbol.BaseType; baseType != null; baseType = baseType.BaseType)
+    //     {
+    //         switch (baseType.ToDisplayString())
+    //         {
+    //             case "UnityEngine.MonoBehaviour":
+    //                 return ProviderKind.MonoBehaviour;
+    //             case "UnityEngine.ScriptableObject":
+    //                 return ProviderKind.ScriptableObject;
+    //         }
+    //     }
+    //
+    //     return ProviderKind.PlainClass;
+    // }
 
     private static string RegistrationEventName(int registerOn) => registerOn switch
     {
@@ -101,44 +105,44 @@ public class ProviderSourceGenerator : IIncrementalGenerator
         _ => "Awake"
     };
 
-    private static int GetIntArgument(AttributeData attribute, string name, int defaultValue)
-    {
-        if (attribute == null) return defaultValue;
-        foreach (var arg in attribute.NamedArguments)
-        {
-            if (arg.Key == name && arg.Value.Value != null)
-            {
-                return System.Convert.ToInt32(arg.Value.Value);
-            }
-        }
-        return defaultValue;
-    }
+    // private static int GetIntArgument(AttributeData attribute, string name, int defaultValue)
+    // {
+    //     if (attribute == null) return defaultValue;
+    //     foreach (var arg in attribute.NamedArguments)
+    //     {
+    //         if (arg.Key == name && arg.Value.Value != null)
+    //         {
+    //             return System.Convert.ToInt32(arg.Value.Value);
+    //         }
+    //     }
+    //     return defaultValue;
+    // }
 
-    private static bool GetBoolArgument(AttributeData attribute, string name, bool defaultValue)
-    {
-        if (attribute == null) return defaultValue;
-        foreach (var arg in attribute.NamedArguments)
-        {
-            if (arg.Key == name && arg.Value.Value is bool b)
-            {
-                return b;
-            }
-        }
-        return defaultValue;
-    }
-
-    private static string GetStringArgument(AttributeData attribute, string name)
-    {
-        if (attribute == null) return null;
-        foreach (var arg in attribute.NamedArguments)
-        {
-            if (arg.Key == name && arg.Value.Value is string s)
-            {
-                return s;
-            }
-        }
-        return null;
-    }
+    // private static bool GetBoolArgument(AttributeData attribute, string name, bool defaultValue)
+    // {
+    //     if (attribute == null) return defaultValue;
+    //     foreach (var arg in attribute.NamedArguments)
+    //     {
+    //         if (arg.Key == name && arg.Value.Value is bool b)
+    //         {
+    //             return b;
+    //         }
+    //     }
+    //     return defaultValue;
+    // }
+    //
+    // private static string GetStringArgument(AttributeData attribute, string name)
+    // {
+    //     if (attribute == null) return null;
+    //     foreach (var arg in attribute.NamedArguments)
+    //     {
+    //         if (arg.Key == name && arg.Value.Value is string s)
+    //         {
+    //             return s;
+    //         }
+    //     }
+    //     return null;
+    // }
     
     private static void Execute(string assemblyName, ImmutableArray<ProviderClassInfo> fields, SourceProductionContext context)
         {
