@@ -1,9 +1,12 @@
+using CCLBStudio.GlobalUpdater;
+using MoreMountains.Feedbacks;
 using PrimeTween;
 using UnityEngine;
 
-public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamageSource
+public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamageSource, IFixedUpdate
 {
     [SerializeField] private Collider2D rocketCollider;
+    [SerializeField] private MMF_Player feedback;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private LayerMask collisionMask;
     
@@ -24,7 +27,7 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         rocketCollider.enabled = true;
     }
 
-    private void FixedUpdate()
+    public void FixedTick()
     {
         _lifetime -= Time.fixedDeltaTime;
         if (_lifetime <= 0f)
@@ -52,6 +55,7 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         
         PlayExplosionParticles();
         ApplyDamages();
+        feedback?.PlayFeedbacks();
         Pool.ReleaseObject(this);
     }
 
@@ -91,11 +95,13 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
 
     public override void OnObjectRequested()
     {
+        GlobalUpdater.RegisterFixedUpdate(this);
         _isAlive = true;
     }
     
     public override void OnObjectReleased()
     {
+        GlobalUpdater.UnregisterFixedUpdate(this);
         rocketCollider.enabled = false;
     }
 

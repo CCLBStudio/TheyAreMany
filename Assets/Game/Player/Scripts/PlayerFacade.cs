@@ -1,4 +1,3 @@
-using System;
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptableValue;
 using UnityEngine;

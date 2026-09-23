@@ -21,7 +21,7 @@ namespace Game.Player.Scripts.Health
             _maxHealth = playerHealth.Value;
         }
 
-        private void TakeDamages(IDamageSource source)
+        public void TakeDamages(IDamageSource source)
         {
             if(_isDead)
             {
@@ -32,7 +32,7 @@ namespace Game.Player.Scripts.Health
             
             if (CheckDeath())
             {
-                TriggerDeath();
+                TriggerDeath(source);
             }
             
             TriggerDamagesTaken(source);
@@ -48,10 +48,10 @@ namespace Game.Player.Scripts.Health
             return playerHealth.Value <= 0 && !_isDead;
         }
 
-        private void TriggerDeath()
+        private void TriggerDeath(IDamageSource source)
         {
             _isDead = true;
-            onDeath?.Invoke(new DebugDamageSource(Vector3.zero, DamageType.Slash, 0));
+            onDeath?.Invoke(source);
         }
         
         private void TriggerDamagesTaken(IDamageSource source)

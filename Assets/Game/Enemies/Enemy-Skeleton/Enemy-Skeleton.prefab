@@ -48,10 +48,10 @@ GameObject:
   - component: {fileID: 1066269070901999816}
   - component: {fileID: 8164720436173187075}
   - component: {fileID: 4752302678668734128}
-  - component: {fileID: 4388007597322882468}
-  - component: {fileID: 5851865607832927506}
   - component: {fileID: 2111678839398766429}
   - component: {fileID: 361235001457151818}
+  - component: {fileID: 4388007597322882468}
+  - component: {fileID: 5851865607832927506}
   m_Layer: 8
   m_Name: Enemy-Skeleton
   m_TagString: Untagged
@@ -116,7 +116,7 @@ MonoBehaviour:
   targetSelector: {fileID: 4752302678668734128}
   animPlayer: {fileID: 8164720436173187075}
   rb: {fileID: 4388007597322882468}
-  attackCollider: {fileID: 0}
+  attackCollider: {fileID: 597256152300386053}
 --- !u!114 &5466280723640532300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +170,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2111678839398766429}
         m_TargetAssemblyTypeName: Game.Enemies.EnemyFlyingDeathAnimation, Assembly-CSharp
         m_MethodName: TriggerDeathAnimation
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -211,6 +211,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSelectionMethod: 0
   players: {fileID: 11400000, guid: 5ea5a3977e5e357409bb11b7c99e0880, type: 2}
+--- !u!114 &2111678839398766429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2882988783833478545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5e78ad174bbd04b919db217ed5b173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Enemies.EnemyFlyingDeathAnimation
+  rb: {fileID: 4388007597322882468}
+  collider: {fileID: 5851865607832927506}
+  flyingForce: 65
+  rotationSpeed: 1000
+  gravityScale: 2
+  linearDamping: 0
+--- !u!114 &361235001457151818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2882988783833478545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64ea84c05c6fdb74194a98304bbc5c34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathState
 --- !u!50 &4388007597322882468
 Rigidbody2D:
   serializedVersion: 5
@@ -284,36 +314,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1.7}
   m_EdgeRadius: 0
---- !u!114 &2111678839398766429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2882988783833478545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c5e78ad174bbd04b919db217ed5b173, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Enemies.EnemyFlyingDeathAnimation
-  rb: {fileID: 4388007597322882468}
-  collider: {fileID: 5851865607832927506}
-  flyingForce: 65
-  rotationSpeed: 1000
-  gravityScale: 2
-  linearDamping: 0
---- !u!114 &361235001457151818
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2882988783833478545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64ea84c05c6fdb74194a98304bbc5c34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathState
 --- !u!1001 &3791072663806690311
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -789,6 +789,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 597256152300386053}
+    - targetCorrespondingSourceObject: {fileID: 6285209290496832376, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8913664959173484673}
+    - targetCorrespondingSourceObject: {fileID: 6285209290496832376, guid: cdce7d2919347e144a212f720c296e97,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 666856290310780850}
   m_SourcePrefab: {fileID: 100100000, guid: cdce7d2919347e144a212f720c296e97, type: 3}
 --- !u!95 &7180167226584548585 stripped
 Animator:
@@ -858,6 +866,45 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.11225369, y: 0.45669645, z: 1.2594349}
   m_Center: {x: 0.008470291, y: 0.036462314, z: 0.94943964}
+--- !u!54 &8913664959173484673
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180167226591819647}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &666856290310780850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180167226591819647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb443caa1334ba842b57bfee6870621b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MeleeWeaponDamageDealer
 --- !u!4 &7180167226592307989 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6285209290496798482, guid: cdce7d2919347e144a212f720c296e97,
