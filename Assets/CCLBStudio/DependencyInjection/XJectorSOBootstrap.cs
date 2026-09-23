@@ -2,10 +2,12 @@ using UnityEngine;
 
 namespace CCLBStudio.DependencyInjection
 {
-    [CreateAssetMenu(fileName = "XJectorSORegistry", menuName = "CCLB Studio/XJector/XJectorSORegistry")]
-    public class XJectorSORegistry : ScriptableObject
+    [CreateAssetMenu(fileName = "XJectorSOBootstrap", menuName = "CCLB Studio/XJector/XJectorSOBootstrap")]
+    public class XJectorSOBootstrap : ScriptableObject
     {
+        public static string Name => "XJectorSOBootstrap";
         public ScriptableObject[] toProvide;
+        public ScriptableObject[] toInject;
     }
 
     public static class XJectorSORegistryLoader
@@ -13,7 +15,7 @@ namespace CCLBStudio.DependencyInjection
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void LoadRegistry()
         {
-            var registry = Resources.Load<XJectorSORegistry>("XJectorSORegistry");
+            var registry = Resources.Load<XJectorSOBootstrap>(XJectorSOBootstrap.Name);
             if (!registry) return;
             
             foreach (var so in registry.toProvide)
@@ -24,6 +26,16 @@ namespace CCLBStudio.DependencyInjection
                 }
                 
                 XJectorContainer.Provide(so.GetType(), so);
+            }
+
+            foreach (var so in registry.toInject)
+            {
+                if (!so || so is not IGeneratedInjectable i)
+                {
+                    continue;
+                }
+
+                i.InjectDependencies();
             }
         }
     }

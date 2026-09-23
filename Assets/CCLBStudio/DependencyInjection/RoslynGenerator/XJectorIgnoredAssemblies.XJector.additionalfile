@@ -1,0 +1,17 @@
+[
+ "CCLBStudio.Extensions",
+ "Lofelt.NiceVibrations",
+ "Lofelt.NiceVibrations.Editor",
+ "CCLBStudio.GlobalUpdater",
+ "Wingman",
+ "PathCreatorEditor",
+ "Lofelt.NiceVibrations.Demo",
+ "PathCreator",
+ "PrimeTween.Debug",
+ "Sirenix.OdinInspector.Modules.UnityMathematics",
+ "PrimeTween.Installer",
+ "PrimeTween.Demo",
+ "MoreMountains.Tools",
+ "MoreMountains.Tools.Editor",
+ "Assembly-CSharp-Editor",
+]
