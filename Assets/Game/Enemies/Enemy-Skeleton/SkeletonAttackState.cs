@@ -19,12 +19,12 @@ public class SkeletonAttackState : EnemyAttackState
 
     public void OnAttackBeginDangerous()
     {
-        if (!attackCollider)
-        {
-            Debug.LogError("Attack collider is not assigned.");
-            return;
-        }
-        attackCollider.enabled = true;
+        EnableDamageCollider(true);
+    }
+    
+    public void OnAttackEndDangerous()
+    {
+        EnableDamageCollider(false);
     }
 
     public override void EnterState()
@@ -46,5 +46,15 @@ public class SkeletonAttackState : EnemyAttackState
         {
             LaunchAttack();
         }
+    }
+    
+    private void EnableDamageCollider(bool enable)
+    {
+        if (!attackCollider)
+        {
+            Debug.LogError("Attack collider is not assigned.");
+            return;
+        }
+        attackCollider.enabled = enable;
     }
 }

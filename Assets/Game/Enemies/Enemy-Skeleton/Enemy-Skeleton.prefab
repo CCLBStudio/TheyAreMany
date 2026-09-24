@@ -325,32 +325,32 @@ PrefabInstance:
     - target: {fileID: 6285209290496798474, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -27.131927
+      value: -27.258064
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798474, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -106.33363
+      value: -105.149864
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798474, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -172.38773
+      value: -172.93056
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798476, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 26.79757
+      value: 26.966719
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798476, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 108.93574
+      value: 107.56772
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798476, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 8.79234
+      value: 8.170937
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798482, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
@@ -440,32 +440,32 @@ PrefabInstance:
     - target: {fileID: 6285209290496798564, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -27.10572
+      value: -27.235235
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798564, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -73.447495
+      value: -74.64683
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798564, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 172.28796
+      value: 172.83752
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798566, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 26.99686
+      value: 27.1404
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798566, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 72.56797
+      value: 73.82973
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798566, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -8.112039
+      value: -7.5356493
       objectReference: {fileID: 0}
     - target: {fileID: 6285209290496798590, guid: cdce7d2919347e144a212f720c296e97,
         type: 3}
@@ -830,6 +830,22 @@ MonoBehaviour:
         - m_Target: {fileID: 1569377491821892351}
           m_TargetAssemblyTypeName: SkeletonAttackState, Assembly-CSharp
           m_MethodName: OnAttackBeginDangerous
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventName: AttackEndDangerous
+    unityEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1569377491821892351}
+          m_TargetAssemblyTypeName: SkeletonAttackState, Assembly-CSharp
+          m_MethodName: OnAttackEndDangerous
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
