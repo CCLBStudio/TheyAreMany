@@ -89,7 +89,7 @@ namespace CCLBStudio.AnimationEvent
             }
 
             _playableGraph = PlayableGraph.Create("BlendTreePreviewGraph");
-            _mixer = AnimationMixerPlayable.Create(_playableGraph, 1, true);
+            _mixer = AnimationMixerPlayable.Create(_playableGraph, 1);
 
             var output = AnimationPlayableOutput.Create(_playableGraph, "Animation", animator);
             output.SetSourcePlayable(_mixer);
