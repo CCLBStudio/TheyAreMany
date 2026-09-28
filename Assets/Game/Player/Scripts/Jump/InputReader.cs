@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
 [CreateAssetMenu(fileName = "NewInputReader", menuName = "CCLB Studio/Inputs/InputReader")]
-public class InputReader : ScriptableObject, PlayerControls.IPlayerActions
+public partial class InputReader : ScriptableObject, PlayerControls.IPlayerActions
 {
     [SerializeField] private bool autoInit = true;
     [SerializeField] private PlayerId playerId = PlayerId.Player1;

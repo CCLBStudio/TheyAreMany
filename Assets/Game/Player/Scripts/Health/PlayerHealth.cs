@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Game.Player.Scripts.Health
 {
-    public class PlayerHealth : MonoBehaviour, IPlayerBehaviour
+    public class PlayerHealth : MonoBehaviour, IPlayerBehaviour, IHealth
     {
         public PlayerFacade Facade { get; set; }
 
@@ -21,7 +21,7 @@ namespace Game.Player.Scripts.Health
             _maxHealth = playerHealth.Value;
         }
 
-        public void TakeDamages(IDamageSource source)
+        public void ReceiveDamages(IDamageSource source)
         {
             if(_isDead)
             {
@@ -38,7 +38,7 @@ namespace Game.Player.Scripts.Health
             TriggerDamagesTaken(source);
         }
 
-        private void Heal(float amount)
+        public void Heal(float amount)
         {
             playerHealth.Value = Mathf.Min(playerHealth.Value + amount, _maxHealth);
         }
@@ -70,7 +70,7 @@ namespace Game.Player.Scripts.Health
                 return;
             }
             
-            TakeDamages(new DebugDamageSource(Vector3.zero, DamageType.Slash, amount));
+            ReceiveDamages(new DebugDamageSource(Vector3.zero, DamageType.Slash, amount));
         }
         
         [Button("Heal")]
