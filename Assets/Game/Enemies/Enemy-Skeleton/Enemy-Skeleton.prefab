@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 361235001457151818}
   - component: {fileID: 4388007597322882468}
   - component: {fileID: 5851865607832927506}
+  - component: {fileID: 8757704415675234395}
   m_Layer: 8
   m_Name: Enemy-Skeleton
   m_TagString: Untagged
@@ -171,6 +172,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Game.Enemies.EnemyFlyingDeathAnimation, Assembly-CSharp
         m_MethodName: TriggerDeathAnimation
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8757704415675234395}
+        m_TargetAssemblyTypeName: EnemyDeathParticlesPlayer, Assembly-CSharp
+        m_MethodName: PlayParticles
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -314,6 +327,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1.7}
   m_EdgeRadius: 0
+--- !u!114 &8757704415675234395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2882988783833478545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51baa44ef77ac7d459f94831ce5628fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathParticlesPlayer
+  particlesPool: {fileID: 11400000, guid: 8faf5e2452def3b4ab510d96ce403e72, type: 2}
 --- !u!1001 &3791072663806690311
 PrefabInstance:
   m_ObjectHideFlags: 0

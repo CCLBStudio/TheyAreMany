@@ -1,5 +1,6 @@
 using System;
 using CCLBStudio.GlobalUpdater;
+using CCLBStudio.ScriptablePooling;
 using UnityEngine;
 
 namespace Game.Enemies

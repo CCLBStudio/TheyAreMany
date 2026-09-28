@@ -14,11 +14,11 @@ namespace CCLBStudio.ScriptablePooling
         [Tooltip("The initial quantity of pooled objects to instantiate during the Initialize method. If this quantity is not enough, other objects will be automatically spawned.")]
         [Min(1)][SerializeField] private int quantityToInstantiate = 10;
         [Tooltip("If TRUE, automatically disable the pooled object when it is instantiated.")]
-        [SerializeField] private bool disableObjectOnCreation;
+        [SerializeField] private bool disableObjectOnCreation = true;
         [Tooltip("If TRUE, automatically disable the pooled object when it is released.")]
-        [SerializeField] private bool disableObjectOnRelease;
+        [SerializeField] private bool disableObjectOnRelease = true;
         [Tooltip("If TRUE, automatically enable the pooled object when it is requested.")]
-        [SerializeField] private bool enableObjectOnRequest;
+        [SerializeField] private bool enableObjectOnRequest = true;
 
         [NonSerialized] private Transform _poolContainer;
         [NonSerialized] private bool _init;

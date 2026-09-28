@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour
@@ -20,4 +21,19 @@ public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour
         inputReader.PrimaryAbilityReleaseEvent += _currentAbility.OnInputReleased;
         inputReader.AimEvent += _currentAbility.OnAim;
     }
+
+    #region Editor
+    #if UNITY_EDITOR
+
+    [Button]
+    private void LaunchAbility()
+    {
+        if (_currentAbility)
+        {
+            _currentAbility.OnInputPressed();
+        }
+    }
+    
+    #endif
+    #endregion
 }
