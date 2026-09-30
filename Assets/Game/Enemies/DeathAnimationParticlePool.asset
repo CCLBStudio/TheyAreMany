@@ -17,4 +17,4 @@ MonoBehaviour:
   quantityToInstantiate: 10
   disableObjectOnCreation: 1
   disableObjectOnRelease: 1
-  enableObjectOnRequest: 1
+  enableObjectOnRequest: 0

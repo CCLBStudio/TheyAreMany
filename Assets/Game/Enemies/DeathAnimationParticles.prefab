@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7034106293146379983}
   - component: {fileID: 2271465108141293173}
   - component: {fileID: 4190991218075439066}
+  - component: {fileID: 8350752203829372928}
   m_Layer: 0
   m_Name: DeathAnimationParticles
   m_TagString: Untagged
@@ -115,9 +116,9 @@ ParticleSystem:
     enabled: 1
     startLifetime:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 5
-      minScalar: 5
+      minMaxState: 3
+      scalar: 1.2
+      minScalar: 0.8
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -287,8 +288,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 10
-      minScalar: 8
+      scalar: 11
+      minScalar: 7
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -4854,3 +4855,15 @@ ParticleSystemRenderer:
   m_MeshWeighting1: 1
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
+--- !u!114 &8350752203829372928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3278108637450892378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da1092268f5aa8446b98854ef029ee79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlyingAnimationParticles

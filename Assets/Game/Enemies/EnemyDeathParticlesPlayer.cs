@@ -6,14 +6,14 @@ public class EnemyDeathParticlesPlayer : MonoBehaviour, IEnemyBehaviour
     public EnemyFacade Facade { get; set; }
 
     [SerializeField] private ScriptablePool particlesPool;
+    [SerializeField] private Transform particlesTarget;
     
-    private DefaultPooledObject _ps;
+    private FlyingAnimationParticles _ps;
 
     public void PlayParticles()
     {
-        _ps = particlesPool.RequestObjectAs<DefaultPooledObject>();
-        _ps.transform.parent = transform;
-        _ps.transform.localPosition = Vector3.zero;
+        _ps = particlesPool.RequestObjectAs<FlyingAnimationParticles>();
+        _ps.SetTarget(particlesTarget);
     }
     
     public void OnEnemyCreated()
@@ -26,6 +26,6 @@ public class EnemyDeathParticlesPlayer : MonoBehaviour, IEnemyBehaviour
 
     public void OnEnemyReleased()
     {
-        particlesPool.ReleaseObject(_ps);
+        _ps.SetDirty();
     }
 }

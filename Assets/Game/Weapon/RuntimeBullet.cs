@@ -1,7 +1,8 @@
+using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptablePooling;
 using UnityEngine;
 
-public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSource
+public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSource, IFixedUpdate
 {
     public ScriptablePool Pool { get; set; }
     public Vector2 Direction { get; set; }
@@ -14,7 +15,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
     private float _currentLifetime;
     private ScriptableWeapon _currentWeapon;
 
-    void FixedUpdate()
+    public void FixedTick()
     {
         if(!_isAlive || !_isInit)
         {
@@ -80,16 +81,6 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
         return _currentWeapon.Damages;
     }
 
-    public float GetKnockbackForce()
-    {
-        return _currentWeapon.DamageableKnockbackForce;
-    }
-
-    public Collider2D GetCollider()
-    {
-        return bulletCollider;
-    }
-
     public void OnObjectCreated()
     {
         _isAlive = false;
@@ -100,10 +91,12 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
     {
         _isAlive = false;
         _isInit = false;
+        GlobalUpdater.UnregisterFixedUpdate(this);
     }
 
     public void OnObjectRequested()
     {
         _isAlive = true;
+        GlobalUpdater.RegisterFixedUpdate(this);
     }
 }
