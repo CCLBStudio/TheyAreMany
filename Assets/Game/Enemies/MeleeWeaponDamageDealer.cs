@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class MeleeWeaponDamageDealer : MonoBehaviour, IDamageSource
 {
+    private Vector3? _hitPoint;
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out IDamageTarget t))
         {
-            Debug.Log($"Inflict damages to {other.name}");
+            _hitPoint = other.ClosestPoint(transform.position);
             t.ReceiveDamages(this);
         }
     }
@@ -14,6 +16,11 @@ public class MeleeWeaponDamageDealer : MonoBehaviour, IDamageSource
     public Vector3 GetPosition()
     {
         return transform.position;
+    }
+
+    public Vector3? GetHitPoint()
+    {
+        return _hitPoint;
     }
 
     public DamageType GetDamageType()

@@ -112,6 +112,11 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         return transform.position;
     }
 
+    public Vector3? GetHitPoint()
+    {
+        return null;
+    }
+
     public DamageType GetDamageType()
     {
         return DamageType.Explosion;

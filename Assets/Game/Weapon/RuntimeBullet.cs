@@ -51,9 +51,10 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
             return;
         }
 
+        var hitPoint = other.ClosestPoint(transform.position);
         foreach (var i in interactors)
         {
-            i.ReceiveDamages(this);
+            i.ReceiveDamages(this, hitPoint);
         }
         
         Pool.ReleaseObject(this);

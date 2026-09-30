@@ -18,7 +18,7 @@ MonoBehaviour:
   casingPool: {fileID: 11400000, guid: a75d27a8900218249a08b04d070e8a3e, type: 2}
   muzzlePool: {fileID: 11400000, guid: 60e0cfd0eb63bbf4cae0896f215f04bc, type: 2}
   groundImpactPool: {fileID: 11400000, guid: 622402ee73723eb42b15638002577c0b, type: 2}
-  damages: 50
+  damages: 5
   attackSpeed: 20
   playerKnockbackForce: 5
   playerInAirKnockbackForceXMultiplier: 1

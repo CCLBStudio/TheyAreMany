@@ -18,7 +18,7 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
         }
     }
 
-    public void ReceiveDamages(IDamageSource damageOrigin)
+    public void ReceiveDamages(IDamageSource damageOrigin, Vector3? hitPoint = null)
     {
         if (damageOrigin.GetDamageType() != DamageType.Bullet)
         {
@@ -26,7 +26,7 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
         }
         
         var effect = effectPool.RequestObjectAs<PooledParticleSystem>();
-        Vector3 bulletPos = damageOrigin.GetPosition();
+        Vector3 bulletPos = hitPoint ?? damageOrigin.GetPosition();
         effect.transform.position = _collider.ClosestPoint(bulletPos);
 
         if (orientTowardsBullet)

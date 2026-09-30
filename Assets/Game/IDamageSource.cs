@@ -25,6 +25,11 @@ public class DebugDamageSource : IDamageSource
         return _position;
     }
 
+    public Vector3? GetHitPoint()
+    {
+        return GetPosition();
+    }
+
     public DamageType GetDamageType()
     {
         return _damageType;

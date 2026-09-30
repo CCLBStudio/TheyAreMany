@@ -114,7 +114,6 @@ namespace Game.Enemies
             catch (OperationCanceledException)
             {
                 // Enemy was released/reused before the delay ended
-                Debug.LogError($"Error while waiting for enemy release : enemy was released too early");
             }
             catch (Exception e)
             {

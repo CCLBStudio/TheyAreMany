@@ -23,7 +23,7 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
     {
     }
 
-    public void ReceiveDamages(IDamageSource damageSource)
+    public void ReceiveDamages(IDamageSource damageSource, Vector3? hitPoint = null)
     {
         if (_currentHealth <= 0f)
         {

@@ -21,7 +21,7 @@ namespace Game.Player.Scripts.Health
             _maxHealth = playerHealth.Value;
         }
 
-        public void ReceiveDamages(IDamageSource source)
+        public void ReceiveDamages(IDamageSource source, Vector3? hitPoint = null)
         {
             if(_isDead)
             {
