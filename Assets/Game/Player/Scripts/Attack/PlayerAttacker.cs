@@ -1,13 +1,13 @@
 using CCLBStudio.GlobalUpdater;
+using Game.ModularWeapon;
+using Game.Weapon;
 using UnityEngine;
 
-public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour, IUpdate
+public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour, IUpdate, IWeaponOwner, IKnockbackTarget
 {
-    public Transform WeaponHolder => weaponHolder;
-    public Rigidbody2D PlayerRb => playerRb;
-    public PlayerJumper Jumper { get; private set; }
     public PlayerFacade Facade { get; set; }
-
+    public Transform WeaponContainer => weaponHolder;
+    
     [SerializeField] private InputReader inputReader;
     [SerializeField] private ScriptableWeapon startWeapon;
     [SerializeField] private Transform weaponPivot;
@@ -19,31 +19,19 @@ public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour, IUpdate
     private float _shootingTimer;
     private Vector2 _shootingDirection;
     private RuntimeWeapon _currentWeapon;
+    private PlayerJumper _jumper;
     
     public void Initialize()
     {
         inputReader.AimEvent += OnAim;
         _currentWeapon = startWeapon.Equip(this);
-        Jumper = GetComponent<PlayerJumper>();
+        _jumper = Facade.GetBehaviour<PlayerJumper>();
     }
 
     public void Tick()
     {
         weaponPivot.rotation = Quaternion.FromToRotation(Vector3.right, _shootingDirection);
-        
-        if(_shootingTimer > 0f)
-        {
-            _shootingTimer -= Time.deltaTime;
-            return;
-        }
-
-        if(!_isShooting)
-        {
-            return;
-        }
-        
-        _currentWeapon.Shoot(_shootingDirection);
-        _shootingTimer = 1f / _currentWeapon.AttackSpeed;
+        _currentWeapon.ShootingDirection = _shootingDirection;
     }
     
     private void OnAim(Vector2 direction)
@@ -63,5 +51,18 @@ public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour, IUpdate
 
         _isShooting = shooting;
         _shootingDirection = direction.normalized;
+    }
+
+    private bool IsGrounded()
+    {
+        return !_jumper || _jumper.Grounded; // true if no jumper component
+    }
+
+    public void ApplyKnockback(Vector3 direction, Vector3 inAirModifier)
+    {
+        direction.x *= IsGrounded() ? 1f : inAirModifier.x;
+        direction.y *= IsGrounded() ? 1f : inAirModifier.y;
+        
+        playerRb.AddForce(direction, ForceMode2D.Impulse);
     }
 }

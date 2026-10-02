@@ -17,7 +17,7 @@ namespace CCLBStudio.ScriptableValue
             var value = (BaseScriptableValue)property.objectReferenceValue;
             float availableWidth = position.width;
 
-            float width = availableWidth - 110f;
+            float width = availableWidth - 130f;
             position.width = width;
             properties.secondaryRect.x = position.x + position.width + 10;
             properties.secondaryRect.y = position.y;
@@ -27,7 +27,7 @@ namespace CCLBStudio.ScriptableValue
 
             if (!value)
             {
-                properties.secondaryRect.width = 100f;
+                properties.secondaryRect.width = 120f;
 
                 if (GUI.Button(properties.secondaryRect, "Create New"))
                 {
@@ -38,10 +38,11 @@ namespace CCLBStudio.ScriptableValue
             }
             else if(!value.TargetTypeIsList && property.objectReferenceValue)
             {
-                GUI.enabled = !Application.isPlaying;
-                
-                properties.secondaryRect.width = 200f;
                 properties.valueSerializedObject ??= new SerializedObject(property.objectReferenceValue);
+                
+                GUI.enabled = !(Application.isPlaying && properties.valueSerializedObject.FindProperty(ScriptableValue<dynamic>.ResetValueOnPlayModeExitProperty).boolValue);
+                
+                properties.secondaryRect.width = 120f;
                 SerializedProperty valueProperty = properties.valueSerializedObject.FindProperty(ScriptableValue<dynamic>.ValueProperty);
                 EditorGUI.PropertyField(properties.secondaryRect, valueProperty, new GUIContent(""));
                 properties.valueSerializedObject.ApplyModifiedProperties();

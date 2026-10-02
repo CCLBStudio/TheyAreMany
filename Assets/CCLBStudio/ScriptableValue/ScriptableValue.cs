@@ -4,7 +4,6 @@ using UnityEditor;
 #endif
 
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CCLBStudio.ScriptableValue
@@ -15,6 +14,7 @@ namespace CCLBStudio.ScriptableValue
 
         public static string ValueProperty => nameof(value);
         public static string InitialValueProperty => nameof(initialValue);
+        public static string ResetValueOnPlayModeExitProperty => nameof(resetValueOnPlayModeExit);
         public override Type TargetType => typeof(T);
 
 #endif
@@ -30,6 +30,8 @@ namespace CCLBStudio.ScriptableValue
         [SerializeField] protected T value;
         
         #if UNITY_EDITOR
+        [Tooltip("If TRUE, when exiting play mode, reset the value to how it was before entering play mode.")]
+        [SerializeField] private bool resetValueOnPlayModeExit = true;
         [SerializeField] protected T initialValue;
         #endif
 
@@ -110,7 +112,17 @@ namespace CCLBStudio.ScriptableValue
         {
             if (state == PlayModeStateChange.EnteredEditMode)
             {
-                CopyInitialValueToValue();
+                if(resetValueOnPlayModeExit)
+                {
+                    CopyInitialValueToValue();
+                }
+                else
+                {
+                    if(!value.Equals(initialValue))
+                    {
+                        EditorUtility.SetDirty(this);
+                    }
+                }
             }
         }
         

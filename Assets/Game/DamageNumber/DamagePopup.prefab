@@ -572,9 +572,9 @@ MonoBehaviour:
   shakeFrequencyFadeIn: 4
   durationFadeOut: 0.2
   enableOffsetFadeOut: 1
-  offsetFadeOut: {x: 0.5, y: 0}
-  enableScaleFadeOut: 0
-  scaleFadeOut: {x: 2, y: 2}
+  offsetFadeOut: {x: 0, y: 0}
+  enableScaleFadeOut: 1
+  scaleFadeOut: {x: 0.25, y: 0.25}
   enableCrossScaleFadeOut: 0
   crossScaleFadeOut: {x: 1, y: 1.5}
   enableShakeFadeOut: 0

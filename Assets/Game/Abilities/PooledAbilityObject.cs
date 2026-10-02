@@ -5,8 +5,6 @@ public abstract class PooledAbilityObject<T> : MonoBehaviour, IScriptablePooledO
 {
     public ScriptablePool Pool { get; set; }
     
-    //[SerializeField] protected T scriptableAbility;
-
     public abstract void Initialize(T scriptableAbility);
 
     public virtual void SetPositionAndRotation(Vector3 position, Quaternion rotation)

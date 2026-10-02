@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 247b560e56fd32e449398781cfd9b377, type: 3}
+  m_Name: AR-ModularWeapon
+  m_EditorClassIdentifier: Assembly-CSharp::ModularScriptableWeapon
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  weaponName: AR
+  weaponPrefab: {fileID: 6187710562396662232, guid: 9e1d1ed370e774d4e88e899ed2e902c4,
+    type: 3}
+  modules:
+  - rid: 7511233456634593373
+  - rid: 7511233475889332333
+  references:
+    version: 2
+    RefIds:
+    - rid: 7511233456634593373
+      type: {class: ShootBulletModule, ns: Game.ModularWeapon, asm: Assembly-CSharp}
+      data:
+        bulletPool: {fileID: 11400000, guid: 9908f6fa45d618648ada32f501132f87, type: 2}
+        baseDamage:
+          min: 4
+          max: 6
+        baseFireRate: {fileID: 11400000, guid: 93883fbafc8477342942c7fd9e1fa4b6, type: 2}
+        baseSpread: {fileID: 11400000, guid: 84ea8c3fc097ff74eafd3f06b27db759, type: 2}
+        baseBulletSpeed: {fileID: 11400000, guid: 2ee55391272e02c478f64c6246a7f092,
+          type: 2}
+        baseLifetime: {fileID: 11400000, guid: b3b6024c9dc58ed4cb4fe4e37b900e80, type: 2}
+        onShootEffects:
+        - rid: 7511233460892074081
+        - rid: 7511233475889332331
+        - rid: 7511233475889332334
+    - rid: 7511233460892074081
+      type: {class: SpawnCasingEffect, ns: Game.ModularWeapon, asm: Assembly-CSharp}
+      data:
+        casingPool: {fileID: 11400000, guid: a75d27a8900218249a08b04d070e8a3e, type: 2}
+        ejectionForce: {fileID: 11400000, guid: 369e0c6c93429b9488758de220fef911,
+          type: 2}
+        casingDispersion: {fileID: 11400000, guid: 5f064372357dff845be39fcfdeaa0133,
+          type: 2}
+        ejectionDirection: {x: -0.4472136, y: 0.8944272, z: 0}
+    - rid: 7511233475889332331
+      type: {class: SpawnMuzzleWeaponEffect, ns: Game.ModularWeapon, asm: Assembly-CSharp}
+      data:
+        muzzlePool: {fileID: 11400000, guid: 60e0cfd0eb63bbf4cae0896f215f04bc, type: 2}
+    - rid: 7511233475889332333
+      type: {class: AnimationWeaponModule, ns: Game.ModularWeapon, asm: Assembly-CSharp}
+      data:
+        shootingTriggerName: Shooting
+    - rid: 7511233475889332334
+      type: {class: KnockbackWeaponEffect, ns: Game.ModularWeapon, asm: Assembly-CSharp}
+      data:
+        force: {fileID: 11400000, guid: 3ca69137e4a0226438647736b8709615, type: 2}
+        inAirMultiplier: {fileID: 11400000, guid: 637c6f010be4e5e4b97e99096a2a5f88,
+          type: 2}

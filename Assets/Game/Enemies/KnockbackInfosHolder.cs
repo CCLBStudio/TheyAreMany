@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class KnockbackInfosHolder : MonoBehaviour, IKnockbackTarget
 {
-    [SerializeField] private Rigidbody2D rb;
-
-    public Rigidbody2D GetRigidbody()
+    public void ApplyKnockback(Vector3 direction, Vector3 inAirModifier)
     {
-        return rb;
+        throw new System.NotImplementedException();
     }
 }

@@ -300,8 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953594f3df9633747884beaa95dec02d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugAndTest
-  damageNumberPrefab: {fileID: 1307128595359496716, guid: 2cdbba7d8ecdad04797915478ca0778f,
-    type: 3}
+  weapon: {fileID: 11400000, guid: fe868c2777f31e54eb005e4e49da8775, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

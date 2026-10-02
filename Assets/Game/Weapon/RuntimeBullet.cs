@@ -1,5 +1,6 @@
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptablePooling;
+using Game.ModularWeapon;
 using UnityEngine;
 
 public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSource, IFixedUpdate
@@ -13,7 +14,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
     private bool _isAlive;
     private bool _isInit;
     private float _currentLifetime;
-    private ScriptableWeapon _currentWeapon;
+    private IRuntimeBulletStat _bulletStat;
 
     public void FixedTick()
     {
@@ -29,7 +30,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
             return;
         }
 
-        rb.MovePosition(rb.position + Direction * (_currentWeapon.BulletSpeed * Time.fixedDeltaTime));
+        rb.MovePosition(rb.position + Direction * (_bulletStat.GetSpeed() * Time.fixedDeltaTime));
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -44,26 +45,25 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
         var interactors = other.gameObject.GetComponents<IDamageTarget>();
         if (interactors.Length <= 0)
         {
-            var effect = _currentWeapon.GroundImpactPool.RequestObjectAs<PooledParticleSystem>();
-            effect.transform.position = other.ClosestPoint(transform.position);
-            effect.Play();
             Pool.ReleaseObject(this);
             return;
         }
 
         var hitPoint = other.ClosestPoint(transform.position);
+        var ctx = new DamageContext(this, _bulletStat.GetDamage());
+        
         foreach (var i in interactors)
         {
-            i.ReceiveDamages(this, hitPoint);
+            i.ReceiveDamages(ctx, hitPoint);
         }
         
         Pool.ReleaseObject(this);
     }
     
-    public void Initialize(ScriptableWeapon weapon)
+    public void Initialize(IRuntimeBulletStat stat)
     {
-        _currentWeapon = weapon;
-        _currentLifetime = weapon.BulletLifetime;
+        _bulletStat = stat;
+        _currentLifetime = stat.GetLifetime();
         _isInit = true;
     }
 
@@ -75,11 +75,6 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
     public DamageType GetDamageType()
     {
         return DamageType.Bullet;
-    }
-
-    public float GetDamages()
-    {
-        return _currentWeapon.Damages;
     }
 
     public void OnObjectCreated()

@@ -10,7 +10,7 @@ namespace Game.Player.Scripts.Health
         public PlayerFacade Facade { get; set; }
 
         [SerializeField] private FloatValue playerHealth;
-        [SerializeField] private UnityEvent<IDamageSource, PlayerHealth> onDamagesTaken;
+        [SerializeField] private UnityEvent<IDamageContext, PlayerHealth> onDamagesTaken;
         [SerializeField] private UnityEvent<IDamageSource> onDeath;
 
         private float _maxHealth;
@@ -21,21 +21,21 @@ namespace Game.Player.Scripts.Health
             _maxHealth = playerHealth.Value;
         }
 
-        public void ReceiveDamages(IDamageSource source, Vector3? hitPoint = null)
+        public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
         {
             if(_isDead)
             {
                 return;
             }
             
-            playerHealth.Value = Mathf.Max(playerHealth.Value - source.GetDamages(), 0);
+            playerHealth.Value = Mathf.Max(playerHealth.Value - damageContext.Amount(), 0);
             
             if (CheckDeath())
             {
-                TriggerDeath(source);
+                TriggerDeath(damageContext.Source());
             }
             
-            TriggerDamagesTaken(source);
+            TriggerDamagesTaken(damageContext);
         }
 
         public void Heal(float amount)
@@ -54,9 +54,9 @@ namespace Game.Player.Scripts.Health
             onDeath?.Invoke(source);
         }
         
-        private void TriggerDamagesTaken(IDamageSource source)
+        private void TriggerDamagesTaken(IDamageContext damageContext)
         {
-            onDamagesTaken?.Invoke(source, this);
+            onDamagesTaken?.Invoke(damageContext, this);
         }
 
         #region Editor Methods
@@ -70,7 +70,8 @@ namespace Game.Player.Scripts.Health
                 return;
             }
             
-            ReceiveDamages(new DebugDamageSource(Vector3.zero, DamageType.Slash, amount));
+            var ctx = new DamageContext(new DebugDamageSource(Vector3.zero, DamageType.Slash), amount);
+            ReceiveDamages(ctx);
         }
         
         [Button("Heal")]

@@ -18,15 +18,15 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
         }
     }
 
-    public void ReceiveDamages(IDamageSource damageOrigin, Vector3? hitPoint = null)
+    public void ReceiveDamages(IDamageContext damageOrigin, Vector3? hitPoint = null)
     {
-        if (damageOrigin.GetDamageType() != DamageType.Bullet)
+        if (damageOrigin.Source().GetDamageType() != DamageType.Bullet)
         {
             return;
         }
         
         var effect = effectPool.RequestObjectAs<PooledParticleSystem>();
-        Vector3 bulletPos = hitPoint ?? damageOrigin.GetPosition();
+        Vector3 bulletPos = hitPoint ?? damageOrigin.Source().GetPosition();
         effect.transform.position = _collider.ClosestPoint(bulletPos);
 
         if (orientTowardsBullet)

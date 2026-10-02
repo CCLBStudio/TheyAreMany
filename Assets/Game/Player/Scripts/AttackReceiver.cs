@@ -17,9 +17,9 @@ namespace Game.Player
             }
         }
 
-        public void ReceiveDamages(IDamageSource damageSource, Vector3? hitPoint = null)
+        public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
         {
-            _health.ReceiveDamages(damageSource, hitPoint);
+            _health.ReceiveDamages(damageContext, hitPoint);
         }
     }
 }

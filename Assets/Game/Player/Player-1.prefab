@@ -77,21 +77,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b68db6ccf3ea0c4bbf8d3cba1af50a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Player.AttackReceiver3D
-  onDamageReceived:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5537324245500611058}
-        m_TargetAssemblyTypeName: Game.Player.Scripts.Health.PlayerHealth, Assembly-CSharp
-        m_MethodName: TakeDamages
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!65 &2143479125758338305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -561,7 +546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: d3ee40d4cce53df4cb81b7af6cfaf165, type: 2}
-  startWeapon: {fileID: 11400000, guid: 9013efff55c84f54286e2ae15dd6b614, type: 2}
+  startWeapon: {fileID: 11400000, guid: fe868c2777f31e54eb005e4e49da8775, type: 2}
   weaponPivot: {fileID: 4443280062117300727}
   weaponHolder: {fileID: 7591879144394585462}
   playerRb: {fileID: 4088282553964037092}

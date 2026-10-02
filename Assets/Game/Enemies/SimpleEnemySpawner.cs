@@ -18,7 +18,7 @@ public class SimpleEnemySpawner : MonoBehaviour
         {
             p.Initialize();
         }
-        _spawnTimer = timeBetweenSpawns;
+        _spawnTimer = 1f;
     }
 
     private void Update()

@@ -15,8 +15,8 @@ public class EnemyDamageNumbers : MonoBehaviour, IDamageTarget
         _target = damageNumberSpawnPoint ? damageNumberSpawnPoint : transform;
     }
 
-    public void ReceiveDamages(IDamageSource damageSource, Vector3? hitPoint)
+    public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint)
     {
-        damageNumberPrefab.Spawn(hitPoint ?? _target.position, damageSource.GetDamages());
+        damageNumberPrefab.Spawn(hitPoint ?? _target.position, damageContext.Amount());
     }
 }

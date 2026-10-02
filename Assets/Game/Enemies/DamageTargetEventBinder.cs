@@ -3,8 +3,8 @@ using UnityEngine.Events;
 
 public class DamageTargetEventBinder : MonoBehaviour, IDamageTarget
 {
-    public UnityEvent<IDamageSource, Vector3?> hitEvent;
-    public void ReceiveDamages(IDamageSource damageOrigin, Vector3? hitPoint = null)
+    public UnityEvent<IDamageContext, Vector3?> hitEvent;
+    public void ReceiveDamages(IDamageContext damageOrigin, Vector3? hitPoint = null)
     {
         hitEvent?.Invoke(damageOrigin, hitPoint);
     }

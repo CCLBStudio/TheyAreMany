@@ -4,20 +4,45 @@ public interface IDamageSource
 {
     public Vector3 GetPosition();
     public DamageType GetDamageType();
-    public float GetDamages();
+}
+
+public interface IDamageContext
+{
+    public IDamageSource Source();
+    public float Amount();
+}
+
+public readonly struct DamageContext : IDamageContext
+{
+    private readonly IDamageSource _damageSource;
+    private readonly float _damageAmount;
+
+    public DamageContext(IDamageSource damageSource, float damageAmount)
+    {
+        _damageSource = damageSource;
+        _damageAmount = damageAmount;
+    }
+
+    public IDamageSource Source()
+    {
+        return _damageSource;
+    }
+
+    public float Amount()
+    {
+        return _damageAmount;
+    }
 }
 
 public class DebugDamageSource : IDamageSource
 {
-    private Vector3 _position;
-    private DamageType _damageType;
-    private float _damages;
+    private readonly Vector3 _position;
+    private readonly DamageType _damageType;
 
-    public DebugDamageSource(Vector3 position, DamageType damageType, float damages)
+    public DebugDamageSource(Vector3 position, DamageType damageType)
     {
         _position = position;
         _damageType = damageType;
-        _damages = damages;
     }
 
     public Vector3 GetPosition()
@@ -25,18 +50,8 @@ public class DebugDamageSource : IDamageSource
         return _position;
     }
 
-    public Vector3? GetHitPoint()
-    {
-        return GetPosition();
-    }
-
     public DamageType GetDamageType()
     {
         return _damageType;
-    }
-
-    public float GetDamages()
-    {
-        return _damages;
     }
 }

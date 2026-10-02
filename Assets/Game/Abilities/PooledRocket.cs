@@ -73,16 +73,11 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         foreach (var col in inRange)
         {
             var damageTargets = col.gameObject.GetComponents<IDamageTarget>();
-            var knockbackTargets = col.gameObject.GetComponents<IKnockbackTarget>();
+            var ctx = new DamageContext(this, _scriptableAbility.Strength);
             
             foreach (var d in damageTargets)
             {
-                d.ReceiveDamages(this);
-            }
-            
-            foreach (var k in knockbackTargets)
-            {
-                k.GetRigidbody().AddExplosionForce(_scriptableAbility.KnockbackForce, rb.position, _scriptableAbility.ExplosionRange, 1f);
+                d.ReceiveDamages(ctx);
             }
         }
     }
@@ -112,19 +107,9 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         return transform.position;
     }
 
-    public Vector3? GetHitPoint()
-    {
-        return null;
-    }
-
     public DamageType GetDamageType()
     {
         return DamageType.Explosion;
-    }
-
-    public float GetDamages()
-    {
-        return _scriptableAbility.Strength;
     }
 
     #endregion

@@ -23,17 +23,17 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
     {
     }
 
-    public void ReceiveDamages(IDamageSource damageSource, Vector3? hitPoint = null)
+    public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
     {
         if (_currentHealth <= 0f)
         {
             return;
         }
         
-        _currentHealth -= damageSource.GetDamages();
+        _currentHealth -= damageContext.Amount();
         if (_currentHealth <= 0f)
         {
-            onDeath?.Invoke(damageSource);
+            onDeath?.Invoke(damageContext.Source());
         }
     }
 }

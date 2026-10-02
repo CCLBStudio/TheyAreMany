@@ -22,7 +22,7 @@ public class ScriptableValueDatabase : ScriptableObject
     [SerializeField] private TemplateFile scriptableValueTemplate;
     [SerializeField] private TemplateFile scriptableValueListTemplate;
     
-    private static string _baseFolderPath;
+    private static string _baseFolderPath = "Assets/CCLBStudio-Values/ScriptableValue/";
     private static string _assetCreationPath;
     
     public static T CreateValueAsset<T>(string assetName, bool ping = true) where T : BaseScriptableValue
@@ -50,18 +50,6 @@ public class ScriptableValueDatabase : ScriptableObject
         return _baseFolderPath;
     }
 
-    public static string GetAssetCreationPath()
-    {
-        if (!string.IsNullOrEmpty(_assetCreationPath))
-        {
-            return _assetCreationPath;
-        }
-
-        string baseFolderPath = GetBaseFolderPath();
-        _assetCreationPath = baseFolderPath + "ValueObjects/";
-        return _assetCreationPath;
-    }
-
     private static string CheckDirectory(Type valueType)
     {
         if (!typeof(BaseScriptableValue).IsAssignableFrom(valueType))
@@ -76,7 +64,7 @@ public class ScriptableValueDatabase : ScriptableObject
             typeName += "s";
         }
 
-        string path = GetAssetCreationPath() + typeName;
+        string path = GetBaseFolderPath() + typeName;
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
