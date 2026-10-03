@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c34c261e31164cc4bb986d9eaebe49b0, type: 3}
   m_Name: AR-KockbackInAirMultiplier
   m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.ScriptableValue.Vector3Value
-  value: {x: 2, y: 0, z: 0}
+  value: {x: 2, y: 1, z: 0}
   resetValueOnPlayModeExit: 0
-  initialValue: {x: 0, y: 0, z: 0}
+  initialValue: {x: 2, y: 1, z: 0}

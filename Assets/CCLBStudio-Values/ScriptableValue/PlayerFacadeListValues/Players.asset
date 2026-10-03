@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Players
   m_EditorClassIdentifier: 
   value: []
+  resetValueOnPlayModeExit: 1
   initialValue: []
