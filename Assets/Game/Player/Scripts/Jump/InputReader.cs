@@ -255,12 +255,12 @@ public partial class InputReader : ScriptableObject, PlayerControls.IPlayerActio
         }
     }
 
-    public void EnablePlayerInputs()
+    public void EnableInGameInputs()
     {
         _playerInputs.Player.Enable();
     }
     
-    public void DisablePlayerInputs()
+    public void DisableInGameInputs()
     {
         _playerInputs.Player.Disable();
     }
@@ -277,7 +277,7 @@ public partial class InputReader : ScriptableObject, PlayerControls.IPlayerActio
 
     public void DisableAll()
     {
-        DisablePlayerInputs();
+        DisableInGameInputs();
         DisableUiInputs();
     }
 }

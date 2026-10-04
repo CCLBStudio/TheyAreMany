@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Game.Player.Scripts.Health
+namespace Game.Player.Health
 {
     public class PlayerHealthPanel : MonoBehaviour
     {

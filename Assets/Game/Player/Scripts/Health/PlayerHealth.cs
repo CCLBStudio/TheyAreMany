@@ -1,9 +1,10 @@
+using CCLBStudio.EventBus;
 using CCLBStudio.ScriptableValue;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Game.Player.Scripts.Health
+namespace Game.Player.Health
 {
     public class PlayerHealth : MonoBehaviour, IPlayerBehaviour, IHealth
     {
@@ -11,7 +12,6 @@ namespace Game.Player.Scripts.Health
 
         [SerializeField] private FloatValue playerHealth;
         [SerializeField] private UnityEvent<IDamageContext, PlayerHealth> onDamagesTaken;
-        [SerializeField] private UnityEvent<IDamageSource> onDeath;
 
         private float _maxHealth;
         private bool _isDead;
@@ -51,7 +51,7 @@ namespace Game.Player.Scripts.Health
         private void TriggerDeath(IDamageSource source)
         {
             _isDead = true;
-            onDeath?.Invoke(source);
+            EvtBus.Raise(new PlayerKilled(Facade, source));
         }
         
         private void TriggerDamagesTaken(IDamageContext damageContext)

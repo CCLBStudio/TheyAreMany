@@ -1,5 +1,6 @@
 using CCLBStudio.GlobalUpdater;
 using Game.ModularWeapon;
+using Game.Player;
 using Game.Weapon;
 using UnityEngine;
 

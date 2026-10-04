@@ -6,12 +6,12 @@ using UnityEngine;
 namespace CCLBStudio.ScreenView
 {
     [CreateAssetMenu(menuName = "CCLB Studio/Screen View/Scriptable Actions/Screen View Action", fileName = "NewScreenViewAction")]
-    public class ScreenViewAction : ScriptableAction
+    public partial class ScreenViewAction : ScriptableAction
     {
         [SerializeField] private ViewId viewId;
         [SerializeField] private ViewAction action = ViewAction.Show;
         
-        [NonSerialized] [InjectLegacy]
+        [NonSerialized] [Inject]
         private ScreenViewService _screenViewService;
         
         private enum ViewAction {Show, Close}

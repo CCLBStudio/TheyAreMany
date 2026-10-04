@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.DependencyInjection.XJectorSOBootstrap
   toProvide:
   - {fileID: 11400000, guid: 1ddac7663f13a734d966c09b1e6e46df, type: 2}
+  - {fileID: 11400000, guid: 5ea5a3977e5e357409bb11b7c99e0880, type: 2}
   toInject: []

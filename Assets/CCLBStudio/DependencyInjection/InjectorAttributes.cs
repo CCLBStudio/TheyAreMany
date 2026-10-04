@@ -2,18 +2,8 @@ using System;
 
 namespace CCLBStudio.DependencyInjection
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Property)]
-    public sealed class InjectLegacyAttribute : Attribute
-    {
-    }
-    
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public sealed class InjectAttribute : Attribute
-    {
-    }
-    
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public sealed class InjectAllAttribute : Attribute
     {
     }
     

@@ -1,4 +1,5 @@
 using CCLBStudio.GlobalUpdater;
+using Game.Player;
 using UnityEngine;
 
 public class PlayerMover : MonoBehaviour, IPlayerBehaviour, IFixedUpdate

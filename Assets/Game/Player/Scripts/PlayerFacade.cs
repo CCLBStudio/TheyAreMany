@@ -3,44 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptableValue;
+using Game.Player;
 using UnityEngine;
 
-public class PlayerFacade : MonoBehaviour
+namespace Game.Player
 {
-    [SerializeField] private PlayerFacadeListValue players;
-
-    private IPlayerBehaviour[] _behaviours;
-    private Dictionary<Type, IPlayerBehaviour> _behaviourDictionary;
-    
-    private void Start()
+    public class PlayerFacade : MonoBehaviour
     {
-        players.Add(this);
-        _behaviours = GetComponentsInChildren<IPlayerBehaviour>();
-        _behaviourDictionary = _behaviours.ToDictionary(b => b.GetType(), b => b);
+        [SerializeField] private PlayerFacadeListValue players;
 
-        foreach (var b in _behaviours)
-        {
-            b.Facade = this;
-            b.Initialize();
-            GlobalUpdater.RegisterUpdatedObject(b);
-        }
-    }
+        private IPlayerBehaviour[] _behaviours;
+        private Dictionary<Type, IPlayerBehaviour> _behaviourDictionary;
     
-    public T GetBehaviour<T>() where T : IPlayerBehaviour
-    {
-        if (_behaviourDictionary.TryGetValue(typeof(T), out var behaviour))
+        private void Start()
         {
-            return (T)behaviour;
+            players.Add(this);
+            _behaviours = GetComponentsInChildren<IPlayerBehaviour>();
+            _behaviourDictionary = _behaviours.ToDictionary(b => b.GetType(), b => b);
+
+            foreach (var b in _behaviours)
+            {
+                b.Facade = this;
+                b.Initialize();
+                GlobalUpdater.RegisterUpdatedObject(b);
+            }
         }
+    
+        public T GetBehaviour<T>() where T : IPlayerBehaviour
+        {
+            if (_behaviourDictionary.TryGetValue(typeof(T), out var behaviour))
+            {
+                return (T)behaviour;
+            }
         
-        throw new Exception($"Behaviour of type {typeof(T)} not found.");
-    }
+            throw new Exception($"Behaviour of type {typeof(T)} not found.");
+        }
 
-    private void OnDestroy()
-    {
-        foreach (var b in _behaviours)
+        private void OnDestroy()
         {
-            GlobalUpdater.UnregisterUpdatedObject(b);
+            foreach (var b in _behaviours)
+            {
+                GlobalUpdater.UnregisterUpdatedObject(b);
+            }
         }
     }
 }

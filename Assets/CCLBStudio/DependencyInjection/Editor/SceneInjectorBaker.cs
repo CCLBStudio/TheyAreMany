@@ -2,6 +2,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
+using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,6 +27,16 @@ namespace CCLBStudio.DependencyInjection
         public void OnProcessScene(Scene scene, BuildReport report)
         {
             BakeScene(scene);
+        }
+
+        [DidReloadScripts]
+        private static void OnCompilationCompleted()
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                var scene = SceneManager.GetSceneAt(i);
+                BakeScene(scene);
+            }
         }
 
         private static void BakeScene(Scene scene)

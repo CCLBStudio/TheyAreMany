@@ -72,5 +72,7 @@ namespace CCLBStudio.ScriptableValue
             value.InsertRange(index, collection);
             OnCollectionChanged?.Invoke();
         }
+
+        public int Count => value.Count;
     }
 }

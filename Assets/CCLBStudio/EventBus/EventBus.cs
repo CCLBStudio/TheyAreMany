@@ -161,10 +161,9 @@ namespace CCLBStudio.EventBus
     }
 
     /// <summary>
-    /// Non-generic facade allowing type inference: <c>Events.Raise(new EnemyKilled { ... });</c>
-    /// Not named EventBus to avoid clashing with the CCLBStudio.EventBus namespace.
+    /// Non-generic facade allowing type inference: <c>EvtBus.Raise(new EnemyKilled { ... });</c>
     /// </summary>
-    public static class Events
+    public static class EvtBus
     {
         public static void Raise<T>(in T evt) where T : struct, IEvent => EventBus<T>.Raise(in evt);
         public static void Raise<T>(T evt) where T : struct, IEvent => EventBus<T>.Raise(in evt);

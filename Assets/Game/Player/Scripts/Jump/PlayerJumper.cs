@@ -1,6 +1,7 @@
 using CCLBStudio.ScriptableValue;
 using System.Collections.Generic;
 using CCLBStudio.GlobalUpdater;
+using Game.Player;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerGroundChecker))]

@@ -1,5 +1,8 @@
-public interface IPlayerBehaviour
+namespace Game.Player
 {
-    public PlayerFacade Facade { get; set; }
-    public void Initialize();
+    public interface IPlayerBehaviour
+    {
+        public PlayerFacade Facade { get; set; }
+        public void Initialize();
+    }
 }
