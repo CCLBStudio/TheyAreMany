@@ -22,7 +22,7 @@ namespace CCLBStudio.ScreenView
         {
             if(!_injected)
             {
-                InjectDependencies(); // TODO: should be automated by the DI system somehow
+                //InjectDependencies(); // TODO: should be automated by the DI system somehow
                 _injected = true;
             }
             

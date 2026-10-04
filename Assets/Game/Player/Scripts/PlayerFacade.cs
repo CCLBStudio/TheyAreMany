@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptableValue;
-using Game.Player;
+using Systems.ScriptableBehaviours;
 using UnityEngine;
 
 namespace Game.Player
@@ -11,6 +11,7 @@ namespace Game.Player
     public class PlayerFacade : MonoBehaviour
     {
         [SerializeField] private PlayerFacadeListValue players;
+        [SerializeField] private List<ScriptableAction> onStartActions;
 
         private IPlayerBehaviour[] _behaviours;
         private Dictionary<Type, IPlayerBehaviour> _behaviourDictionary;
@@ -26,6 +27,11 @@ namespace Game.Player
                 b.Facade = this;
                 b.Initialize();
                 GlobalUpdater.RegisterUpdatedObject(b);
+            }
+
+            foreach (var a in onStartActions)
+            {
+                a.Execute();
             }
         }
     

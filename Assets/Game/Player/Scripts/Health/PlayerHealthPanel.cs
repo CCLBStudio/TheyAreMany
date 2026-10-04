@@ -1,3 +1,4 @@
+using CCLBStudio.ScreenView;
 using CCLBStudio.ScriptableValue;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Game.Player.Health
 {
-    public class PlayerHealthPanel : MonoBehaviour
+    public class PlayerHealthPanel : ScreenView
     {
         [SerializeField] private FloatValue playerHealth;
         

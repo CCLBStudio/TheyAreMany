@@ -22,6 +22,7 @@ namespace CCLBStudio.ScreenView
         
         public static readonly ViewId Empty = new("");
         public static readonly ViewId Monid = new("Monid");
+        public static readonly ViewId Player1Health = new("Player1Health");
         public ViewId(string viewId) => id = viewId;
 
         public override string ToString() => string.IsNullOrEmpty(id) ? "<None>" : id;
