@@ -45,10 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dc64d38a43ff4e668c0e6d942870dff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  injectAt: 0
   canvas: {fileID: 1494249271247752226}
   container: {fileID: 2224284605206215282}
-  disableCanvasInGameSession: 0
-  gameSessionStartAction: 0
 --- !u!1 &6868239535974388922
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,6 +104,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0

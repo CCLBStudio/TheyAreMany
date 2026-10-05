@@ -115,6 +115,19 @@ public static class Extensions
                 generatedClasses.Count,
                 string.Join(", ", generatedClasses)));
         }
+
+        public void EmitInjectErrorReport(string message, Location location)
+        {
+            context.ReportDiagnostic(Diagnostic.Create(
+                new DiagnosticDescriptor(
+                    "DI200",
+                    "XJector inject error",
+                    message,
+                    "DependencyInjection",
+                    DiagnosticSeverity.Error,
+                    true),
+                location));
+        }
     }
 
     #endregion

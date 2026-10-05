@@ -35,9 +35,9 @@ namespace CCLBStudio.ScreenView
         private ScreenViewService _screenViewService;
 
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
+            base.Awake();
             
             raycaster = canvas.GetComponent<GraphicRaycaster>();
             displayedViews = new List<ScreenView>();

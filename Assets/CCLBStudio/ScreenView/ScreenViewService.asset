@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1790f84a4a5a54575b17d67f83745807, type: 3}
   m_Name: ScreenViewService
   m_EditorClassIdentifier: 
-  screenViewPrefabs: []
+  screenViewPrefabs:
+  - {fileID: 2266735253369255634, guid: 92be510b5f4937742bc4ffc9b1e5c54a, type: 3}
   uiContainers:
     initialPairs:
     - key: Main
-      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b, type: 3}
+      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b,
+        type: 3}
     debugDisplay:
     - key: Main
-      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b, type: 3}
+      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b,
+        type: 3}
   defaultClickSound: {fileID: 8300000, guid: ebbdf343834382d46ac306569de41222, type: 3}

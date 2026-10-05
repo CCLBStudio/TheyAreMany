@@ -41,7 +41,7 @@ namespace CCLBStudio.ScreenView
     #endregion
 
     [RequireComponent(typeof(CanvasGroup))]
-    public partial class ScreenView : MonoBehaviour
+    public partial class ScreenView : InjectedMonoBehaviour
     {
         #region Editor
 
@@ -201,8 +201,10 @@ namespace CCLBStudio.ScreenView
 
         #region Unity Events
 
-        protected void Start()
+        protected override void Start()
         {
+            base.Start();
+            
             if (_isInit)
             {
                 return;

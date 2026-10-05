@@ -454,6 +454,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   players: {fileID: 11400000, guid: 5ea5a3977e5e357409bb11b7c99e0880, type: 2}
+  onStartActions:
+  - {fileID: 11400000, guid: 6e38a3fd670311f4e9f42d0ee498a18e, type: 2}
 --- !u!114 &7126139698575504579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,8 +625,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Player.Scripts.Health.PlayerHealth
   playerHealth: {fileID: 11400000, guid: bb45fc03453283645b7c1746f8dda914, type: 2}
   onDamagesTaken:
-    m_PersistentCalls:
-      m_Calls: []
-  onDeath:
     m_PersistentCalls:
       m_Calls: []

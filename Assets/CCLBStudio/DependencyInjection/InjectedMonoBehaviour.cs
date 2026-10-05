@@ -4,7 +4,7 @@ namespace CCLBStudio.DependencyInjection
 {
     public abstract class InjectedMonoBehaviour : MonoBehaviour
     {
-        [SerializeField] private MonoInjectEvent injectAt = MonoInjectEvent.Start;
+        [SerializeField] private MonoInjectEvent injectAt = MonoInjectEvent.Awake;
         private enum MonoInjectEvent
         {
             Awake,

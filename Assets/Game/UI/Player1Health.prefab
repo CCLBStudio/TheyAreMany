@@ -1252,6 +1252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747c9cf836dff7c4db51ee516898c7ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealthUI
+  injectAt: 0
   entriesSectionExpanded: 0
   animationSectionExpanded: 1
   displayShow: 1
@@ -1348,7 +1349,7 @@ MonoBehaviour:
         moveRect: 1
         moveDirection: 3
         normalizedScreenOffset: {x: 0, y: 0}
-        moveDuration: 0.5
+        moveDuration: 2
         customMoveCurve: 0
         moveCurve:
           serializedVersion: 2

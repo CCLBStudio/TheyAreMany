@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CCLBStudio.ScreenView
 {
-    [CreateAssetMenu(menuName = "CCLB Studio/Screen View/Scriptable Actions/Screen View Action", fileName = "NewScreenViewAction")]
+    [CreateAssetMenu(menuName = "CCLB Studio/Screen View/Scriptable Behaviour/Actions/Screen View Action", fileName = "NewScreenViewAction")]
     public partial class ScreenViewAction : ScriptableAction
     {
         [SerializeField] private ViewId viewId;
