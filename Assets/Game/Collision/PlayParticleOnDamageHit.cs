@@ -1,5 +1,6 @@
 using CCLBStudio.ScriptablePooling;
 using Game.Damage;
+using Game.Stats;
 using UnityEngine;
 
 public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
@@ -19,15 +20,20 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
         }
     }
 
+    public ResistanceDescriptor GetResistances(DamageType damageType)
+    {
+        return new ResistanceDescriptor(0, 0);
+    }
+
     public void ReceiveDamages(IDamageContext damageOrigin, Vector3? hitPoint = null)
     {
-        if (damageOrigin.Source().GetDamageType() != DamageType.Piercing)
+        if (damageOrigin.Source.GetDamageType() != DamageType.Piercing)
         {
             return;
         }
         
         var effect = effectPool.RequestObjectAs<PooledParticleSystem>();
-        Vector3 bulletPos = hitPoint ?? damageOrigin.Source().GetPosition();
+        Vector3 bulletPos = hitPoint ?? damageOrigin.Source.GetPosition();
         effect.transform.position = _collider.ClosestPoint(bulletPos);
 
         if (orientTowardsBullet)

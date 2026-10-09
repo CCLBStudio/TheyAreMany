@@ -12,10 +12,10 @@ namespace Game.ModularWeapon
     
     public struct RuntimeBulletContext : IRuntimeBulletContext
     {
-        public int BaseDamage { get; private set; }
-        public float Speed { get; private set; }
-        public float LifeTime { get; private set; }
-        public ICharacterStats OwnerStats { get; private set; }
+        public int BaseDamage { get; }
+        public float Speed { get; }
+        public float LifeTime { get; }
+        public ICharacterStats OwnerStats { get; }
 
         public RuntimeBulletContext(int baseDamage, float speed, float lifeTime, ICharacterStats ownerStats)
         {

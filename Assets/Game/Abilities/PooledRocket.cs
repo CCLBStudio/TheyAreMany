@@ -76,19 +76,17 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         foreach (var col in inRange)
         {
             var damageTargets = col.gameObject.GetComponents<IDamageTarget>();
-            var stats = col.TryGetComponent(out ICharacterStats targetStats) ? targetStats : _defaultStats;
-            var ctx = new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
-            {
-                BaseDamage = _scriptableAbility.Strength,
-                AttackerPower = _defaultStats.Power.Value,
-                AttackerFlatDamage = _defaultStats.FlatDamage.Value,
-                AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
-                TargetFlatResistance = stats.GetResistances(GetDamageType()).FlatResistance.Value,
-                TargetPercentageResistance = stats.GetResistances(GetDamageType()).PercentageResistance.Value
-            }));
-            
             foreach (var d in damageTargets)
             {
+                var ctx = new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
+                {
+                    BaseDamage = _scriptableAbility.Strength,
+                    AttackerPower = _defaultStats.Power.Value,
+                    AttackerFlatDamage = _defaultStats.FlatDamage.Value,
+                    AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
+                    TargetFlatResistance = d.GetResistances(GetDamageType()).FlatResistance.Value,
+                    TargetPercentageResistance = d.GetResistances(GetDamageType()).PercentageResistance.Value
+                }));
                 d.ReceiveDamages(ctx);
             }
         }

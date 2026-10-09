@@ -1,6 +1,7 @@
 using CCLBStudio.EventBus;
 using CCLBStudio.ScriptableValue;
 using Game.Damage;
+using Game.Stats;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,10 +17,25 @@ namespace Game.Player.Health
 
         private float _maxHealth;
         private bool _isDead;
+        private ICharacterStats _stats;
 
         public void Initialize()
         {
             _maxHealth = playerHealth.Value;
+            if(TryGetComponent(out ICharacterStats stats))
+            {
+                _stats = stats;
+            }
+            else
+            {
+                Debug.LogWarning("PlayerHealth: No ICharacterStats component found on the player. Using default stats.");
+                _stats = new DefaultCharacterStats();
+            }
+        }
+
+        public ResistanceDescriptor GetResistances(DamageType damageType)
+        {
+            return _stats.GetResistances(damageType);
         }
 
         public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
@@ -29,11 +45,11 @@ namespace Game.Player.Health
                 return;
             }
             
-            playerHealth.Value = Mathf.Max(playerHealth.Value - damageContext.Amount(), 0);
+            playerHealth.Value = Mathf.Max(playerHealth.Value - damageContext.Damage.FinalDamage, 0);
             
             if (CheckDeath())
             {
-                TriggerDeath(damageContext.Source());
+                TriggerDeath(damageContext.Source);
             }
             
             TriggerDamagesTaken(damageContext);

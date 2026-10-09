@@ -1,4 +1,5 @@
 using Game.Damage;
+using Game.Stats;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,10 +10,19 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
     [SerializeField] private UnityEvent<IDamageSource> onDeath;
 
     private int _currentHealth;
+    private ICharacterStats _stats;
     
     public void OnEnemyCreated()
     {
-        
+        if(TryGetComponent(out ICharacterStats stats))
+        {
+            _stats = stats;
+        }
+        else
+        {
+            Debug.LogWarning("EnemyHealth: No ICharacterStats component found. Using default stats.");
+            _stats = new DefaultCharacterStats();
+        }
     }
 
     public void OnEnemyRequested()
@@ -24,6 +34,11 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
     {
     }
 
+    public ResistanceDescriptor GetResistances(DamageType damageType)
+    {
+        return _stats.GetResistances(damageType);
+    }
+
     public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
     {
         if (_currentHealth <= 0f)
@@ -31,10 +46,10 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
             return;
         }
         
-        _currentHealth -= damageContext.Amount();
+        _currentHealth -= damageContext.Damage.FinalDamage;
         if (_currentHealth <= 0f)
         {
-            onDeath?.Invoke(damageContext.Source());
+            onDeath?.Invoke(damageContext.Source);
         }
     }
 }

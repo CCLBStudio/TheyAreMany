@@ -54,18 +54,17 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
         }
 
         var hitPoint = other.ClosestPoint(transform.position);
-        ICharacterStats stats = other.TryGetComponent(out ICharacterStats targetStats) ? targetStats : new DefaultCharacterStats();
-        var ctx = new DamageContext(this, ComputeDamage(stats));
         
         foreach (var i in interactors)
         {
+            var ctx = new DamageContext(this, ComputeDamage(i.GetResistances(GetDamageType())));
             i.ReceiveDamages(ctx, hitPoint);
         }
         
         Pool.ReleaseObject(this);
     }
     
-    private ComputedDamage ComputeDamage(ICharacterStats targetStats)
+    private ComputedDamage ComputeDamage(ResistanceDescriptor res)
     {
         return Calculator.ComputeDamage(new DamageCalculationContext
         {
@@ -73,8 +72,8 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
             AttackerPower = _ownerStats.Power.Value,
             AttackerFlatDamage = _ownerStats.FlatDamage.Value,
             AttackerFinalDamagePercentage = _ownerStats.FinalDamagePercentage.Value,
-            TargetFlatResistance = targetStats.GetResistances(GetDamageType()).FlatResistance.Value,
-            TargetPercentageResistance = targetStats.GetResistances(GetDamageType()).PercentageResistance.Value
+            TargetFlatResistance = res.FlatResistance.Value,
+            TargetPercentageResistance = res.PercentageResistance.Value
         });
     }
     

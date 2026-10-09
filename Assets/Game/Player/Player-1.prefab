@@ -490,12 +490,9 @@ MonoBehaviour:
   scaleTransform: {fileID: 4408659387768372024}
   rotationTransform: {fileID: 2045528681459041264}
   inputReader: {fileID: 11400000, guid: d3ee40d4cce53df4cb81b7af6cfaf165, type: 2}
-  normalizedJumpStrength: {fileID: 11400000, guid: 2ee73b39d6524a940aaacb1b816a6a86,
-    type: 2}
-  pressTimeForMaxJump: {fileID: 11400000, guid: 7f0d98a8873c61c47addb3e832ee7c9e,
-    type: 2}
-  propulsionDirection: {fileID: 11400000, guid: 61f37472a4ff1a04c8adda01e8d748c2,
-    type: 2}
+  normalizedJumpStrength: {fileID: 11400000, guid: 2ee73b39d6524a940aaacb1b816a6a86, type: 2}
+  pressTimeForMaxJump: {fileID: 11400000, guid: 7f0d98a8873c61c47addb3e832ee7c9e, type: 2}
+  propulsionDirection: {fileID: 11400000, guid: 61f37472a4ff1a04c8adda01e8d748c2, type: 2}
   inputBufferTime: 0.25
   jumpEffects:
   - {fileID: 11400000, guid: 3cc8098650378ac4caf8c5d0072d7426, type: 2}
@@ -641,41 +638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cccad99c2ada4c0e8a30b5114b504563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Stats.CharacterStats
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: resistances
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[Game.Damage.DamageType, Assembly-CSharp],[Game.Stats.ResistanceDescriptor,
-        Assembly-CSharp]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Game.Damage.DamageType,
-        Assembly-CSharp]], mscorlib
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
   damage:
     rid: 7511233589272379488
   power:
@@ -690,6 +652,37 @@ MonoBehaviour:
     rid: 7511233589272379489
   bulletSpeed:
     rid: 7511233589272379490
+  resistances:
+  - key: 0
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 1
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 2
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 3
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 4
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
   references:
     version: 2
     RefIds:

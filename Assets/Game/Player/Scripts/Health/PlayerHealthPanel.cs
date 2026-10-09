@@ -17,8 +17,9 @@ namespace Game.Player.Health
 
         private HealthFillUI _fillUI;
         
-        void Start()
+        protected override void Start()
         {
+            base.Start();
             _fillUI = new HealthFillUI(healthBarMain, healthBarSecondary, playerHealth.Value);
             
             playerHealth.OnValueChanged -= OnHealthChanged;

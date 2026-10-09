@@ -10,29 +10,19 @@ namespace Game.Damage
 
     public interface IDamageContext
     {
-        public IDamageSource Source();
-        public int Amount();
+        public IDamageSource Source { get; init; }
+        public ComputedDamage Damage { get; init; }
     }
 
     public readonly struct DamageContext : IDamageContext
     {
-        private readonly IDamageSource _damageSource;
-        private readonly int _amount;
+        public IDamageSource Source { get; init; }
+        public ComputedDamage Damage { get; init; }
 
-        public DamageContext(IDamageSource damageSource, ComputedDamage damageAmount)
+        public DamageContext(IDamageSource source, ComputedDamage damageAmount)
         {
-            _damageSource = damageSource;
-            _amount = damageAmount.FinalDamage;
-        }
-
-        public IDamageSource Source()
-        {
-            return _damageSource;
-        }
-
-        public int Amount()
-        {
-            return _amount;
+            Source = source;
+            Damage = damageAmount;
         }
     }
 
