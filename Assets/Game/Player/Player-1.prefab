@@ -415,8 +415,9 @@ GameObject:
   - component: {fileID: 5117817040848553908}
   - component: {fileID: 1863892172625965392}
   - component: {fileID: 3993461349045189390}
-  - component: {fileID: 4088282553964037092}
   - component: {fileID: 5537324245500611058}
+  - component: {fileID: 4088282553964037092}
+  - component: {fileID: 8559617817602184101}
   m_Layer: 7
   m_Name: Player-1
   m_TagString: Untagged
@@ -548,6 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: d3ee40d4cce53df4cb81b7af6cfaf165, type: 2}
+  stats: {fileID: 8559617817602184101}
   startWeapon: {fileID: 11400000, guid: fe868c2777f31e54eb005e4e49da8775, type: 2}
   weaponPivot: {fileID: 4443280062117300727}
   weaponHolder: {fileID: 7591879144394585462}
@@ -584,6 +586,22 @@ MonoBehaviour:
   maximumForceMultiplicator: 4
   rb: {fileID: 4088282553964037092}
   currentVelocity: {x: 0, y: 0}
+--- !u!114 &5537324245500611058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6585772666322606550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1122d91ea6b7324ba2c50d8afc8107f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Player.Scripts.Health.PlayerHealth
+  playerHealth: {fileID: 11400000, guid: bb45fc03453283645b7c1746f8dda914, type: 2}
+  onDamagesTaken:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!50 &4088282553964037092
 Rigidbody2D:
   serializedVersion: 5
@@ -611,7 +629,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &5537324245500611058
+--- !u!114 &8559617817602184101
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -620,10 +638,86 @@ MonoBehaviour:
   m_GameObject: {fileID: 6585772666322606550}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1122d91ea6b7324ba2c50d8afc8107f, type: 3}
+  m_Script: {fileID: 11500000, guid: cccad99c2ada4c0e8a30b5114b504563, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Game.Player.Scripts.Health.PlayerHealth
-  playerHealth: {fileID: 11400000, guid: bb45fc03453283645b7c1746f8dda914, type: 2}
-  onDamagesTaken:
-    m_PersistentCalls:
-      m_Calls: []
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Stats.CharacterStats
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: resistances
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[Game.Damage.DamageType, Assembly-CSharp],[Game.Stats.ResistanceDescriptor,
+        Assembly-CSharp]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[Game.Damage.DamageType,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+  damage:
+    rid: 7511233589272379488
+  power:
+    rid: 7511233612901253220
+  critChance:
+    rid: 7511233612901253221
+  critDamage:
+    rid: 7511233612901253222
+  finalDamagePercentage:
+    rid: 7511233612901253223
+  attackSpeed:
+    rid: 7511233589272379489
+  bulletSpeed:
+    rid: 7511233589272379490
+  references:
+    version: 2
+    RefIds:
+    - rid: 7511233589272379488
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233589272379489
+      type: {class: FloatStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233589272379490
+      type: {class: FloatStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233612901253220
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233612901253221
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233612901253222
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233612901253223
+      type: {class: FloatStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0

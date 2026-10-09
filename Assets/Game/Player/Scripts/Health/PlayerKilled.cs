@@ -1,4 +1,5 @@
 using CCLBStudio.EventBus;
+using Game.Damage;
 
 namespace Game.Player.Health
 {

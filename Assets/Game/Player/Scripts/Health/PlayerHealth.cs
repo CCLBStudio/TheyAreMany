@@ -1,5 +1,6 @@
 using CCLBStudio.EventBus;
 using CCLBStudio.ScriptableValue;
+using Game.Damage;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -70,7 +71,13 @@ namespace Game.Player.Health
                 return;
             }
             
-            var ctx = new DamageContext(new DebugDamageSource(Vector3.zero, DamageType.Slash), amount);
+            var ctx = new DamageContext(new DebugDamageSource(Vector3.zero, DamageType.Slashing), new ComputedDamage
+            {
+                TrueDamage = (int)amount,
+                ReducedDamage = (int)amount,
+                ReducedAmount = 0,
+                FinalDamage = (int)amount
+            });
             ReceiveDamages(ctx);
         }
         

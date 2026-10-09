@@ -1,5 +1,6 @@
 using CCLBStudio.Attributes;
 using DamageNumbersPro;
+using Game.Damage;
 using UnityEngine;
 
 public class EnemyDamageNumbers : MonoBehaviour, IDamageTarget

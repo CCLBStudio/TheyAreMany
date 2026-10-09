@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22281ef54c16c084c83619ceb3330ce1, type: 3}
   m_Name: AR-BaseFireRate
   m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.ScriptableValue.FloatValue
-  value: 25
+  value: 50
   resetValueOnPlayModeExit: 0
   initialValue: 25

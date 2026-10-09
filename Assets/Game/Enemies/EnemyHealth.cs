@@ -1,3 +1,4 @@
+using Game.Damage;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,7 +8,7 @@ public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
 
     [SerializeField] private UnityEvent<IDamageSource> onDeath;
 
-    private float _currentHealth;
+    private int _currentHealth;
     
     public void OnEnemyCreated()
     {

@@ -1,4 +1,6 @@
 using CCLBStudio.GlobalUpdater;
+using Game.Damage;
+using Game.Stats;
 using MoreMountains.Feedbacks;
 using PrimeTween;
 using UnityEngine;
@@ -15,6 +17,7 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
     private bool _isAlive;
     private float _lifetime;
     private ScriptableRocketAbility _scriptableAbility;
+    private ICharacterStats _defaultStats = new DefaultCharacterStats();
 
     public override void Initialize(ScriptableRocketAbility scriptableAbility)
     {
@@ -73,7 +76,16 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         foreach (var col in inRange)
         {
             var damageTargets = col.gameObject.GetComponents<IDamageTarget>();
-            var ctx = new DamageContext(this, _scriptableAbility.Strength);
+            var stats = col.TryGetComponent(out ICharacterStats targetStats) ? targetStats : _defaultStats;
+            var ctx = new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
+            {
+                BaseDamage = _scriptableAbility.Strength,
+                AttackerPower = _defaultStats.Power.Value,
+                AttackerFlatDamage = _defaultStats.FlatDamage.Value,
+                AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
+                TargetFlatResistance = stats.GetResistances(GetDamageType()).FlatResistance.Value,
+                TargetPercentageResistance = stats.GetResistances(GetDamageType()).PercentageResistance.Value
+            }));
             
             foreach (var d in damageTargets)
             {
@@ -109,7 +121,7 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
 
     public DamageType GetDamageType()
     {
-        return DamageType.Explosion;
+        return DamageType.Explosive;
     }
 
     #endregion

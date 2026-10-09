@@ -83373,6 +83373,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player-1
       objectReference: {fileID: 0}
+    - target: {fileID: 8559617817602184101, guid: 0b788fcfdf635ff498f6aa28d9ede281,
+        type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 8559617817602184101, guid: 0b788fcfdf635ff498f6aa28d9ede281,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

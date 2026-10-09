@@ -1,3 +1,5 @@
+using Game.Damage;
+
 namespace Game.Enemies
 {
     public interface IDeathAnimation

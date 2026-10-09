@@ -1,9 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using CCLBStudio.ScriptablePooling;
 using CCLBStudio.ScriptableValue;
 using CCLBStudio.Utils;
+using Game.Stats;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -49,7 +49,7 @@ namespace Game.ModularWeapon
         public FloatValue Lifetime { get; set; }
     }
 
-    public class ShootBulletModuleBehaviour : WeaponModuleBehaviour, IRuntimeBulletStat
+    public class ShootBulletModuleBehaviour : WeaponModuleBehaviour
     {
         private readonly ScriptablePool _bulletPool;
         private readonly FloatValue _baseFireRate;
@@ -61,6 +61,7 @@ namespace Game.ModularWeapon
         
         private bool _isShooting;
         private float _timer;
+        private RuntimeBulletContext _bulletContext;
         
         public ShootBulletModuleBehaviour(ShootBulletContext context)
         {
@@ -76,6 +77,7 @@ namespace Game.ModularWeapon
         public override void Initialize(RuntimeWeapon runtimeWeapon)
         {
             base.Initialize(runtimeWeapon);
+            
             foreach (var e in _onShootBehaviours)
             {
                 e.Initialize(runtimeWeapon);
@@ -95,7 +97,7 @@ namespace Game.ModularWeapon
             bullet.Direction = shootingDirection.ApplyRotation(dispersion);
             bullet.transform.SetPositionAndRotation(weapon.BulletOrigin.position, ComputeSpread(dispersion, shootingDirection));
             
-            bullet.Initialize(this);
+            bullet.Initialize(new RuntimeBulletContext(_baseDamage.GetRandom(), _baseBulletSpeed.Value, _baseLifetime.Value, weapon.Owner.Stats));
         }
         
         public override void OnStartShooting()
@@ -127,19 +129,10 @@ namespace Game.ModularWeapon
             }
         }
 
-        public int GetDamage()
-        {
-            return _baseDamage.GetRandom();
-        }
-
-        public float GetSpeed()
-        {
-            return _baseBulletSpeed.Value;
-        }
-
-        public float GetLifetime()
-        {
-            return _baseLifetime.Value;
-        }
+        public int BaseDamage =>_baseDamage.GetRandom();
+        public float Speed => _baseBulletSpeed.Value * (1f + weapon.Owner.Stats.BulletSpeed.Value);
+        public float LifeTime => _baseLifetime.Value;
+        public IStat<float> BulletSpeedStat => weapon.Owner.Stats.BulletSpeed;
+        public IStat<int> DamageStat => weapon.Owner.Stats.FlatDamage;
     }
 }

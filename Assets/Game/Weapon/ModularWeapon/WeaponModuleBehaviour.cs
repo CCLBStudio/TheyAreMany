@@ -1,3 +1,5 @@
+using Game.Stats;
+
 namespace Game.ModularWeapon
 {
     public abstract class WeaponModuleBehaviour

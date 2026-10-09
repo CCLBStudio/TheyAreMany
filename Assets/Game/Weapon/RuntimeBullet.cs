@@ -1,6 +1,8 @@
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptablePooling;
+using Game.Damage;
 using Game.ModularWeapon;
+using Game.Stats;
 using UnityEngine;
 
 public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSource, IFixedUpdate
@@ -14,7 +16,9 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
     private bool _isAlive;
     private bool _isInit;
     private float _currentLifetime;
-    private IRuntimeBulletStat _bulletStat;
+    private int _baseDamage;
+    private float _speed;
+    private ICharacterStats _ownerStats;
 
     public void FixedTick()
     {
@@ -30,7 +34,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
             return;
         }
 
-        rb.MovePosition(rb.position + Direction * (_bulletStat.GetSpeed() * Time.fixedDeltaTime));
+        rb.MovePosition(rb.position + Direction * (_speed * Time.fixedDeltaTime));
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -50,7 +54,8 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
         }
 
         var hitPoint = other.ClosestPoint(transform.position);
-        var ctx = new DamageContext(this, _bulletStat.GetDamage());
+        ICharacterStats stats = other.TryGetComponent(out ICharacterStats targetStats) ? targetStats : new DefaultCharacterStats();
+        var ctx = new DamageContext(this, ComputeDamage(stats));
         
         foreach (var i in interactors)
         {
@@ -60,10 +65,25 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
         Pool.ReleaseObject(this);
     }
     
-    public void Initialize(IRuntimeBulletStat stat)
+    private ComputedDamage ComputeDamage(ICharacterStats targetStats)
     {
-        _bulletStat = stat;
-        _currentLifetime = stat.GetLifetime();
+        return Calculator.ComputeDamage(new DamageCalculationContext
+        {
+            BaseDamage = _baseDamage,
+            AttackerPower = _ownerStats.Power.Value,
+            AttackerFlatDamage = _ownerStats.FlatDamage.Value,
+            AttackerFinalDamagePercentage = _ownerStats.FinalDamagePercentage.Value,
+            TargetFlatResistance = targetStats.GetResistances(GetDamageType()).FlatResistance.Value,
+            TargetPercentageResistance = targetStats.GetResistances(GetDamageType()).PercentageResistance.Value
+        });
+    }
+    
+    public void Initialize(IRuntimeBulletContext context)
+    {
+        _baseDamage = context.BaseDamage;
+        _ownerStats = context.OwnerStats;
+        _speed = context.Speed + context.OwnerStats.BulletSpeed.Value;
+        _currentLifetime = context.LifeTime;
         _isInit = true;
     }
 
@@ -74,7 +94,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
 
     public DamageType GetDamageType()
     {
-        return DamageType.Bullet;
+        return DamageType.Piercing;
     }
 
     public void OnObjectCreated()

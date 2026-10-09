@@ -1,4 +1,5 @@
 using CCLBStudio.ScriptablePooling;
+using Game.Damage;
 using UnityEngine;
 
 public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
@@ -20,7 +21,7 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
 
     public void ReceiveDamages(IDamageContext damageOrigin, Vector3? hitPoint = null)
     {
-        if (damageOrigin.Source().GetDamageType() != DamageType.Bullet)
+        if (damageOrigin.Source().GetDamageType() != DamageType.Piercing)
         {
             return;
         }

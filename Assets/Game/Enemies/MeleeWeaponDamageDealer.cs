@@ -1,3 +1,4 @@
+using Game.Damage;
 using UnityEngine;
 
 public class MeleeWeaponDamageDealer : MonoBehaviour, IDamageSource
@@ -7,7 +8,14 @@ public class MeleeWeaponDamageDealer : MonoBehaviour, IDamageSource
         if (other.TryGetComponent(out IDamageTarget t))
         {
             var hitPoint = other.ClosestPoint(transform.position);
-            var ctx = new DamageContext(this, 10f);
+            var ctx = new DamageContext(this, new ComputedDamage
+            {
+                TrueDamage = 10,
+                ReducedDamage = 10,
+                ReducedAmount = 0,
+                FinalDamage = 10,
+                IsCritical = false
+            });
             t.ReceiveDamages(ctx, hitPoint);
         }
     }
@@ -19,6 +27,6 @@ public class MeleeWeaponDamageDealer : MonoBehaviour, IDamageSource
 
     public DamageType GetDamageType()
     {
-        return DamageType.Slash;
+        return DamageType.Slashing;
     }
 }

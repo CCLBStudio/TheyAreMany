@@ -1,6 +1,7 @@
 using CCLBStudio.GlobalUpdater;
 using Game.ModularWeapon;
 using Game.Player;
+using Game.Stats;
 using Game.Weapon;
 using UnityEngine;
 
@@ -8,8 +9,10 @@ public class PlayerAttacker : MonoBehaviour, IPlayerBehaviour, IUpdate, IWeaponO
 {
     public PlayerFacade Facade { get; set; }
     public Transform WeaponContainer => weaponHolder;
-    
+    public ICharacterStats Stats => stats;
+
     [SerializeField] private InputReader inputReader;
+    [SerializeField] private CharacterStats stats;
     [SerializeField] private ScriptableWeapon startWeapon;
     [SerializeField] private Transform weaponPivot;
     [SerializeField] private Transform weaponHolder;
