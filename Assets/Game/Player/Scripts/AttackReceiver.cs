@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Player
 {
-    public class AttackReceiver : MonoBehaviour, IDamageTarget
+    public class AttackReceiver : MonoBehaviour, IDamageTarget, IResistanceProvider
     {
         private IHealth _health;
         private ICharacterStats _stats;

@@ -76,20 +76,39 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
         foreach (var col in inRange)
         {
             var damageTargets = col.gameObject.GetComponents<IDamageTarget>();
-            foreach (var d in damageTargets)
+            foreach (var target in damageTargets)
             {
-                var ctx = new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
-                {
-                    BaseDamage = _scriptableAbility.Strength,
-                    AttackerPower = _defaultStats.Power.Value,
-                    AttackerFlatDamage = _defaultStats.FlatDamage.Value,
-                    AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
-                    TargetFlatResistance = d.GetResistances(GetDamageType()).FlatResistance.Value,
-                    TargetPercentageResistance = d.GetResistances(GetDamageType()).PercentageResistance.Value
-                }));
-                d.ReceiveDamages(ctx);
+                var ctx = ComputeDamageContextForTarget(target);
+                target.ReceiveDamages(ctx);
             }
         }
+    }
+    
+    private DamageContext ComputeDamageContextForTarget(IDamageTarget target)
+    {
+        if (target is IResistanceProvider resProvider)
+        {
+            var res = resProvider.GetResistances(GetDamageType());
+            return new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
+            {
+                BaseDamage = _scriptableAbility.Strength,
+                AttackerPower = _defaultStats.Power.Value,
+                AttackerFlatDamage = _defaultStats.FlatDamage.Value,
+                AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
+                TargetFlatResistance = res.FlatResistance.Value,
+                TargetPercentageResistance = res.PercentageResistance.Value
+            }));
+        }
+            
+        return new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
+        {
+            BaseDamage = _scriptableAbility.Strength,
+            AttackerPower = _defaultStats.Power.Value,
+            AttackerFlatDamage = _defaultStats.FlatDamage.Value,
+            AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
+            TargetFlatResistance = 0,
+            TargetPercentageResistance = 0
+        }));
     }
 
     public override void OnObjectCreated()

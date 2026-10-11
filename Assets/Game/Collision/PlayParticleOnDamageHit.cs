@@ -20,11 +20,6 @@ public class PlayParticleOnDamageHit : MonoBehaviour, IDamageTarget
         }
     }
 
-    public ResistanceDescriptor GetResistances(DamageType damageType)
-    {
-        return new ResistanceDescriptor(0, 0);
-    }
-
     public void ReceiveDamages(IDamageContext damageOrigin, Vector3? hitPoint = null)
     {
         if (damageOrigin.Source.GetDamageType() != DamageType.Piercing)

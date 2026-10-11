@@ -6,6 +6,7 @@ using CCLBStudio.EditorTools;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Assemblies;
 using UnityEngine.UI;
 using Utils;
 
@@ -131,7 +132,7 @@ namespace CCLBStudio.ScreenView
 
         private void BuildAnimationLists()
         {
-            _concreteTypes = AppDomain.CurrentDomain.GetAssemblies()
+            _concreteTypes = CurrentAssemblies.GetLoadedAssemblies()
                 .SelectMany(a => a.GetTypes())
                 .Where(t => typeof(IScreenViewAnimation).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface)
                 .ToList();

@@ -18,11 +18,6 @@ public class EnemyDamageNumbers : MonoBehaviour, IDamageTarget
         _target = damageNumberSpawnPoint ? damageNumberSpawnPoint : transform;
     }
 
-    public ResistanceDescriptor GetResistances(DamageType damageType)
-    {
-        return _stats.GetResistances(damageType);
-    }
-
     public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint)
     {
         damageNumberPrefab.Spawn(hitPoint ?? _target.position, damageContext.Damage.FinalDamage);

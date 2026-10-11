@@ -3,7 +3,7 @@ using Game.Stats;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget
+public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget, IResistanceProvider
 {
     public EnemyFacade Facade { get; set; }
 

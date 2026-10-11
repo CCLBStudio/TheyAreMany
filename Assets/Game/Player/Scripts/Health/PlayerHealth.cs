@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace Game.Player.Health
 {
-    public class PlayerHealth : MonoBehaviour, IPlayerBehaviour, IHealth
+    public class PlayerHealth : MonoBehaviour, IPlayerBehaviour, IHealth, IResistanceProvider
     {
         public PlayerFacade Facade { get; set; }
 

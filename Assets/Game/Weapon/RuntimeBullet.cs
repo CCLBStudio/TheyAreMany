@@ -57,24 +57,38 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
         
         foreach (var i in interactors)
         {
-            var ctx = new DamageContext(this, ComputeDamage(i.GetResistances(GetDamageType())));
+            DamageContext ctx = ComputeDamageContextForTarget(i);
             i.ReceiveDamages(ctx, hitPoint);
         }
         
         Pool.ReleaseObject(this);
     }
-    
-    private ComputedDamage ComputeDamage(ResistanceDescriptor res)
+
+    private DamageContext ComputeDamageContextForTarget(IDamageTarget target)
     {
-        return Calculator.ComputeDamage(new DamageCalculationContext
+        if (target is IResistanceProvider resProvider)
+        {
+            var res = resProvider.GetResistances(GetDamageType());
+            return new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
+            {
+                BaseDamage = _baseDamage,
+                AttackerPower = _ownerStats.Power.Value,
+                AttackerFlatDamage = _ownerStats.FlatDamage.Value,
+                AttackerFinalDamagePercentage = _ownerStats.FinalDamagePercentage.Value,
+                TargetFlatResistance = res.FlatResistance.Value,
+                TargetPercentageResistance = res.PercentageResistance.Value
+            }));
+        }
+            
+        return new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
         {
             BaseDamage = _baseDamage,
             AttackerPower = _ownerStats.Power.Value,
             AttackerFlatDamage = _ownerStats.FlatDamage.Value,
             AttackerFinalDamagePercentage = _ownerStats.FinalDamagePercentage.Value,
-            TargetFlatResistance = res.FlatResistance.Value,
-            TargetPercentageResistance = res.PercentageResistance.Value
-        });
+            TargetFlatResistance = 0,
+            TargetPercentageResistance = 0
+        }));
     }
     
     public void Initialize(IRuntimeBulletContext context)
