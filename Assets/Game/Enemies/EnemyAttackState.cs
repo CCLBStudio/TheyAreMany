@@ -1,5 +1,6 @@
 using System;
 using CCLBStudio.GlobalUpdater;
+using Game.Enemies;
 using UnityEngine;
 
 public class EnemyAttackState : MonoBehaviour, IEnemyBehaviour, IFixedUpdate, IEnemyState

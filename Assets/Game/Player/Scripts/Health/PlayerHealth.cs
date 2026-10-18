@@ -11,6 +11,7 @@ namespace Game.Player.Health
     public class PlayerHealth : MonoBehaviour, IPlayerBehaviour, IHealth, IResistanceProvider
     {
         public PlayerFacade Facade { get; set; }
+        public bool IsAlive => !_isDead;
 
         [SerializeField] private FloatValue playerHealth;
         [SerializeField] private UnityEvent<IDamageContext, PlayerHealth> onDamagesTaken;

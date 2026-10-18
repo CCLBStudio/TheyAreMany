@@ -40,8 +40,11 @@ namespace CCLBStudio.DependencyInjection
         {
             if (this is IGeneratedInjectable injectable)
             {
-                injectable.InjectDependencies(); 
+                injectable.InjectDependencies();
+                return;
             }
+            
+            Debug.LogError($"Unable to inject GameObject {name} !");
         }
     }
 }

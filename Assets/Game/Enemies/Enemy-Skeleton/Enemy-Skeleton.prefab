@@ -1307,8 +1307,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19a1f8efda601d44b065fc3b7a5ee8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetSelection:
+    rid: 1010431812968382706
   targetSelectionMethod: 0
   players: {fileID: 11400000, guid: 5ea5a3977e5e357409bb11b7c99e0880, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1010431812968382706
+      type: {class: SelectMostImportantTarget, ns: Game.Enemies, asm: Assembly-CSharp}
+      data: 
 --- !u!114 &2111678839398766429
 MonoBehaviour:
   m_ObjectHideFlags: 0

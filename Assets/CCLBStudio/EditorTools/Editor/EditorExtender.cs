@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assemblies;
 using UnityEngine.UI;
 
 namespace CCLBStudio.EditorTools
@@ -451,7 +452,7 @@ namespace CCLBStudio.EditorTools
         
         public static List<Type> GetAllConcreteTypes(Type type)
         {
-            return AppDomain.CurrentDomain.GetAssemblies()
+            return CurrentAssemblies.GetLoadedAssemblies()
                 .Where(asm => !asm.IsDynamic)
                 .SelectMany(a =>
                 {

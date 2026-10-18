@@ -6,6 +6,11 @@ public class SkeletonChaseState : EnemyChaseState
     
     protected override void Move()
     {
+        if (!Target)
+        {
+            return;
+        }
+        
         if (ComputeTargetDistance() < EnemyData.AttackRange)
         {
             StateMachine.TransitionToState(StateMachine.AttackState);
