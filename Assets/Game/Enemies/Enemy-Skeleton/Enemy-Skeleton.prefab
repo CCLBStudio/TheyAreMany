@@ -1138,6 +1138,7 @@ GameObject:
   - component: {fileID: 5851865607832927506}
   - component: {fileID: 8757704415675234395}
   - component: {fileID: 14987284983473464}
+  - component: {fileID: 3463788943122802008}
   m_Layer: 8
   m_Name: Enemy-Skeleton
   m_TagString: Untagged
@@ -1293,8 +1294,12 @@ MonoBehaviour:
   animInfos:
   - triggerName: Run
     animationType: 0
+    speedMultiplierParam: 
+    clipName: 
   - triggerName: Attack
     animationType: 1
+    speedMultiplierParam: Attack01SpeedMultiplier
+    clipName: Attack01
 --- !u!114 &4752302678668734128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1307,10 +1312,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19a1f8efda601d44b065fc3b7a5ee8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  injectAt: 0
   targetSelection:
     rid: 1010431812968382706
-  targetSelectionMethod: 0
-  players: {fileID: 11400000, guid: 5ea5a3977e5e357409bb11b7c99e0880, type: 2}
   references:
     version: 2
     RefIds:
@@ -1452,6 +1456,94 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamageNumbers
   damageNumberPrefab: {fileID: 1307128595359496716, guid: 2cdbba7d8ecdad04797915478ca0778f, type: 3}
   damageNumberSpawnPoint: {fileID: 0}
+--- !u!114 &3463788943122802008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2882988783833478545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cccad99c2ada4c0e8a30b5114b504563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Stats.CharacterStats
+  damage:
+    rid: 7511233881074827414
+  power:
+    rid: 7511233881074827415
+  critChance:
+    rid: 7511233881074827416
+  critDamage:
+    rid: 7511233881074827417
+  finalDamagePercentage:
+    rid: 7511233881074827418
+  attackSpeed:
+    rid: 7511233881074827419
+  bulletSpeed:
+    rid: 7511233881074827420
+  resistances:
+  - key: 1
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 3
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 0
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 4
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  - key: 2
+    value:
+      flatResistance:
+        baseValue: 0
+      percentageResistance:
+        baseValue: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 7511233881074827414
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233881074827415
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233881074827416
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233881074827417
+      type: {class: IntStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233881074827418
+      type: {class: FloatStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233881074827419
+      type: {class: FloatStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
+    - rid: 7511233881074827420
+      type: {class: FloatStat, ns: Game.Stats, asm: Assembly-CSharp}
+      data:
+        baseValue: 0
 --- !u!1 &2902120151172129857
 GameObject:
   m_ObjectHideFlags: 0

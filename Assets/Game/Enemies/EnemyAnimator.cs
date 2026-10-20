@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Game.Damage;
 using UnityEngine;
 
 public class EnemyAnimator : MonoBehaviour, IEnemyBehaviour
@@ -8,7 +10,8 @@ public class EnemyAnimator : MonoBehaviour, IEnemyBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private List<AnimationInfo> animInfos;
-    private Dictionary<AnimationType, string> _animHash;
+    
+    private Dictionary<AnimationType, AnimationInfo> _animHash;
 
     private enum AnimationType {Run, Attack, Idle, Death}
     
@@ -24,48 +27,33 @@ public class EnemyAnimator : MonoBehaviour, IEnemyBehaviour
 
     private void PlayAnimation(AnimationType animType)
     {
-        if (!_animHash.TryGetValue(animType, out string hash))
+        if (!_animHash.TryGetValue(animType, out AnimationInfo info))
         {
-            if (!TryCreateMissingAnim(animType, out string newHash))
-            {
-                return;
-            }
-
-            animator.SetTrigger(newHash);
+            Debug.LogError($"Animation of type {animType} not found in the animation dictionary !");
             return;
         }
-        
-        animator.SetTrigger(hash);
+
+        RefreshAttackAnimationSpeed(info);
+        animator.SetTrigger(info.triggerName);
     }
 
-    private bool TryCreateMissingAnim(AnimationType type, out string result)
+    private void RefreshAttackAnimationSpeed(AnimationInfo info)
     {
-        int i = animInfos.FindIndex(x => x.animationType == type);
-        if (i < 0)
-        {
-            Debug.LogError($"Unable to create missing animation of type {type}");
-            result = string.Empty;
-            return false;
-        }
-
-        result = animInfos[i].triggerName;
-        _animHash.Add(animInfos[i].animationType, result);
-        return true;
+        float targetSpeed = info.BaseAnimationLength * Calculator.ComputeAttackSpeed(Facade.EnemyData.AttackSpeed, Facade.Stats.AttackSpeed.Value);
+        animator.SetFloat(info.SpeedMultiplierHash, targetSpeed);
     }
     
     public void OnEnemyCreated()
     {
-        _animHash = new Dictionary<AnimationType, string>();
+        _animHash = new Dictionary<AnimationType, AnimationInfo>();
         
         foreach (var info in animInfos)
         {
-            if (_animHash.ContainsKey(info.animationType))
+            info.BakeAnimationLength(animator);
+            if (!_animHash.TryAdd(info.animationType, info))
             {
                 Debug.LogError($"Key {info.animationType} is already present in the animation dictionary !");
-                continue;
             }
-            
-            _animHash.Add(info.animationType, info.triggerName);
         }
     }
 
@@ -80,7 +68,34 @@ public class EnemyAnimator : MonoBehaviour, IEnemyBehaviour
     [Serializable]
     private struct AnimationInfo
     {
+        public float BaseAnimationLength => _baseAnimationLength;
+        
         public string triggerName;
         public AnimationType animationType;
+        public string speedMultiplierParam;
+        public string clipName;
+        
+        [NonSerialized] private int _speedMulHash;
+        [NonSerialized] private float _baseAnimationLength;
+        public int SpeedMultiplierHash => _speedMulHash == 0 ? _speedMulHash = Animator.StringToHash(speedMultiplierParam) : _speedMulHash;
+        
+        public void BakeAnimationLength(Animator animator)
+        {
+            if (string.IsNullOrEmpty(clipName))
+            {
+                return;
+            }
+
+            var s = clipName;
+            AnimationClip clip = animator.runtimeAnimatorController.animationClips.FirstOrDefault(c => c.name == s);
+            
+            if (!clip)
+            {
+                Debug.LogError($"Animation clip {clipName} not found in the animator controller for animation type {animationType}");
+                return;
+            }
+
+            _baseAnimationLength = clip.length;
+        }
     }
 }

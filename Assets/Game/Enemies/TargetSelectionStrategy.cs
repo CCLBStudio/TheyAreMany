@@ -18,6 +18,8 @@ namespace Game.Enemies
         {
             selector = s;
         }
+        
+        public void SetTarget(IEnemyTarget t) => CurrentTarget = t;
 
         protected bool ShouldAcquireNewTarget()
         {

@@ -1,14 +1,16 @@
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptablePooling;
+using Game.Stats;
 using UnityEngine;
-using ZLinq;
 
 public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
 {
     public ScriptablePool Pool { get; set; }
     public ScriptableEnemy EnemyData => enemyData;
+    public ICharacterStats Stats => _stats;
 
     private IEnemyBehaviour[] _behaviours;
+    private ICharacterStats _stats;
     
     [SerializeField] protected ScriptableEnemy enemyData;
     [SerializeField] private EnemyStateMachine stateMachine;
@@ -22,6 +24,7 @@ public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
 
     public void OnObjectCreated()
     {
+        _stats = GetComponent<ICharacterStats>() ?? new DefaultCharacterStats();
         _behaviours = GetComponentsInChildren<IEnemyBehaviour>();
 
         foreach (var b in _behaviours)

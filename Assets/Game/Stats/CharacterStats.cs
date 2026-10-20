@@ -34,7 +34,14 @@ namespace Game.Stats
         [SerializeReference] private IStat<float> finalDamagePercentage = new FloatStat();
         [SerializeReference] private IStat<float> attackSpeed = new FloatStat();
         [SerializeReference] private IStat<float> bulletSpeed = new FloatStat();
-        [SerializeField] private Dictionary<DamageType, ResistanceDescriptor> resistances = new();
+        [SerializeField] private Dictionary<DamageType, ResistanceDescriptor> resistances = new()
+        {
+            { DamageType.Explosive, new ResistanceDescriptor(0, 0) },
+            { DamageType.Fire, new ResistanceDescriptor(0, 0) },
+            { DamageType.Piercing, new ResistanceDescriptor(0, 0) },
+            { DamageType.Poison, new ResistanceDescriptor(0, 0) },
+            { DamageType.Slashing, new ResistanceDescriptor(0, 0) }
+        };
         
         public ResistanceDescriptor GetResistances(DamageType damageType)
         {

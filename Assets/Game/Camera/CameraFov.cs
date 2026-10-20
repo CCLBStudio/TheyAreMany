@@ -1,6 +1,7 @@
 using System.Linq;
 using CCLBStudio.ScriptableValue;
 using UnityEngine;
+using ZLinq;
 
 [RequireComponent(typeof(Camera))]
 public class CameraFov : MonoBehaviour
@@ -26,7 +27,7 @@ public class CameraFov : MonoBehaviour
             return;
         }
         
-        var points = Vector3Utils.GetFarthestPoints(players.Value.Select(x => x.transform.position).ToList());
+        var points = Vector3Utils.GetFarthestPoints(players.Value.AsValueEnumerable().Where(x => x).Select(x => x.transform.position).ToList());
         float normalizedRange = Mathf.Clamp01((Vector3.Distance(points.Item1, points.Item2) - distanceForMinFov) / distanceForMaxFov);
 
         _cam.fieldOfView = minFov + normalizedRange * FovRange;

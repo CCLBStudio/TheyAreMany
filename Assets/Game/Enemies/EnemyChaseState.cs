@@ -1,3 +1,4 @@
+using CCLBStudio.Extensions;
 using Game.Enemies;
 using Unity.Mathematics;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class EnemyChaseState : MonoBehaviour, IEnemyBehaviour, IEnemyState
     protected float speed;
     protected Vector2 direction;
     protected Quaternion baseRot;
+    protected bool isExitingState;
 
     protected virtual void Move()
     {
@@ -32,6 +34,15 @@ public class EnemyChaseState : MonoBehaviour, IEnemyBehaviour, IEnemyState
         direction.y /= heightDivider;
         
         rb.AddForce(direction.normalized * speed);
+    }
+    
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.collider.TryGetComponentOnRoot(out IEnemyTarget target) && target.TargetTransform == Target)
+        {
+            isExitingState = true;
+            StateMachine.TransitionToState(StateMachine.AttackState);
+        }
     }
 
     protected void OrientTowardsTarget()
@@ -53,6 +64,7 @@ public class EnemyChaseState : MonoBehaviour, IEnemyBehaviour, IEnemyState
             transform.rotation = baseRot;
         }
     }
+    
     public virtual void OnEnemyCreated()
     {
         speed = Random.Range(minMaxSpeed.x, minMaxSpeed.y);
@@ -73,6 +85,7 @@ public class EnemyChaseState : MonoBehaviour, IEnemyBehaviour, IEnemyState
     public virtual void EnterState()
     {
         CanMove = true;
+        isExitingState = false;
         animPlayer.PlayRunAnimation();
         startMoving?.Invoke();
     }

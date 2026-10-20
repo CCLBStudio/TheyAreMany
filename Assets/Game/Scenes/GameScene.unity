@@ -8894,8 +8894,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.DependencyInjection.SceneInjector
   bakedInjectables:
   - {fileID: 1993552623}
-  - {fileID: 1754276957}
   - {fileID: 1731955671}
+  - {fileID: 1754276957}
 --- !u!4 &218949247
 Transform:
   m_ObjectHideFlags: 0

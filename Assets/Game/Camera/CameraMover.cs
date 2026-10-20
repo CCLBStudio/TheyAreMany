@@ -2,6 +2,7 @@ using CCLBStudio.ScriptableValue;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using ZLinq;
 
 public class CameraMover : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class CameraMover : MonoBehaviour
 
     private void Update()
     {
-        _centroid = ComputeCentroid(players.Value.Select(x => x.transform.position).ToList());
+        _centroid = ComputeCentroid(players.Value.AsValueEnumerable().Where(x => x).Select(x => x.transform.position).ToList());
         _centroid.z = transform.position.z;
         _centroid.y = Mathf.Max(_minY, _centroid.y);
 

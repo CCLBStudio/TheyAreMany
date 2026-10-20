@@ -1,5 +1,6 @@
 using System;
 using CCLBStudio.GlobalUpdater;
+using Game.Damage;
 using Game.Enemies;
 using UnityEngine;
 
@@ -15,18 +16,39 @@ public class EnemyAttackState : MonoBehaviour, IEnemyBehaviour, IFixedUpdate, IE
     [SerializeField] protected Rigidbody2D rb;
 
     protected float attackTimer;
+    protected Quaternion baseRot;
 
     protected void LaunchAttack()
     {
         animPlayer.PlayAttackAnimation();
-        attackTimer = 1f / EnemyData.AttackSpeed;
+        attackTimer = 1f / Calculator.ComputeAttackSpeed(Facade.EnemyData.AttackSpeed, Facade.Stats.AttackSpeed.Value);
+    }
+    
+    protected void OrientTowardsTarget()
+    {
+        if (!Target)
+        {
+            return;
+        }
+
+        float targetPos = Target.position.x;
+        float selfPos = rb.position.x;
+
+        if (targetPos > selfPos)
+        {
+            transform.rotation = baseRot * Quaternion.Euler(0f, 180f, 0f);
+        }
+        else
+        {
+            transform.rotation = baseRot;
+        }
     }
 
     #region Behaviour Methods
 
     public virtual void OnEnemyCreated()
     {
-        
+        baseRot = transform.rotation;
     }
 
     public virtual void OnEnemyRequested()

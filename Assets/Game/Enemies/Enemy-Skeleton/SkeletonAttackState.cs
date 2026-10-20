@@ -1,20 +1,32 @@
+using System.Collections.Generic;
+using CCLBStudio.Extensions;
+using Game.Enemies;
 using UnityEngine;
 
 public class SkeletonAttackState : EnemyAttackState
 {
     [SerializeField] private Collider attackCollider;
     
-    private Vector2 _desiredPosition;
-    
-    private void ComputeDesiredPosition()
+    private readonly List<IEnemyTarget> _collidingTargets = new();
+
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        _desiredPosition = Target.position;
-        _desiredPosition.y = rb.position.y;
+        if (!other.collider.TryGetComponentOnRoot(out IEnemyTarget target))
+        {
+            return;
+        }
+        
+        _collidingTargets.Add(target);
     }
     
-    private float ComputeTargetDistance()
+    private void OnCollisionExit2D(Collision2D other)
     {
-        return Vector2.Distance(rb.position, _desiredPosition);
+        if (!other.collider.TryGetComponentOnRoot(out IEnemyTarget target))
+        {
+            return;
+        }
+        
+        _collidingTargets.Remove(target);
     }
 
     public void OnAttackBeginDangerous()
@@ -29,20 +41,17 @@ public class SkeletonAttackState : EnemyAttackState
 
     public override void EnterState()
     {
-        ComputeDesiredPosition();
     }
 
     public override void UpdateState()
     {
-        if (ComputeTargetDistance() > EnemyData.AttackRange)
+        if (_collidingTargets.Count <= 0)
         {
             StateMachine.TransitionToState(StateMachine.ChaseState);
             return;
         }
         
-        ComputeDesiredPosition();
-
-        if (attackTimer <= 0f && Vector2.Distance(rb.position, Target.position) < EnemyData.AttackRange)
+        if (attackTimer <= 0f)
         {
             LaunchAttack();
         }

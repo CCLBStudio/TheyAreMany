@@ -1,10 +1,11 @@
-using Game.Stats;
 using UnityEngine;
 
 namespace Game.Damage
 {
     public static class Calculator
     {
+        #region Damage Calculation
+
         public static ComputedDamage ComputeDamage(DamageCalculationContext ctx)
         {
             int trueDamage = Mathf.Max(0, Mathf.FloorToInt(ctx.BaseDamage * ComputeBaseDamageMultiplier(ctx.AttackerPower) + ctx.AttackerFlatDamage));
@@ -35,8 +36,21 @@ namespace Game.Damage
         {
             return 1f - percentageResistance / 100f;
         }
+
+        #endregion
+
+        #region Attack Speed Calculation
+
+        public static float ComputeAttackSpeed(float baseAttackSpeed, float attackSpeedStat)
+        {
+            return baseAttackSpeed * (1f + attackSpeedStat);
+        }
+
+        #endregion
     }
-    
+
+    #region Damage DTO
+
     public readonly struct DamageCalculationContext
     {
         public int BaseDamage { get; init; }
@@ -55,4 +69,6 @@ namespace Game.Damage
         public int FinalDamage { get; init; }
         public bool IsCritical { get; init; }
     }
+
+    #endregion
 }

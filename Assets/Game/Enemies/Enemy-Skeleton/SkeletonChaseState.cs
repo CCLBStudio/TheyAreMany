@@ -6,7 +6,7 @@ public class SkeletonChaseState : EnemyChaseState
     
     protected override void Move()
     {
-        if (!Target)
+        if (!Target || isExitingState)
         {
             return;
         }
