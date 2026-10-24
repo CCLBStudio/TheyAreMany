@@ -1,23 +1,29 @@
+using CCLBStudio.Extensions;
 using Game.Damage;
+using Game.Stats;
 using UnityEngine;
 
 public class MeleeWeaponDamageDealer : MonoBehaviour, IDamageSource
 {
+    [SerializeField] private RangeInt baseDamage = new(7, 10);
+    private ICharacterStats _stats;
+
+    private void Awake()
+    {
+        _stats = this.TryGetComponentOnRoot(out ICharacterStats stats) ? stats : new DefaultCharacterStats();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out IDamageTarget t))
+        if (!other.TryGetComponent(out IDamageTarget t))
         {
-            var hitPoint = other.ClosestPoint(transform.position);
-            var ctx = new DamageContext(this, new ComputedDamage
-            {
-                TrueDamage = 10,
-                ReducedDamage = 10,
-                ReducedAmount = 0,
-                FinalDamage = 10,
-                IsCritical = false
-            });
-            t.ReceiveDamages(ctx, hitPoint);
+            return;
         }
+        
+        var hitPoint = other.ClosestPoint(transform.position);
+        var ctx = DamageHelper.ComputeDamageContext(this, baseDamage.GetRandom(), _stats, t);
+            
+        t.ReceiveDamages(ctx, hitPoint);
     }
 
     public Vector3 GetPosition()

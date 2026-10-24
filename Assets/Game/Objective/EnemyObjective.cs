@@ -4,17 +4,20 @@ using UnityEngine;
 
 namespace Game.Objective
 {
-    public partial class MainEnemyObjective : MonoBehaviour, IEnemyTarget
+    public partial class EnemyObjective : MonoBehaviour, IEnemyTarget
     {
-        public int TargetPriority => 10;
+        public int TargetPriority => targetPriority;
         public Transform TargetTransform => transform;
-        public bool CanBeSelected() => true;
 
+        [SerializeField] private int targetPriority = 10;
+        
         [Inject] private EnemyTargetList _enemyTargetList;
 
         private void Awake()
         {
             _enemyTargetList.targets.Add(this);
         }
+        
+        public bool CanBeSelected() => true;
     }
 }
