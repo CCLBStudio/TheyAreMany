@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
@@ -140,8 +140,11 @@ namespace CCLBStudio.ScreenView
 
         private void PlaceRectAtStartPos(out Vector2 destination)
         {
-            float scaleFactor = _canvas ? _canvas.scaleFactor : 1f;
-            Vector2 offset = new Vector2(Screen.width / scaleFactor * Mathf.Clamp(normalizedScreenOffset.x, -1f, 1f), Screen.height / scaleFactor * Mathf.Clamp(normalizedScreenOffset.y, -1f, 1f));
+            // Root canvas rect is already expressed in canvas units (screen size / scaleFactor), and the nested canvas may not carry the scaler's factor.
+            Vector2 canvasSize = _canvas ? ((RectTransform)_canvas.rootCanvas.transform).rect.size : new Vector2(Screen.width, Screen.height);
+            float width = canvasSize.x;
+            float height = canvasSize.y;
+            Vector2 offset = new Vector2(width * Mathf.Clamp(normalizedScreenOffset.x, -1f, 1f), height * Mathf.Clamp(normalizedScreenOffset.y, -1f, 1f));
             _referenceAnchoredPos ??= rect.anchoredPosition;
             Vector2 startPos = _referenceAnchoredPos.Value;
             destination = startPos;
@@ -149,35 +152,35 @@ namespace CCLBStudio.ScreenView
             switch (moveDirection)
             {
                 case ScreenViewTweenDirection.FromSouth:
-                    startPos = new Vector2(0f, -Screen.height / scaleFactor) + offset;
+                    startPos = new Vector2(0f, -height) + offset;
                     break;
                     
                 case ScreenViewTweenDirection.FromNorth:
-                    startPos = new Vector2(0f, Screen.height / scaleFactor) + offset;
+                    startPos = new Vector2(0f, height) + offset;
                     break;
                     
                 case ScreenViewTweenDirection.FromEast:
-                    startPos = new Vector2(Screen.width / scaleFactor, 0f) + offset;
+                    startPos = new Vector2(width, 0f) + offset;
                     break;
                     
                 case ScreenViewTweenDirection.FromWest:
-                    startPos = new Vector2(-Screen.width / scaleFactor, 0f) + offset;
+                    startPos = new Vector2(-width, 0f) + offset;
                     break;
 
                 case ScreenViewTweenDirection.ToSouth:
-                    destination = new Vector2(0f, -Screen.height / scaleFactor) + offset;
+                    destination = new Vector2(0f, -height) + offset;
                     break;
                     
                 case ScreenViewTweenDirection.ToNorth:
-                    destination = new Vector2(0f, Screen.height / scaleFactor) + offset;
+                    destination = new Vector2(0f, height) + offset;
                     break;
 
                 case ScreenViewTweenDirection.ToEast:
-                    destination = new Vector2(Screen.width / scaleFactor, 0f) + offset;
+                    destination = new Vector2(width, 0f) + offset;
                     break;
 
                 case ScreenViewTweenDirection.ToWest:
-                    destination = new Vector2(-Screen.width / scaleFactor, 0f) + offset;
+                    destination = new Vector2(-width, 0f) + offset;
                     break;
             }
 

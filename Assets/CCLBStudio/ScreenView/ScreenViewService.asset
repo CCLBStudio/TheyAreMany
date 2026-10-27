@@ -14,13 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   screenViewPrefabs:
   - {fileID: 2266735253369255634, guid: 92be510b5f4937742bc4ffc9b1e5c54a, type: 3}
-  uiContainers:
-    initialPairs:
-    - key: Main
-      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b,
-        type: 3}
-    debugDisplay:
-    - key: Main
-      value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b,
-        type: 3}
+  - {fileID: 8314952261542690245, guid: 5c6ccf1360e83ab4b884b9ec6ee986f2, type: 3}
+  containers:
+  - key: Main
+    value: {fileID: 4616230811578210893, guid: c07ca9155b2acf94f993a2e356a5e9ac, type: 3}
+  - key: Loading
+    value: {fileID: 4616230811578210893, guid: ce01c5f0119c71e459b427db2928949b, type: 3}
   defaultClickSound: {fileID: 8300000, guid: ebbdf343834382d46ac306569de41222, type: 3}

@@ -8893,9 +8893,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.DependencyInjection.SceneInjector
   bakedInjectables:
-  - {fileID: 1993552623}
-  - {fileID: 1754276957}
   - {fileID: 1731955671}
+  - {fileID: 1754276957}
+  - {fileID: 1993552623}
 --- !u!4 &218949247
 Transform:
   m_ObjectHideFlags: 0
@@ -68134,6 +68134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
   onGameOver:
   - {fileID: 11400000, guid: 26039bf1f20810a4989bd89a800d0143, type: 2}
+  - {fileID: 11400000, guid: c3d058a6ce33b5c43be6133fbc6f5c53, type: 2}
 --- !u!1 &1743169143
 GameObject:
   m_ObjectHideFlags: 0
@@ -77064,7 +77065,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4095
 --- !u!114 &2000678729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77082,7 +77083,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0.5
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

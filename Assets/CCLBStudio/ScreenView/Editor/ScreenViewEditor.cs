@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CCLBStudio.EditorTools;
+using CCLBStudio.StringIds;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -60,11 +61,6 @@ namespace CCLBStudio.ScreenView
         private ReorderableList _showAnimationList;
         private ReorderableList _closeAnimationList;
         private List<Type> _concreteTypes;
-        private bool _creatingNewId;
-        private string _newId = "";
-        private readonly List<ViewId> _allIds = ViewId.GetAll().ToList();
-        private bool _focusIdNextFrame;
-        private const string NewIdFocusName = "NewIdTextField";
         private GUIStyle _sectionStyle, _blueStyle;
         private bool _stylesInit;
         private readonly Color _sectionFoldoutTint = new Color(0.5f, 0.5f, 0.5f, 1f);
@@ -255,155 +251,7 @@ namespace CCLBStudio.ScreenView
 
         private void DrawId()
         {
-            var idProperty = viewId.FindPropertyRelative(ViewId.IdProperty);
-            var currentId = new ViewId(idProperty.stringValue);
-
-            int currentIndex = Mathf.Max(0, _allIds.FindIndex(vid => vid == currentId));
-            var names = _allIds.Select(vid => vid.ToString()).ToArray();
-
-            if (currentId == ViewId.Empty)
-            {
-                EditorGUILayout.HelpBox("A valid ID is required", MessageType.Error);
-            }
-
-            EditorGUILayout.BeginHorizontal();
-            
-            int newIndex = EditorGUILayout.Popup("Id", currentIndex, names, GUILayout.Width(EditorGUIUtility.currentViewWidth - 100));
-            if (currentId != ViewId.Empty && GUILayout.Button("Delete"))
-            {
-                DeleteViewId(currentId.Id);
-                idProperty.stringValue = string.Empty;
-                EditorGUILayout.EndHorizontal();
-                return;
-            }
-            
-            EditorGUILayout.EndHorizontal();
-
-            if (newIndex != currentIndex)
-            {
-                idProperty.stringValue = _allIds[newIndex].Id;
-            }
-            
-            if (_creatingNewId)
-            {
-                EditorGUILayout.BeginHorizontal();
-                
-                GUI.SetNextControlName(NewIdFocusName);
-                _newId = EditorGUILayout.TextField(_newId).Capitalize();
-                bool valid = true;
-                bool alreadyExists = _allIds.Any(x => x.Id == _newId);
-                
-                if (_focusIdNextFrame && Event.current.type == EventType.Repaint)
-                {
-                    GUI.FocusControl(NewIdFocusName);
-                    _focusIdNextFrame = false;
-                }
-                
-                if (_newId.Length < 1)
-                {
-                    valid = false;
-                }
-                
-                if (alreadyExists)
-                {
-                    valid = false;
-                }
-
-                GUI.enabled = valid;
-                
-                if (GUILayout.Button("Add", GUILayout.Width(50)))
-                {
-                    AddNewViewId(_newId);
-                    idProperty.stringValue = _newId;
-                    _creatingNewId = false;
-                    _newId = string.Empty;
-                    GUI.FocusControl(null);
-                }
-                
-                GUI.enabled = true;
-                
-                EditorGUILayout.EndHorizontal();
-
-                if (alreadyExists && _newId.Length > 1)
-                {
-                    EditorGUILayout.HelpBox("Id already exists", MessageType.Error);
-                }
-            }
-            else if (GUILayout.Button("New Id"))
-            {
-                _creatingNewId = true;
-                _focusIdNextFrame = true;
-            }
-        }
-        
-        private void AddNewViewId(string newId)
-        {
-            string[] guids = AssetDatabase.FindAssets($"{nameof(ViewId)} t:script", new[] {"Assets"});
-            string path = string.Empty;
-            foreach (string guid in guids)
-            {
-                path = AssetDatabase.GUIDToAssetPath(guid);
-                if (Path.GetFileNameWithoutExtension(path) == nameof(ViewId))
-                {
-                    break;
-                }
-            }
-
-            if (string.IsNullOrEmpty(path))
-            {
-                Debug.LogError($"Unable to find {nameof(ViewId)}.cs file.");
-                return;
-            }
-            
-            string[] lines = File.ReadAllLines(path);
-
-            int insertIndex = Array.FindLastIndex(lines, l => l.Trim().StartsWith("public static readonly ViewId")) + 1;
-
-            if (insertIndex <= 0) return;
-
-            string newEntry = $"        public static readonly ViewId {newId} = new(\"{newId}\");";
-
-            var newLines = lines.Take(insertIndex)
-                .Concat(new[] { newEntry })
-                .Concat(lines.Skip(insertIndex))
-                .ToArray();
-
-            File.WriteAllLines(path, newLines);
-            AssetDatabase.Refresh();
-        }
-
-        private void DeleteViewId(string id)
-        {
-            string[] guids = AssetDatabase.FindAssets($"{nameof(ViewId)} t:script", new[] {"Assets"});
-            string path = string.Empty;
-            foreach (string guid in guids)
-            {
-                path = AssetDatabase.GUIDToAssetPath(guid);
-                if (Path.GetFileNameWithoutExtension(path) == nameof(ViewId))
-                {
-                    break;
-                }
-            }
-
-            if (string.IsNullOrEmpty(path))
-            {
-                Debug.LogError($"Unable to find {nameof(ViewId)}.cs file.");
-                return;
-            }
-            
-            string[] lines = File.ReadAllLines(path);
-            int deleteIndex = Array.FindIndex(lines, l => l.Trim().StartsWith($"public static readonly ViewId {id}"));
-            if (deleteIndex < 0) return;
-            
-            int index = _allIds.FindIndex(x => x.Id == id);
-            _allIds.RemoveAt(index);
-            
-            var newLines = lines.Take(deleteIndex)
-                .Concat(lines.Skip(deleteIndex + 1))
-                .ToArray();
-            
-            File.WriteAllLines(path, newLines);
-            AssetDatabase.Refresh();
+            StringIdEditorGUI.DrawIdLayout<ViewId>(viewId, new GUIContent("Id"));
         }
 
         private void DrawHeaderSection(ScreenView script)

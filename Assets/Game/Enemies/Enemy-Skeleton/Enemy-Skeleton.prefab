@@ -3560,6 +3560,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8027559162463396373}
     m_Modifications:
+    - target: {fileID: 1760979992494274648, guid: 1ea6030353537394ea39ea5103515073, type: 3}
+      propertyPath: baseDamage.max
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1760979992494274648, guid: 1ea6030353537394ea39ea5103515073, type: 3}
+      propertyPath: baseDamage.min
+      value: 7000
+      objectReference: {fileID: 0}
     - target: {fileID: 4595765277272599330, guid: 1ea6030353537394ea39ea5103515073, type: 3}
       propertyPath: animationEvents.Array.data[0].unityEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

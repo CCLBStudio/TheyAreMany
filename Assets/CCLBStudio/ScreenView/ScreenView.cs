@@ -114,7 +114,7 @@ namespace CCLBStudio.ScreenView
         public string ContainerId => containerId;
 
         [Tooltip("The id of this screen view. It must be unique. It can be used as parameter to show or close the view.")]
-        [SerializeField] private ViewId viewId = ViewId.Empty;
+        [SerializeField] private ViewId viewId = new();
         [Tooltip("A list of TMP entries linked to a key, that allows us to access those fields.")]
         [SerializeField] private List<SerializableStringValuePair<TextMeshProUGUI>> textEntries;
         [Tooltip("A list of sprite entries linked to a key, that allows us to access those fields.")]

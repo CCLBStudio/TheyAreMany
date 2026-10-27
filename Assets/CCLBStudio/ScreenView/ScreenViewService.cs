@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CCLBStudio.DependencyInjection;
-using CCLBStudio.SerializablePairs;
 using CCLBStudio.Utils;
 using Services;
 using UnityEngine;
@@ -18,7 +17,7 @@ namespace CCLBStudio.ScreenView
 #if UNITY_EDITOR
  
         public static string ScreenViewPrefabsProperty => nameof(screenViewPrefabs);
-        public static string UiContainersProperty => nameof(uiContainers);
+        public static string UiContainersProperty => nameof(containers);
         public static string ButtonClickSoundProperty => nameof(defaultClickSound);
         
         public Dictionary<ScreenViewContainerHandler, List<ScreenView>> GetContainersViewMapEditor()
@@ -26,7 +25,7 @@ namespace CCLBStudio.ScreenView
             Dictionary<ScreenViewContainerHandler, List<ScreenView>> result = new Dictionary<ScreenViewContainerHandler, List<ScreenView>>();
             Dictionary<string, ScreenViewContainerHandler> containerMap = new Dictionary<string, ScreenViewContainerHandler>();
 
-            foreach (var pair in uiContainers.Dictionary)
+            foreach (var pair in containers)
             {
                 ScreenViewContainerHandler handler = pair.Value.GetComponent<ScreenViewContainerHandler>();
                 if (!handler)
@@ -58,12 +57,12 @@ namespace CCLBStudio.ScreenView
 #endregion
 
         public List<GameObject> ScreenViewPrefabs => screenViewPrefabs;
-        public List<string> ContainerIds => uiContainers.GetKeys();
+        public List<string> ContainerIds => containers.Keys.ToList();
         public List<ScreenViewContainerHandler> ExistingContainers => _containers.Values.ToList();
         public AudioClip DefaultClickSound => defaultClickSound;
 
         [SerializeField] private List<GameObject> screenViewPrefabs;
-        [SerializeField] private SerializableDictionary<string, GameObject> uiContainers;
+        [SerializeField] private Dictionary<string, GameObject> containers = new();
         
         [Header("Feedback Settings")]
         [SerializeField] private AudioClip defaultClickSound;
@@ -81,7 +80,7 @@ namespace CCLBStudio.ScreenView
             _existingViews = new Dictionary<ViewId, ScreenView>();
             _screenViewObserver = new ObserverWrapper<IViewServiceListener>();
             _screenViews = new Dictionary<ViewId, GameObject>(screenViewPrefabs.Count);
-            _containers = new Dictionary<string, ScreenViewContainerHandler>(uiContainers.Count);
+            _containers = new Dictionary<string, ScreenViewContainerHandler>(containers.Count);
             
             screenViewPrefabs.ClearNull();
             foreach (var prefab in screenViewPrefabs)
@@ -97,7 +96,7 @@ namespace CCLBStudio.ScreenView
             
             _containerHolder = new GameObject("ContainerHolder").AddComponent<ScreenViewContainerHolder>();
             
-            foreach (var container in uiContainers.Dictionary)
+            foreach (var container in containers)
             {
                 var handler = _containerHolder.InstantiateNewContainer(container.Value);
                 handler.Id = container.Key;

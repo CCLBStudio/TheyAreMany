@@ -5,6 +5,7 @@ using CCLBStudio.EventBus;
 using CCLBStudio.ScriptableValue;
 using Game.Objective;
 using Game.Player.Health;
+using Sirenix.OdinInspector;
 using Systems.ScriptableBehaviours;
 using UnityEngine;
 
@@ -17,7 +18,12 @@ namespace Game.GameOver
         [Inject] private PlayerFacadeListValue _players;
         [NonSerialized] private int _killedPlayers;
         private bool _gameOver;
-        
+
+        private void Awake()
+        {
+            _gameOver = false;
+        }
+
         private void OnEnable()
         {
             EventBus<PlayerKilled>.Subscribe(this);
@@ -57,5 +63,23 @@ namespace Game.GameOver
                 action.Execute();
             }
         }
+
+        #region Editor
+        #if UNITY_EDITOR
+        
+        [Button("Trigger Game Over")]
+        private void TriggerGameOverEditor()
+        {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+            
+            _gameOver = false;
+            TriggerGameOver();
+        }
+        
+        #endif
+        #endregion
     }
 }
