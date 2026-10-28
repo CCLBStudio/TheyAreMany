@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd6071ed8590dc47839dd71eee65a53, type: 3}
   m_Name: TransitionService
   m_EditorClassIdentifier: Assembly-CSharp::Game.Transition.TransitionService
-  profiles: []
+  profiles:
+  - key:
+      id: FadeVignette
+    value: {fileID: 11400000, guid: ca02219a944a424419dfc656325532b8, type: 2}

@@ -10,7 +10,6 @@ namespace Game.Transition
     public class TransitionService : AppService
     {
         [SerializeField] private Dictionary<TransitionId, TransitionProfile> profiles = new();
-        [SerializeField] private Dictionary<string, string> test = new();
         
         public async Awaitable FadeIn(TransitionId transitionId)
         {
