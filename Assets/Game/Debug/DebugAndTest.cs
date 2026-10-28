@@ -1,10 +1,19 @@
-using CCLBStudio.ScreenView;
+using System.Collections.Generic;
+using Game.Transition;
 using Sirenix.OdinInspector;
+using TransitionsPlus;
 using UnityEngine;
 
 public class DebugAndTest : MonoBehaviour
 {
-    public ScriptableWeapon weapon;
-    public ViewId viewId;
-    public ContainerId containerId;
+    public TransitionProfile profile;
+    public TransitionId transitionId;
+    public List<TransitionId> transitionIds = new();
+    [SerializeField] private Dictionary<TransitionId, TransitionProfile> profiles = new();
+
+    [Button("Start Transition")]
+    public void StartTransition()
+    {
+        TransitionAnimator.Start(profile);
+    }
 }
