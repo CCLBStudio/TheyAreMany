@@ -365,16 +365,17 @@ namespace CCLBStudio.ScreenView
             if (behaviour == ShowBehaviour.InsideContainer || behaviour == ShowBehaviour.InsideContainerAsLastSibling)
             {
                 var keys = service.ContainerIds.Where(x => !string.IsNullOrEmpty(x)).ToList();
+                var containerIdValue = containerId.FindPropertyRelative(StringId.IdProperty);
                 if (keys.Count > 0)
                 {
-                    int index = keys.FindIndex(x => x.Equals(containerId.stringValue));
+                    int index = keys.FindIndex(x => x.Equals(containerIdValue.stringValue));
                     uiContainerIndex.intValue = index >= 0 ? index : Mathf.Clamp(uiContainerIndex.intValue, 0, keys.Count - 1);
                     uiContainerIndex.intValue = EditorExtender.DrawPopup(uiContainerIndex.intValue, keys.ToArray(), "Container Id");
-                    containerId.stringValue = keys[uiContainerIndex.intValue];
+                    containerIdValue.stringValue = keys[uiContainerIndex.intValue];
                 }
                 else
                 {
-                    containerId.stringValue = string.Empty;
+                    containerIdValue.stringValue = string.Empty;
                 }
             }
 

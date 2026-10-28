@@ -3217,8 +3217,9 @@ MonoBehaviour:
   blockRaycastUntilCloseCompleted: 1
   autoCloseOnCancel: 0
   showBehaviour: 3
-  containerId: Main
-  containerIndex: 0
+  containerId:
+    id: Main
+  containerIndex: 1
   closeBehaviour: 1
   buttonFeedbacks: []
   enableOptimization: 0

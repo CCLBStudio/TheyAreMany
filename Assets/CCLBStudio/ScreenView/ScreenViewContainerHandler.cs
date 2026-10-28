@@ -20,7 +20,7 @@ namespace CCLBStudio.ScreenView
 
         #endregion
 
-        public string Id { get; set; } = string.Empty;
+        public ContainerId Id { get; set; } = new();
         public Canvas Canvas => canvas;
         
         [Tooltip("The canvas related to this container. Is used as the default container if none is specified in the Container field.")]

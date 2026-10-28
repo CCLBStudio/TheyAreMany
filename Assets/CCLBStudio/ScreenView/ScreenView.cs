@@ -111,7 +111,7 @@ namespace CCLBStudio.ScreenView
         /// True if a submit button has been clicked. Value is reset to false every time the Show method is called.
         /// </summary>
         public bool Submitted { get; private set; }
-        public string ContainerId => containerId;
+        public ContainerId ContainerId => containerId;
 
         [Tooltip("The id of this screen view. It must be unique. It can be used as parameter to show or close the view.")]
         [SerializeField] private ViewId viewId = new();
@@ -163,7 +163,7 @@ namespace CCLBStudio.ScreenView
         [Tooltip("Determines how and where the view will displayed when the Show() method is called.")]
         [SerializeField] private ShowBehaviour showBehaviour = ShowBehaviour.InsideContainerAsLastSibling;
         [Tooltip("The container in which the view will be displayed.")]
-        [SerializeField] private string containerId;
+        [SerializeField] private ContainerId containerId;
         [SerializeField] private int containerIndex;
         [Tooltip("Determines how the view behaves when to Close() method has completed (i.e. the animations have finished).")]
         [SerializeField] private CloseBehaviour closeBehaviour = CloseBehaviour.Disable;
@@ -242,13 +242,13 @@ namespace CCLBStudio.ScreenView
         {
             if (showBehaviour == ShowBehaviour.None || showBehaviour == ShowBehaviour.SetAsLastSibling)
             {
-                containerId = string.Empty;
+                containerId = new ContainerId();
                 return;
             }
             
             // If our containerId is not empty we can assume that we expect a container with this id to exist.
             // Otherwise we can just return.
-            if (string.IsNullOrEmpty(containerId))
+            if (containerId.IsEmpty)
             {
                 return;
             }

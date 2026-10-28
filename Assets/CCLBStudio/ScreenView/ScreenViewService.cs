@@ -39,12 +39,12 @@ namespace CCLBStudio.ScreenView
                 }
                 
                 result.Add(handler, new List<ScreenView>());
-                containerMap.Add(pair.Key, handler);
+                containerMap.Add(pair.Key.ToString(), handler);
             }
 
             foreach (ScreenView view in screenViewPrefabs.Select(x => x.GetComponent<ScreenView>()).Where(v => v))
             {
-                if (containerMap.TryGetValue(view.ContainerId, out var container))
+                if (containerMap.TryGetValue(view.ContainerId.ToString(), out var container))
                 {
                     result[container].Add(view);
                 }
@@ -57,12 +57,12 @@ namespace CCLBStudio.ScreenView
 #endregion
 
         public List<GameObject> ScreenViewPrefabs => screenViewPrefabs;
-        public List<string> ContainerIds => containers.Keys.ToList();
-        public List<ScreenViewContainerHandler> ExistingContainers => _containers.Values.ToList();
+        public List<string> ContainerIds => containers.Keys.Select(x => x.Id).ToList();
+        public List<ScreenViewContainerHandler> ExistingContainers => _runitmeContainers.Values.ToList();
         public AudioClip DefaultClickSound => defaultClickSound;
 
         [SerializeField] private List<GameObject> screenViewPrefabs;
-        [SerializeField] private Dictionary<string, GameObject> containers = new();
+        [SerializeField] private Dictionary<ContainerId, GameObject> containers = new();
         
         [Header("Feedback Settings")]
         [SerializeField] private AudioClip defaultClickSound;
@@ -70,7 +70,7 @@ namespace CCLBStudio.ScreenView
         private ObserverWrapper<IViewServiceListener> _screenViewObserver;
         private Dictionary<ViewId, GameObject> _screenViews;
         private Dictionary<ViewId, ScreenView> _existingViews;
-        private Dictionary<string, ScreenViewContainerHandler> _containers;
+        private Dictionary<ContainerId, ScreenViewContainerHandler> _runitmeContainers;
         [NonSerialized] private ScreenViewContainerHolder _containerHolder;
 
         #region Initialization
@@ -80,7 +80,7 @@ namespace CCLBStudio.ScreenView
             _existingViews = new Dictionary<ViewId, ScreenView>();
             _screenViewObserver = new ObserverWrapper<IViewServiceListener>();
             _screenViews = new Dictionary<ViewId, GameObject>(screenViewPrefabs.Count);
-            _containers = new Dictionary<string, ScreenViewContainerHandler>(containers.Count);
+            _runitmeContainers = new Dictionary<ContainerId, ScreenViewContainerHandler>(containers.Count);
             
             screenViewPrefabs.ClearNull();
             foreach (var prefab in screenViewPrefabs)
@@ -100,7 +100,7 @@ namespace CCLBStudio.ScreenView
             {
                 var handler = _containerHolder.InstantiateNewContainer(container.Value);
                 handler.Id = container.Key;
-                _containers.Add(container.Key, handler);
+                _runitmeContainers.Add(container.Key, handler);
             }
         }
 
@@ -213,19 +213,19 @@ namespace CCLBStudio.ScreenView
             return _existingViews.TryGetValue(id, out var view) && view.IsDisplayed;
         }
 
-        public ScreenViewContainerHandler GetContainer(string id)
+        public ScreenViewContainerHandler GetContainer(ContainerId id)
         {
-            return _containers.TryGetValue(id, out var container) ? container : null;
+            return _runitmeContainers.GetValueOrDefault(id);
         }
         
         public ScreenViewContainerHandler GetContainer(int index)
         {
-            if (index < 0 || index >= _containers.Count)
+            if (index < 0 || index >= _runitmeContainers.Count)
             {
                 return null;
             }
 
-            return _containers.ElementAt(index).Value;
+            return _runitmeContainers.ElementAt(index).Value;
         }
 
         public void AddView(ScreenView screenView)

@@ -6,6 +6,12 @@ namespace CCLBStudio.StringIds
     [CustomPropertyDrawer(typeof(StringId), true)]
     public class StringIdDrawer : PropertyDrawer
     {
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            var idType = StringIdEditorGUI.ResolveIdType(property);
+            return idType == null ? EditorGUIUtility.singleLineHeight : StringIdEditorGUI.GetIdHeight(property, idType, required: false);
+        }
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             var idType = StringIdEditorGUI.ResolveIdType(property);
@@ -15,7 +21,7 @@ namespace CCLBStudio.StringIds
                 return;
             }
 
-            StringIdEditorGUI.DrawIdPopup(position, property, label, idType);
+            StringIdEditorGUI.DrawId(position, property, label, idType, required: false);
         }
     }
 }

@@ -1295,8 +1295,9 @@ MonoBehaviour:
   blockRaycastUntilCloseCompleted: 0
   autoCloseOnCancel: 0
   showBehaviour: 3
-  containerId: Main
-  containerIndex: 0
+  containerId:
+    id: Main
+  containerIndex: 1
   closeBehaviour: 0
   buttonFeedbacks: []
   enableOptimization: 0
@@ -1500,6 +1501,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &2332545240702619801
 GameObject:
   m_ObjectHideFlags: 0
@@ -3204,6 +3207,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!1 &5938999848818834212
 GameObject:
   m_ObjectHideFlags: 0
@@ -3676,6 +3681,8 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+  m_MaxWidth: -1
+  m_MaxHeight: -1
 --- !u!114 &1552545271874721980
 MonoBehaviour:
   m_ObjectHideFlags: 0

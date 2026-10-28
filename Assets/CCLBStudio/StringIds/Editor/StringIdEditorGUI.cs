@@ -34,6 +34,12 @@ namespace CCLBStudio.StringIds
         private static readonly Dictionary<string, FieldState> States = new();
         private static readonly Regex IdentifierRegex = new(@"^[A-Za-z_][A-Za-z0-9_]*$");
         private const string NewIdFocusPrefix = "StringIdNewIdField_";
+        private const float ButtonSpacing = 2f;
+        private const float DeleteButtonWidth = 55f;
+        private const float NewButtonWidth = 42f;
+        private const float AddButtonWidth = 42f;
+        private const float CancelButtonWidth = 55f;
+        private static float HelpBoxHeight => EditorGUIUtility.singleLineHeight * 1.5f;
 
         #region Public API
 
@@ -59,43 +65,110 @@ namespace CCLBStudio.StringIds
 
         public static void DrawIdLayout(SerializedProperty property, Type idType, GUIContent label, bool required, bool allowEdit)
         {
+            Rect position = EditorGUILayout.GetControlRect(true, GetIdHeight(property, idType, required, allowEdit));
+            DrawId(position, property, label ?? new GUIContent(property.displayName), idType, required, allowEdit);
+        }
+
+        /// <summary>
+        /// Height needed by <see cref="DrawId"/> for the current state of the property.
+        /// </summary>
+        public static float GetIdHeight(SerializedProperty property, Type idType, bool required = true, bool allowEdit = true)
+        {
+            float line = EditorGUIUtility.singleLineHeight;
+            float spacing = EditorGUIUtility.standardVerticalSpacing;
+            var idProperty = property.FindPropertyRelative(StringId.IdProperty);
+            if (idProperty == null) return line;
+
+            float height = line;
+            if (required && string.IsNullOrEmpty(idProperty.stringValue) && !idProperty.hasMultipleDifferentValues)
+            {
+                height += HelpBoxHeight + spacing;
+            }
+
+            if (allowEdit && TryGetState(property, out var state) && state.Creating)
+            {
+                height += line + spacing;
+                if (GetNewIdError(state.NewId, idType) != null)
+                {
+                    height += HelpBoxHeight + spacing;
+                }
+            }
+
+            return height;
+        }
+
+        /// <summary>
+        /// Draws a StringId property in a rect: popup + Delete / New buttons (usable in PropertyDrawers, height given by <see cref="GetIdHeight"/>).
+        /// </summary>
+        public static void DrawId(Rect position, SerializedProperty property, GUIContent label, Type idType, bool required = true, bool allowEdit = true)
+        {
             var idProperty = property.FindPropertyRelative(StringId.IdProperty);
             if (idProperty == null)
             {
-                EditorGUILayout.HelpBox($"Property '{property.propertyPath}' is not a StringId.", MessageType.Error);
+                EditorGUI.LabelField(position, label, new GUIContent($"'{property.propertyPath}' is not a StringId"));
                 return;
             }
 
-            label ??= new GUIContent(property.displayName);
+            float line = EditorGUIUtility.singleLineHeight;
+            float spacing = EditorGUIUtility.standardVerticalSpacing;
+            label ??= GUIContent.none;
             string current = idProperty.stringValue;
             bool isEmpty = string.IsNullOrEmpty(current);
+            bool mixed = idProperty.hasMultipleDifferentValues;
+            var row = new Rect(position.x, position.y, position.width, line);
 
-            if (required && isEmpty && !idProperty.hasMultipleDifferentValues)
+            if (required && isEmpty && !mixed)
             {
-                EditorGUILayout.HelpBox("A valid ID is required", MessageType.Error);
+                EditorGUI.HelpBox(new Rect(row.x, row.y, row.width, HelpBoxHeight), "A valid ID is required", MessageType.Error);
+                row.y += HelpBoxHeight + spacing;
             }
 
             if (!allowEdit)
             {
-                DrawIdPopup(EditorGUILayout.GetControlRect(true), property, label, idType);
+                DrawIdPopup(row, property, label, idType);
                 return;
             }
 
-            EditorGUILayout.BeginHorizontal();
-            DrawIdPopup(EditorGUILayout.GetControlRect(true), property, label, idType);
-            if (!isEmpty && !idProperty.hasMultipleDifferentValues && GUILayout.Button("Delete", GUILayout.Width(60)))
+            var state = GetState(property);
+            bool canDelete = !isEmpty && !mixed;
+            float buttonsWidth = (canDelete ? DeleteButtonWidth + ButtonSpacing : 0f) + (state.Creating ? 0f : NewButtonWidth + ButtonSpacing);
+
+            var popupRect = new Rect(row.x, row.y, row.width - buttonsWidth, line);
+            DrawIdPopup(popupRect, property, label, idType);
+
+            // Buttons are drawn with indentLevel 0 so they are not shifted inside their rects.
+            int indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
+            float x = popupRect.xMax + ButtonSpacing;
+            if (canDelete)
             {
-                if (EditorUtility.DisplayDialog("Delete id", $"Delete '{current}' from {idType.Name}?\nAny code referencing {idType.Name}.{current} will no longer compile.", "Delete", "Cancel")
+                if (GUI.Button(new Rect(x, row.y, DeleteButtonWidth, line), "Delete")
+                    && EditorUtility.DisplayDialog("Delete id", $"Delete '{current}' from {idType.Name}?\nAny code referencing {idType.Name}.{current} will no longer compile.", "Delete", "Cancel")
                     && DeleteId(idType, current))
                 {
                     idProperty.stringValue = string.Empty;
                 }
-                EditorGUILayout.EndHorizontal();
-                return;
+                x += DeleteButtonWidth + ButtonSpacing;
             }
-            EditorGUILayout.EndHorizontal();
 
-            DrawNewIdSection(property, idProperty, idType);
+            if (!state.Creating && GUI.Button(new Rect(x, row.y, NewButtonWidth, line), "New"))
+            {
+                state.Creating = true;
+                state.FocusNextFrame = true;
+            }
+
+            if (state.Creating)
+            {
+                row.y += line + spacing;
+                if (label != null && label != GUIContent.none && !string.IsNullOrEmpty(label.text))
+                {
+                    row.xMin = popupRect.x + EditorGUIUtility.labelWidth;
+                }
+                DrawNewIdSection(row, property, idProperty, idType, state);
+            }
+
+            EditorGUI.indentLevel = indent;
         }
 
         /// <summary>
@@ -143,38 +216,26 @@ namespace CCLBStudio.StringIds
 
         #region New Id
 
-        private static void DrawNewIdSection(SerializedProperty property, SerializedProperty idProperty, Type idType)
+        private static void DrawNewIdSection(Rect row, SerializedProperty property, SerializedProperty idProperty, Type idType, FieldState state)
         {
-            var state = GetState(property);
-            if (!state.Creating)
-            {
-                if (GUILayout.Button("New Id"))
-                {
-                    state.Creating = true;
-                    state.FocusNextFrame = true;
-                }
-                return;
-            }
-
+            float line = EditorGUIUtility.singleLineHeight;
             string focusName = NewIdFocusPrefix + property.propertyPath;
-            var cache = GetCache(idType);
-
-            EditorGUILayout.BeginHorizontal();
+            float textWidth = row.width - AddButtonWidth - CancelButtonWidth - 2 * ButtonSpacing;
 
             GUI.SetNextControlName(focusName);
-            state.NewId = EditorGUILayout.TextField(state.NewId).Trim().Capitalize();
+            state.NewId = EditorGUI.TextField(new Rect(row.x, row.y, textWidth, line), state.NewId).Trim().Capitalize();
             if (state.FocusNextFrame && Event.current.type == EventType.Repaint)
             {
                 GUI.FocusControl(focusName);
                 state.FocusNextFrame = false;
             }
 
-            bool validIdentifier = IdentifierRegex.IsMatch(state.NewId) && state.NewId != idType.Name;
-            bool alreadyExists = cache.TakenNames.Contains(state.NewId);
+            string error = GetNewIdError(state.NewId, idType);
+            float x = row.x + textWidth + ButtonSpacing;
 
-            using (new EditorGUI.DisabledScope(!validIdentifier || alreadyExists))
+            using (new EditorGUI.DisabledScope(state.NewId.Length == 0 || error != null))
             {
-                if (GUILayout.Button("Add", GUILayout.Width(50)) && AddId(idType, state.NewId))
+                if (GUI.Button(new Rect(x, row.y, AddButtonWidth, line), "Add") && AddId(idType, state.NewId))
                 {
                     idProperty.stringValue = state.NewId;
                     ResetState(state);
@@ -182,22 +243,24 @@ namespace CCLBStudio.StringIds
                 }
             }
 
-            if (GUILayout.Button("Cancel", GUILayout.Width(60)))
+            if (GUI.Button(new Rect(x + AddButtonWidth + ButtonSpacing, row.y, CancelButtonWidth, line), "Cancel"))
             {
                 ResetState(state);
                 GUI.FocusControl(null);
             }
 
-            EditorGUILayout.EndHorizontal();
+            if (error != null && state.Creating)
+            {
+                EditorGUI.HelpBox(new Rect(row.x, row.y + line + EditorGUIUtility.standardVerticalSpacing, row.width, HelpBoxHeight), error, MessageType.Error);
+            }
+        }
 
-            if (alreadyExists)
-            {
-                EditorGUILayout.HelpBox("Id already exists", MessageType.Error);
-            }
-            else if (state.NewId.Length > 0 && !validIdentifier)
-            {
-                EditorGUILayout.HelpBox("Id must be a valid C# identifier (letters, digits, '_', not starting with a digit).", MessageType.Error);
-            }
+        private static string GetNewIdError(string newId, Type idType)
+        {
+            if (string.IsNullOrEmpty(newId)) return null;
+            if (GetCache(idType).TakenNames.Contains(newId)) return "Id already exists";
+            if (!IdentifierRegex.IsMatch(newId) || newId == idType.Name) return "Id must be a valid C# identifier";
+            return null;
         }
 
         private static void ResetState(FieldState state)
@@ -335,9 +398,13 @@ namespace CCLBStudio.StringIds
             }
         }
 
+        private static string GetStateKey(SerializedProperty property) => $"{property.serializedObject.targetObject.GetEntityId()}:{property.propertyPath}";
+
+        private static bool TryGetState(SerializedProperty property, out FieldState state) => States.TryGetValue(GetStateKey(property), out state);
+
         private static FieldState GetState(SerializedProperty property)
         {
-            string key = $"{property.serializedObject.targetObject.GetEntityId()}:{property.propertyPath}";
+            string key = GetStateKey(property);
             if (!States.TryGetValue(key, out var state))
             {
                 state = new FieldState();
