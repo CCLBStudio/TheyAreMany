@@ -32,14 +32,44 @@ public class EnemyAnimator : MonoBehaviour, IEnemyBehaviour
             Debug.LogError($"Animation of type {animType} not found in the animation dictionary !");
             return;
         }
-
-        RefreshAttackAnimationSpeed(info);
+        
+        RefreshAnimationSpeed(animType);
         animator.SetTrigger(info.triggerName);
+    }
+    
+    private void RefreshAnimationSpeed(AnimationType animType)
+    {
+        if (!_animHash.TryGetValue(animType, out AnimationInfo info))
+        {
+            Debug.LogError($"Animation of type {animType} not found in the animation dictionary !");
+            return;
+        }
+
+        switch (animType)
+        {
+            case AnimationType.Run:
+                break;
+            case AnimationType.Attack:
+                RefreshAttackAnimationSpeed(info);
+                break;
+            case AnimationType.Idle:
+                break;
+            case AnimationType.Death:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(animType), animType, null);
+        }
     }
 
     private void RefreshAttackAnimationSpeed(AnimationInfo info)
     {
         float targetSpeed = info.BaseAnimationLength * Calculator.ComputeAttackSpeed(Facade.EnemyData.AttackSpeed, Facade.Stats.AttackSpeed.Value);
+        int hash = info.SpeedMultiplierHash;
+        if (hash == 0)
+        {
+            return;
+        }
+        
         animator.SetFloat(info.SpeedMultiplierHash, targetSpeed);
     }
     

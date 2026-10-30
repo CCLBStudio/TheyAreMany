@@ -6,9 +6,9 @@ namespace Game.Player.Health
 {
     public class HealthFillUI
     {
-        private Image _main;
-        private Image _secondary;
-        private float _maxHealth;
+        private readonly Image _main;
+        private readonly Image _secondary;
+        private readonly float _maxHealth;
         private float _currentHealth;
         private Sequence _currentSequence;
         

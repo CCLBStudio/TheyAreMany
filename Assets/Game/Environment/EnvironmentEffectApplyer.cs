@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CCLBStudio.EventBus;
+using CCLBStudio.SceneLoading;
 using PrimeTween;
 using UnityEngine;
+using ZLinq;
 
-public class EnvironmentEffectApplyer : MonoBehaviour
+public class EnvironmentEffectApplyer : MonoBehaviour, IEventListener<WillUnloadScene>
 {
     [SerializeField] private LevelGenerator level;
     [SerializeField] private Vector3[] rotationAxis = new[] { Vector3.up, Vector3.down, Vector3.right, Vector3.left, Vector3.forward, Vector3.back };
@@ -19,6 +22,16 @@ public class EnvironmentEffectApplyer : MonoBehaviour
         {
             _queuedTweens[t] = new Queue<QueuedTweenInfo>();
         }
+    }
+
+    private void OnEnable()
+    {
+        EvtBus.Subscribe(this);
+    }
+    
+    private void OnDisable()
+    {
+        EvtBus.Unsubscribe(this);
     }
 
     public void ApplyRotationOnBeat()
@@ -44,7 +57,6 @@ public class EnvironmentEffectApplyer : MonoBehaviour
                 continue;
             }
             
-
             CreateRotationTween(target, axis, delay);
         }
     }
@@ -73,10 +85,36 @@ public class EnvironmentEffectApplyer : MonoBehaviour
         CreateRotationTween(infos.target, infos.axis, infos.delay);
     }
 
+    private void OnDestroy()
+    {
+        ClearAllTweens();
+    }
+    
+    private void ClearAllTweens()
+    {
+        foreach (var tween in _currentlyTweening.Values.AsValueEnumerable().Where(t => t.isAlive))
+        {
+            tween.Stop();
+        }
+
+        _queuedTweens.Clear();
+    }
+
     private struct QueuedTweenInfo
     {
         public Transform target;
         public float delay;
         public Vector3 axis;
+    }
+
+    public void OnEvent(in WillUnloadScene evt)
+    {
+        if (evt.SceneName != gameObject.scene.name)
+        {
+            return;
+        }
+        
+        Debug.Log("Unloading scene, clearing all tweens.");
+        ClearAllTweens();
     }
 }

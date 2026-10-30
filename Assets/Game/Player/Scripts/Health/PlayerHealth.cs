@@ -2,6 +2,7 @@ using CCLBStudio.EventBus;
 using CCLBStudio.ScriptableValue;
 using Game.Damage;
 using Game.Stats;
+using Game.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,16 +14,14 @@ namespace Game.Player.Health
         public PlayerFacade Facade { get; set; }
         public bool IsAlive => !_isDead;
 
-        [SerializeField] private FloatValue playerHealth;
+        [SerializeField] private HealthValue playerHealth;
         [SerializeField] private UnityEvent<IDamageContext, PlayerHealth> onDamagesTaken;
 
-        private float _maxHealth;
         private bool _isDead;
         private ICharacterStats _stats;
 
         public void Initialize()
         {
-            _maxHealth = playerHealth.Value;
             if(TryGetComponent(out ICharacterStats stats))
             {
                 _stats = stats;
@@ -46,7 +45,7 @@ namespace Game.Player.Health
                 return;
             }
             
-            playerHealth.Value = Mathf.Max(playerHealth.Value - damageContext.Damage.FinalDamage, 0);
+            playerHealth.Decrement(damageContext.Damage.FinalDamage);
             
             if (CheckDeath())
             {
@@ -58,12 +57,12 @@ namespace Game.Player.Health
 
         public void Heal(float amount)
         {
-            playerHealth.Value = Mathf.Min(playerHealth.Value + amount, _maxHealth);
+            playerHealth.Increment(amount);
         }
         
         private bool CheckDeath()
         {
-            return playerHealth.Value <= 0 && !_isDead;
+            return playerHealth.IsZero() && !_isDead;
         }
 
         private void TriggerDeath(IDamageSource source)

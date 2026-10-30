@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Systems.ScriptableBehaviours
+namespace CCLBStudio.ScriptableBehaviours
 {
     public abstract class ScriptableOperationStrategy<T, TR> : ScriptableObject
     {

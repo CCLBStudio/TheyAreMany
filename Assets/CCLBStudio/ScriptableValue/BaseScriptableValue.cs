@@ -11,6 +11,7 @@ namespace CCLBStudio.ScriptableValue
 
         public abstract Type TargetType { get; }
         public bool TargetTypeIsList => IsTargetTypeList();
+        public abstract void HardReset();
 
         protected virtual bool IsTargetTypeArray()
         {

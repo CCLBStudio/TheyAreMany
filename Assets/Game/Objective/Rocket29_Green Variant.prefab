@@ -238,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace74a8bd60e423983a68eff636b347e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Objective.MainObjectiveHealth
-  objectiveHealth: {fileID: 11400000, guid: ea987cd2afe6d034081e0fefdcaea66c, type: 2}
+  objectiveHealth: {fileID: 11400000, guid: 0d48a0ca9218bd24482d481771d4cf02, type: 2}
 --- !u!114 &5347333438998166928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,7 +339,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b1b8d1c665425b9582643e75b55f15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Objective.RocketMaterialModifier
-  rocketHealth: {fileID: 11400000, guid: ea987cd2afe6d034081e0fefdcaea66c, type: 2}
+  rocketHealth: {fileID: 11400000, guid: 0d48a0ca9218bd24482d481771d4cf02, type: 2}
   maxEmissionColor: {r: 3.4415908, g: 0.63065803, b: 0.63065803, a: 1}
   maxVertexAnimationFrequency: {x: 80, y: 80, z: 80}
 --- !u!4 &1007061681864247395 stripped

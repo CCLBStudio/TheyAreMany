@@ -347,6 +347,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DebugAndTest
   profile: {fileID: 11400000, guid: ca02219a944a424419dfc656325532b8, type: 2}
+  transitionId:
+    id: FadeVignette
+  transitionIds:
+  - id: FadeVignette
+  profiles: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

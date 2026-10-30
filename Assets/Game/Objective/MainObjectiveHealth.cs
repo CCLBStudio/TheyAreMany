@@ -1,21 +1,16 @@
 using CCLBStudio.EventBus;
 using CCLBStudio.ScriptableValue;
 using Game.Damage;
+using Game.Utils;
 using UnityEngine;
 
 namespace Game.Objective
 {
     public class MainObjectiveHealth : MonoBehaviour, IHealth
     {
-        [SerializeField] private FloatValue objectiveHealth;
+        [SerializeField] private HealthValue objectiveHealth;
         
         private bool _isDead;
-        private float _maxHealth;
-
-        private void Awake()
-        {
-            _maxHealth = objectiveHealth.Value;
-        }
 
         public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
         {
@@ -24,7 +19,7 @@ namespace Game.Objective
                 return;
             }
             
-            objectiveHealth.Value = Mathf.Max(objectiveHealth.Value - damageContext.Damage.FinalDamage, 0);
+            objectiveHealth.Decrement(damageContext.Damage.FinalDamage);
             
             if (CheckDeath())
             {
@@ -36,7 +31,7 @@ namespace Game.Objective
 
         public void Heal(float amount)
         {
-            objectiveHealth.Value = Mathf.Min(objectiveHealth.Value + amount, _maxHealth);
+            objectiveHealth.Increment(amount);
         }
         
         private void TriggerDeath(IDamageContext ctx)
@@ -52,7 +47,7 @@ namespace Game.Objective
         
         private bool CheckDeath()
         {
-            return objectiveHealth.Value <= 0 && !_isDead;
+            return objectiveHealth.IsZero() && !_isDead;
         }
     }
 }

@@ -1,5 +1,5 @@
 using CCLBStudio.ScreenView;
-using CCLBStudio.ScriptableValue;
+using Game.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +8,7 @@ namespace Game.Player.Health
 {
     public class PlayerHealthPanel : ScreenView
     {
-        [SerializeField] private FloatValue playerHealth;
+        [SerializeField] private HealthValue playerHealth;
         
         [BoxGroup("Health Sliders")]
         [SerializeField] private Image healthBarMain;
@@ -20,7 +20,10 @@ namespace Game.Player.Health
         protected override void Start()
         {
             base.Start();
-            _fillUI = new HealthFillUI(healthBarMain, healthBarSecondary, playerHealth.Value);
+
+            healthBarMain.fillAmount = playerHealth.NormalizedValue;
+            healthBarSecondary.fillAmount = playerHealth.NormalizedValue;
+            _fillUI = new HealthFillUI(healthBarMain, healthBarSecondary, playerHealth.MaxValue);
             
             playerHealth.OnValueChanged -= OnHealthChanged;
             playerHealth.OnValueChanged += OnHealthChanged;

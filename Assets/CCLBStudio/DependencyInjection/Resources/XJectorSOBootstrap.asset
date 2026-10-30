@@ -15,6 +15,9 @@ MonoBehaviour:
   toProvide:
   - {fileID: 11400000, guid: 1ddac7663f13a734d966c09b1e6e46df, type: 2}
   - {fileID: 11400000, guid: 5ea5a3977e5e357409bb11b7c99e0880, type: 2}
+  - {fileID: 11400000, guid: d45dc6e7ada055144bf1ceee3cc76f01, type: 2}
   toInject:
+  - {fileID: 11400000, guid: 533091c040721d74a939068617e3ecd0, type: 2}
+  - {fileID: 11400000, guid: c812da311ed1f5940a39286b0112d47b, type: 2}
   - {fileID: 11400000, guid: c3d058a6ce33b5c43be6133fbc6f5c53, type: 2}
   - {fileID: 11400000, guid: 6e38a3fd670311f4e9f42d0ee498a18e, type: 2}

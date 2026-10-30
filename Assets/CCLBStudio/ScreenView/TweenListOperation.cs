@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using PrimeTween;
-using Systems.ScriptableBehaviours;
+using CCLBStudio.ScriptableBehaviours;
 
 namespace CCLBStudio.ScreenView
 {

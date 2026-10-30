@@ -3179,7 +3179,7 @@ MonoBehaviour:
   animationSectionExpanded: 1
   displayShow: 1
   displayClose: 1
-  mainButtonsSectionExpanded: 0
+  mainButtonsSectionExpanded: 1
   disableAndCloseSectionExpanded: 1
   displaySectionExpanded: 1
   buttonFeedbacksSectionExpanded: 1
@@ -3211,7 +3211,23 @@ MonoBehaviour:
   submitButtons: []
   cancelButtons: []
   closeButtons: []
-  customButtons: []
+  customButtons:
+  - key: {fileID: 2145083074134136565}
+    value:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4661015230289019628}
+          m_TargetAssemblyTypeName: GameOverUI, Assembly-CSharp
+          m_MethodName: ReloadScene
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   disableInteractionOn: 0
   autoCloseOnSubmit: 1
   blockRaycastUntilCloseCompleted: 1
@@ -3338,6 +3354,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d6cc5978f885044ab677dd9f1d1ee16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOverUI
+  injectAt: 0
 --- !u!1 &8332735305706639247
 GameObject:
   m_ObjectHideFlags: 0
@@ -6296,6 +6313,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80ddfd07a15c7114284f7b33f2de3ab6, type: 3}
+--- !u!114 &2145083074134136565 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2216926336390333707, guid: 80ddfd07a15c7114284f7b33f2de3ab6, type: 3}
+  m_PrefabInstance: {fileID: 216392070304551934}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &4793858600207241719 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4722010527587041801, guid: 80ddfd07a15c7114284f7b33f2de3ab6, type: 3}

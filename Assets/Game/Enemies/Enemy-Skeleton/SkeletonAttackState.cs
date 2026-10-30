@@ -41,6 +41,12 @@ public class SkeletonAttackState : EnemyAttackState
 
     public override void EnterState()
     {
+        EnableDamageCollider(false);
+    }
+
+    public override void ExitState()
+    {
+        EnableDamageCollider(false);
     }
 
     public override void UpdateState()
@@ -65,5 +71,11 @@ public class SkeletonAttackState : EnemyAttackState
             return;
         }
         attackCollider.enabled = enable;
+    }
+
+    public override void OnEnemyCreated()
+    {
+        base.OnEnemyCreated();
+        EnableDamageCollider(false);
     }
 }

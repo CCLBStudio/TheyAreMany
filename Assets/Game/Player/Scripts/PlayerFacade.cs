@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptableValue;
-using Systems.ScriptableBehaviours;
+using CCLBStudio.ScriptableBehaviours;
 using UnityEngine;
 
 namespace Game.Player

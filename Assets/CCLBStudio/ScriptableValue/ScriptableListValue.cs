@@ -73,6 +73,12 @@ namespace CCLBStudio.ScriptableValue
             OnCollectionChanged?.Invoke();
         }
 
+        public override void HardReset()
+        {
+            base.HardReset();
+            value = new List<T>();
+        }
+
         public int Count => value.Count;
     }
 }

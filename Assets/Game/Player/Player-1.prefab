@@ -596,7 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1122d91ea6b7324ba2c50d8afc8107f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Player.Scripts.Health.PlayerHealth
-  playerHealth: {fileID: 11400000, guid: bb45fc03453283645b7c1746f8dda914, type: 2}
+  playerHealth: {fileID: 11400000, guid: d4e785178fe73c44ca88fc4dc9c1e298, type: 2}
   onDamagesTaken:
     m_PersistentCalls:
       m_Calls: []

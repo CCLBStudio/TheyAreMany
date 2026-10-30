@@ -6,7 +6,7 @@ using CCLBStudio.ScriptableValue;
 using Game.Objective;
 using Game.Player.Health;
 using Sirenix.OdinInspector;
-using Systems.ScriptableBehaviours;
+using CCLBStudio.ScriptableBehaviours;
 using UnityEngine;
 
 namespace Game.GameOver
@@ -62,6 +62,8 @@ namespace Game.GameOver
             {
                 action.Execute();
             }
+            
+            EvtBus.Raise(new GameOverEvent());
         }
 
         #region Editor

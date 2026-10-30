@@ -47,7 +47,7 @@ public class EnemyChaseState : MonoBehaviour, IEnemyBehaviour, IEnemyState
 
     protected void OrientTowardsTarget()
     {
-        if (Target == null)
+        if (!Target)
         {
             return;
         }

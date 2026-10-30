@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Player
 {
-    public partial class PlayerEnemyTarget : MonoBehaviour, IPlayerBehaviour, IEnemyTarget
+    public partial class PlayerEnemyTarget : InjectedMonoBehaviour, IPlayerBehaviour, IEnemyTarget
     {
         public PlayerFacade Facade { get; set; }
         public int TargetPriority => 0;

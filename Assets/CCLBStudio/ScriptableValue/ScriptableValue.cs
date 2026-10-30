@@ -40,7 +40,18 @@ namespace CCLBStudio.ScriptableValue
             value = newValue;
             OnValueChanged?.Invoke(value);
         }
+
+        public override void HardReset()
+        {
+            value = default;
+            OnValueChanged = null;
+        }
         
+        protected void ResetOnValueChanged()
+        {
+            OnValueChanged = null;
+        }
+
 #if UNITY_EDITOR
 
         private void CopyValueToInitialValue()

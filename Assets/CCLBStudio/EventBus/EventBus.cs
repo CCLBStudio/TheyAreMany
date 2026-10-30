@@ -173,7 +173,7 @@ namespace CCLBStudio.EventBus
 
         public static bool Unsubscribe<T>(IEventListener<T> listener) where T : struct, IEvent => EventBus<T>.Unsubscribe(listener);
         public static bool Unsubscribe<T>(EventCallback<T> callback) where T : struct, IEvent => EventBus<T>.Unsubscribe(callback);
-
+        
         public static void ClearAll() => EventBusRegistry.ClearAll();
     }
 }

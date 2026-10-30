@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Systems.ScriptableBehaviours.Actions
+namespace CCLBStudio.ScriptableBehaviours.Actions
 {
     [CreateAssetMenu(menuName = "Theramor/Systems/Scriptable Behaviours/Scene/Unload", fileName = "NewUnloadSceneAction")]
     public class UnloadSceneScriptableAction : ScriptableAction

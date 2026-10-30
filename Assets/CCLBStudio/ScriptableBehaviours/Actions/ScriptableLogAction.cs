@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Systems.ScriptableBehaviours.Actions
+namespace CCLBStudio.ScriptableBehaviours.Actions
 {
     public class ScriptableLogAction : ScriptableAction
     {

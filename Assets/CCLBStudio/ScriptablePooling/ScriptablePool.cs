@@ -98,6 +98,12 @@ namespace CCLBStudio.ScriptablePooling
             var key = _available.Keys.First();
             var obj = _available[key];
             
+            if(!obj)
+            {
+                ClearAllMissing();
+                return RequestObject();
+            }
+            
             _available.Remove(key);
             _inUse[key] = obj;
 
@@ -130,6 +136,12 @@ namespace CCLBStudio.ScriptablePooling
 
             var obj = _available[key];
 
+            if (!obj)
+            {
+                ClearAllMissing();
+                return RequestObjectAs<T>();
+            }
+
             _available.Remove(key);
             _inUse[key] = obj;
 
@@ -159,6 +171,12 @@ namespace CCLBStudio.ScriptablePooling
             pooledObject.OnObjectReleased();
             
             obj.SetActive(!disableObjectOnRelease);
+        }
+
+        private void ClearAllMissing()
+        {
+            _available = _available.Where(kvp => kvp.Key != null && kvp.Value).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            _inUse = _inUse.Where(kvp => kvp.Key != null && kvp.Value).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
         #endregion

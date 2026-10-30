@@ -1,4 +1,5 @@
 using CCLBStudio.ScriptableValue;
+using Game.Utils;
 using UnityEngine;
 
 namespace Game.Objective
@@ -6,7 +7,7 @@ namespace Game.Objective
 
 public class RocketMaterialModifier : MonoBehaviour
 {
-    [SerializeField] private FloatValue rocketHealth;
+    [SerializeField] private HealthValue rocketHealth;
 
     [Header("Paramètres d'effet maximal (Santé = 0)")]
     [ColorUsage(false, true)] 
@@ -14,7 +15,6 @@ public class RocketMaterialModifier : MonoBehaviour
     [SerializeField] private Vector3 maxVertexAnimationFrequency = new Vector3(2f, 2f, 2f);
 
     private Material _material;
-    private float _initialHealth;
 
     // Identifiants internes des propriétés du shader MK Toon
     private static readonly int EmissionColorProp = Shader.PropertyToID("_EmissionColor");
@@ -23,13 +23,13 @@ public class RocketMaterialModifier : MonoBehaviour
 
     private void Awake()
     {
-        if (rocketHealth == null)
+        if (!rocketHealth)
         {
-            Debug.LogError("FloatValue rocketHealth n'est pas assigné.", this);
+            Debug.LogError("HealthValue rocketHealth is not assigned.", this);
             return;
         }
 
-        _initialHealth = rocketHealth.Value;
+        rocketHealth.OnValueChanged -= OnRocketHealthChanged;
         rocketHealth.OnValueChanged += OnRocketHealthChanged;
 
         var renderer = GetComponent<Renderer>();
@@ -49,12 +49,12 @@ public class RocketMaterialModifier : MonoBehaviour
         _material = material;
 
         // Initialisation de l'affichage avec la santé de départ
-        OnRocketHealthChanged(_initialHealth);
+        OnRocketHealthChanged(rocketHealth.MaxValue);
     }
 
     private void OnDestroy()
     {
-        if (rocketHealth != null)
+        if (rocketHealth)
         {
             rocketHealth.OnValueChanged -= OnRocketHealthChanged;
         }
@@ -64,8 +64,7 @@ public class RocketMaterialModifier : MonoBehaviour
     {
         if (!_material) return;
 
-        // Valeur normalisée entre 0 et 1
-        float normalizedHealth = _initialHealth > 0f ? Mathf.Clamp01(newValue / _initialHealth) : 0f;
+        float normalizedHealth = rocketHealth.NormalizedValue;
 
         // Facteur inversé : 0 quand la santé est pleine (1), 1 quand la santé est vide (0)
         float effectFactor = 1f - normalizedHealth;

@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Transition.TransitionService
   profiles:
   - key:
-      id: FadeVignette
+      id: VignetteFadeIn
     value: {fileID: 11400000, guid: ca02219a944a424419dfc656325532b8, type: 2}
+  - key:
+      id: VignetteFadeOut
+    value: {fileID: 11400000, guid: e6f09d9ad98b5e84399b231929bf579a, type: 2}

@@ -1305,7 +1305,7 @@ MonoBehaviour:
   newTargetFrameRate: 30
   disableCanvasWithLowerSortOrder: 0
   disableMainCamera: 0
-  playerHealth: {fileID: 11400000, guid: bb45fc03453283645b7c1746f8dda914, type: 2}
+  playerHealth: {fileID: 11400000, guid: d4e785178fe73c44ca88fc4dc9c1e298, type: 2}
   healthBarMain: {fileID: 353639213273136100}
   healthBarSecondary: {fileID: 1332856980786956044}
   references:

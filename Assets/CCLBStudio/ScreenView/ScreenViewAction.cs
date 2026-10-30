@@ -1,6 +1,6 @@
 using System;
 using CCLBStudio.DependencyInjection;
-using Systems.ScriptableBehaviours;
+using CCLBStudio.ScriptableBehaviours;
 using UnityEngine;
 
 namespace CCLBStudio.ScreenView
