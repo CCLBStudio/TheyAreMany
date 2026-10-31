@@ -9,18 +9,37 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4076d99db54fce42b64ccdbd3473c71, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f98ba1fb8e31a94faa34dc4b4c27677, type: 3}
   m_Name: Rocket-ScriptableAbility
   m_EditorClassIdentifier: 
-  cooldown: 0
-  strength: 100
-  abilityPrefab: {fileID: 1454416333903646861, guid: a1076854dfa470f4691d335a910ad914,
-    type: 3}
-  visualPool: {fileID: 11400000, guid: 3cecf330c6d284f41b90ef3e9fab1111, type: 2}
-  travelSpeed: 50
-  accelerationTime: 0.5
-  lifetime: 3
-  accelerationEase: 17
-  explosionPool: {fileID: 11400000, guid: 646ca0ebbe4474b418c1106a5b393d97, type: 2}
-  explosionRange: 5
-  knockbackForce: 200
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  abilityName: Rocket
+  abilityPrefab: {fileID: 1454416333903646861, guid: a1076854dfa470f4691d335a910ad914, type: 3}
+  modules:
+  - rid: 8100000000000000001
+  references:
+    version: 2
+    RefIds:
+    - rid: 8100000000000000001
+      type: {class: LaunchRocketAbilityModule, ns: Game.ModularAbility, asm: Assembly-CSharp}
+      data:
+        rocketPool: {fileID: 11400000, guid: 3cecf330c6d284f41b90ef3e9fab1111, type: 2}
+        explosionPool: {fileID: 11400000, guid: 646ca0ebbe4474b418c1106a5b393d97, type: 2}
+        cooldown: 0
+        strength:
+          min: 80
+          max: 100
+        travelSpeed: 50
+        accelerationTime: 0.5
+        accelerationEase: 17
+        lifetime: 3
+        explosionRange: 5
+        onLaunchEffects: []

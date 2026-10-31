@@ -1,11 +1,15 @@
+using Game.ModularAbility;
 using Game.Player;
+using Game.Stats;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour
+public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour, IAbilityOwner
 {
     public PlayerFacade Facade { get; set; }
-    public Transform AbilityHolder => abilityHolder;
+    public Transform AbilityContainer => abilityHolder;
+    // Abilities currently ignore the player's stats, matching previous rocket behaviour.
+    public ICharacterStats Stats { get; } = new DefaultCharacterStats();
 
     [SerializeField] private InputReader inputReader;
     [SerializeField] private ScriptableAbility startAbility;
@@ -18,9 +22,9 @@ public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour
     {
         _currentAbility = startAbility.Equip(this);
         
-        inputReader.PrimaryAbilityPressEvent += _currentAbility.OnInputPressed;
-        inputReader.PrimaryAbilityReleaseEvent += _currentAbility.OnInputReleased;
-        inputReader.AimEvent += _currentAbility.OnAim;
+        inputReader.PrimaryAbilityPressEvent += _currentAbility.PressInput;
+        inputReader.PrimaryAbilityReleaseEvent += _currentAbility.ReleaseInput;
+        inputReader.AimEvent += _currentAbility.Aim;
     }
 
     #region Editor
@@ -31,7 +35,7 @@ public class PlayerAbilities : MonoBehaviour, IPlayerBehaviour
     {
         if (_currentAbility)
         {
-            _currentAbility.OnInputPressed();
+            _currentAbility.PressInput();
         }
     }
     

@@ -1,12 +1,16 @@
 using CCLBStudio.GlobalUpdater;
+using CCLBStudio.ScriptablePooling;
 using Game.Damage;
+using Game.ModularAbility;
 using Game.Stats;
 using MoreMountains.Feedbacks;
 using PrimeTween;
 using UnityEngine;
 
-public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamageSource, IFixedUpdate
+public class PooledRocket : MonoBehaviour, IScriptablePooledObject, IDamageSource, IFixedUpdate
 {
+    public ScriptablePool Pool { get; set; }
+
     [SerializeField] private Collider2D rocketCollider;
     [SerializeField] private MMF_Player feedback;
     [SerializeField] private Rigidbody2D rb;
@@ -16,16 +20,19 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
     private Tween _accelerationTween;
     private bool _isAlive;
     private float _lifetime;
-    private ScriptableRocketAbility _scriptableAbility;
-    private ICharacterStats _defaultStats = new DefaultCharacterStats();
+    private int _baseDamage;
+    private float _explosionRange;
+    private ScriptablePool _explosionPool;
+    private ICharacterStats _ownerStats;
 
-    public override void Initialize(ScriptableRocketAbility scriptableAbility)
+    public void Initialize(RocketContext context)
     {
-        _scriptableAbility = scriptableAbility;
-        
-        _lifetime = _scriptableAbility.Lifetime;
-        float maxSpeed = _scriptableAbility.TravelSpeed;
-        _accelerationTween = Tween.Custom(0f, maxSpeed, _scriptableAbility.AccelerationTime, f => _currentSpeed = f, _scriptableAbility.AccelerationEase);
+        _baseDamage = context.BaseDamage;
+        _lifetime = context.Lifetime;
+        _explosionPool = context.ExplosionPool;
+        _explosionRange = context.ExplosionRange;
+        _ownerStats = context.OwnerStats ?? new DefaultCharacterStats();
+        _accelerationTween = Tween.Custom(0f, context.TravelSpeed, context.AccelerationTime, f => _currentSpeed = f, context.AccelerationEase);
         
         rocketCollider.enabled = true;
     }
@@ -64,15 +71,14 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
 
     private void PlayExplosionParticles()
     {
-        var effect = _scriptableAbility.ExplosionPool.RequestObjectAs<PooledParticleSystem>();
-        Vector3 abilityPos = transform.position;
-        effect.transform.position = abilityPos;
+        var effect = _explosionPool.RequestObjectAs<PooledParticleSystem>();
+        effect.transform.position = transform.position;
         effect.Play();
     }
 
     private void ApplyDamages()
     {
-        Collider2D[] inRange = Physics2D.OverlapCircleAll(transform.position, _scriptableAbility.ExplosionRange, collisionMask);
+        Collider2D[] inRange = Physics2D.OverlapCircleAll(transform.position, _explosionRange, collisionMask);
         foreach (var col in inRange)
         {
             var damageTargets = col.gameObject.GetComponents<IDamageTarget>();
@@ -91,10 +97,10 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
             var res = resProvider.GetResistances(GetDamageType());
             return new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
             {
-                BaseDamage = _scriptableAbility.Strength,
-                AttackerPower = _defaultStats.Power.Value,
-                AttackerFlatDamage = _defaultStats.FlatDamage.Value,
-                AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
+                BaseDamage = _baseDamage,
+                AttackerPower = _ownerStats.Power.Value,
+                AttackerFlatDamage = _ownerStats.FlatDamage.Value,
+                AttackerFinalDamagePercentage = _ownerStats.FinalDamagePercentage.Value,
                 TargetFlatResistance = res.FlatResistance.Value,
                 TargetPercentageResistance = res.PercentageResistance.Value
             }));
@@ -102,28 +108,28 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
             
         return new DamageContext(this, Calculator.ComputeDamage(new DamageCalculationContext
         {
-            BaseDamage = _scriptableAbility.Strength,
-            AttackerPower = _defaultStats.Power.Value,
-            AttackerFlatDamage = _defaultStats.FlatDamage.Value,
-            AttackerFinalDamagePercentage = _defaultStats.FinalDamagePercentage.Value,
+            BaseDamage = _baseDamage,
+            AttackerPower = _ownerStats.Power.Value,
+            AttackerFlatDamage = _ownerStats.FlatDamage.Value,
+            AttackerFinalDamagePercentage = _ownerStats.FinalDamagePercentage.Value,
             TargetFlatResistance = 0,
             TargetPercentageResistance = 0
         }));
     }
 
-    public override void OnObjectCreated()
+    public void OnObjectCreated()
     {
         rocketCollider.enabled = false;
         _isAlive = false;
     }
 
-    public override void OnObjectRequested()
+    public void OnObjectRequested()
     {
         GlobalUpdater.RegisterFixedUpdate(this);
         _isAlive = true;
     }
     
-    public override void OnObjectReleased()
+    public void OnObjectReleased()
     {
         GlobalUpdater.UnregisterFixedUpdate(this);
         rocketCollider.enabled = false;
@@ -147,11 +153,11 @@ public class PooledRocket : PooledAbilityObject<ScriptableRocketAbility>, IDamag
 
     private void OnDrawGizmosSelected()
     {
-        if (!_scriptableAbility)
+        if (_explosionRange <= 0f)
         {
             return;
         }
-        Gizmos.DrawWireSphere(transform.position, _scriptableAbility.ExplosionRange);
+        Gizmos.DrawWireSphere(transform.position, _explosionRange);
     }
 
 #endif

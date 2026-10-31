@@ -15,15 +15,18 @@ public class MeleeWeaponDamageDealer : MonoBehaviour, IDamageSource
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.TryGetComponent(out IDamageTarget t))
+        var targets = other.GetComponents<IDamageTarget>();
+        if (targets.Length == 0)
         {
             return;
         }
         
         var hitPoint = other.ClosestPoint(transform.position);
-        var ctx = DamageHelper.ComputeDamageContext(this, baseDamage.GetRandom(), _stats, t);
-            
-        t.ReceiveDamages(ctx, hitPoint);
+        foreach (var t in targets)
+        {
+            var ctx = DamageHelper.ComputeDamageContext(this, baseDamage.GetRandom(), _stats, t);
+            t.ReceiveDamages(ctx, hitPoint);
+        }
     }
 
     public Vector3 GetPosition()

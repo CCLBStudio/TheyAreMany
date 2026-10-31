@@ -12,6 +12,7 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Collider2D bulletCollider;
+    [SerializeField] private LayerMask ignoredLayers;
 
     private bool _isAlive;
     private bool _isInit;
@@ -41,6 +42,12 @@ public class RuntimeBullet : MonoBehaviour, IScriptablePooledObject, IDamageSour
     {
         if (!_isAlive)
         {
+            return;
+        }
+        
+        if(ignoredLayers == (ignoredLayers | (1 << other.gameObject.layer)))
+        {
+            Pool.ReleaseObject(this);
             return;
         }
 

@@ -8893,8 +8893,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.DependencyInjection.SceneInjector
   bakedInjectables:
-  - {fileID: 1731955671}
   - {fileID: 1754276957}
+  - {fileID: 1731955671}
 --- !u!4 &218949247
 Transform:
   m_ObjectHideFlags: 0
@@ -68106,6 +68106,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1727295491}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1728752713 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1003782568537752477, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+  m_PrefabInstance: {fileID: 5286534611869091797}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1729660421
 GameObject:
   m_ObjectHideFlags: 0
@@ -68804,12 +68809,26 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1520845511824372378, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
   m_PrefabInstance: {fileID: 5286534611869091797}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1728752713}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd2c21333e644e1fb04d3e87e0bdebf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.Objective.MainEnemyObjective
+--- !u!114 &1754276973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728752713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b93207e0524b1144e81ea0cafde94c1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Damage.DamageNumberSpawner
+  damageNumberPrefab: {fileID: 1307128595359496716, guid: db3a91e07a1ceb441b328750a06bd6cc, type: 3}
+  damageNumberSpawnPoint: {fileID: 0}
 --- !u!1 &1757718263
 GameObject:
   m_ObjectHideFlags: 0
@@ -83308,10 +83327,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9154269666047549189, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      propertyPath: onDamagesTaken.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154269666047549189, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      propertyPath: onDamagesTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154269666047549189, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      propertyPath: onDamagesTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1754276973}
+    - target: {fileID: 9154269666047549189, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      propertyPath: onDamagesTaken.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154269666047549189, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      propertyPath: onDamagesTaken.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Spawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154269666047549189, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      propertyPath: onDamagesTaken.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Game.Damage.DamageNumberSpawner, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 9154269666047549189, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      propertyPath: onDamagesTaken.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1003782568537752477, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1754276973}
   m_SourcePrefab: {fileID: 100100000, guid: 3e87e7883a3c5554eb5f96311c7e0431, type: 3}
 --- !u!1001 &8796544629169122205
 PrefabInstance:

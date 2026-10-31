@@ -1,14 +1,15 @@
 using CCLBStudio.EventBus;
-using CCLBStudio.ScriptableValue;
 using Game.Damage;
 using Game.Utils;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Game.Objective
 {
     public class MainObjectiveHealth : MonoBehaviour, IHealth
     {
         [SerializeField] private HealthValue objectiveHealth;
+        [SerializeField] private UnityEvent<IDamageContext, Vector3?> onDamagesTaken;
         
         private bool _isDead;
 
@@ -26,7 +27,7 @@ namespace Game.Objective
                 TriggerDeath(damageContext);
             }
             
-            TriggerDamagesTaken(damageContext);
+            TriggerDamagesTaken(damageContext, hitPoint);
         }
 
         public void Heal(float amount)
@@ -40,9 +41,10 @@ namespace Game.Objective
             EvtBus.Raise(new ObjectiveDestroyed(ctx));
         }
         
-        private void TriggerDamagesTaken(IDamageContext damageContext)
+        private void TriggerDamagesTaken(IDamageContext damageContext, Vector3? hitPoint)
         {
             EvtBus.Raise(new ObjectiveDamaged(damageContext));
+            onDamagesTaken?.Invoke(damageContext, hitPoint);
         }
         
         private bool CheckDeath()

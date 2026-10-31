@@ -3,53 +3,59 @@ using Game.Stats;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget, IResistanceProvider
+namespace Game.Enemies
 {
-    public EnemyFacade Facade { get; set; }
+    public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget, IResistanceProvider
+    {
+        public EnemyFacade Facade { get; set; }
 
-    [SerializeField] private UnityEvent<IDamageSource> onDeath;
+        [SerializeField] private UnityEvent<IDamageSource> onDeath;
+        [SerializeField] private UnityEvent<IDamageContext, Vector3?> onDamageTaken;
 
-    private int _currentHealth;
-    private ICharacterStats _stats;
+        private int _currentHealth;
+        private ICharacterStats _stats;
     
-    public void OnEnemyCreated()
-    {
-        if(TryGetComponent(out ICharacterStats stats))
+        public void OnEnemyCreated()
         {
-            _stats = stats;
+            if(TryGetComponent(out ICharacterStats stats))
+            {
+                _stats = stats;
+            }
+            else
+            {
+                Debug.LogWarning("EnemyHealth: No ICharacterStats component found. Using default stats.");
+                _stats = new DefaultCharacterStats();
+            }
         }
-        else
+
+        public void OnEnemyRequested()
         {
-            Debug.LogWarning("EnemyHealth: No ICharacterStats component found. Using default stats.");
-            _stats = new DefaultCharacterStats();
+            _currentHealth = Facade.EnemyData.MaxHealth;
         }
-    }
 
-    public void OnEnemyRequested()
-    {
-        _currentHealth = Facade.EnemyData.MaxHealth;
-    }
-
-    public void OnEnemyReleased()
-    {
-    }
-
-    public ResistanceDescriptor GetResistances(DamageType damageType)
-    {
-        return _stats.GetResistances(damageType);
-    }
-
-    public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
-    {
-        if (_currentHealth <= 0f)
+        public void OnEnemyReleased()
         {
-            return;
         }
+
+        public ResistanceDescriptor GetResistances(DamageType damageType)
+        {
+            return _stats.GetResistances(damageType);
+        }
+
+        public void ReceiveDamages(IDamageContext damageContext, Vector3? hitPoint = null)
+        {
+            if (_currentHealth <= 0f)
+            {
+                return;
+            }
         
-        _currentHealth -= damageContext.Damage.FinalDamage;
-        if (_currentHealth <= 0f)
-        {
-            onDeath?.Invoke(damageContext.Source);
+            _currentHealth -= damageContext.Damage.FinalDamage;
+            if (_currentHealth <= 0f)
+            {
+                onDeath?.Invoke(damageContext.Source);
+            }
+            
+            onDamageTaken?.Invoke(damageContext, hitPoint);
         }
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511330003e7be3f409d9684042979f61, type: 3}
   m_Name: Health-RocketObjective
   m_EditorClassIdentifier: Assembly-CSharp::Game.Utils.HealthValue
-  value: 100
+  value: 95
   resetValueOnPlayModeExit: 0
-  initialValue: 100
+  initialValue: 0
   maxValue: 100
