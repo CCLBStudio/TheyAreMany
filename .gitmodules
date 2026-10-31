@@ -1,0 +1,3 @@
+[submodule "Assets/CCLBStudio/ScriptablePooling"]
+	path = Assets/CCLBStudio/ScriptablePooling
+	url = https://github.com/CCLBStudio/ScriptablePooling.git
