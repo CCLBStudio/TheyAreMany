@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Game.Damage
@@ -9,6 +10,10 @@ namespace Game.Damage
 
     public interface IHealth : IDamageTarget
     {
+        public event Action<IDamageContext> OnDeath;
+        public bool IsMaxHealth { get; }
+        public float CurrentHealth { get; }
+
         public void Heal(float amount);
     }
 }

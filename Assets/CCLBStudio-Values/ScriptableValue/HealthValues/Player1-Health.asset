@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game.Utils.HealthValue
   value: 100
   resetValueOnPlayModeExit: 0
-  initialValue: 100
+  initialValue: 90
   maxValue: 100

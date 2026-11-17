@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734637c24d1a4a73a624a46ed01f9f18, type: 3}
+  m_Name: LootTable-Enemy-Default
+  m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.Loot.LootTable
+  chanceToDrop: 1
+  entries:
+  - loot:
+      rid: 1614632079184887907
+    weight: 5
+  - loot:
+      rid: 1614632079184887908
+    weight: 3
+  - loot:
+      rid: 1614632079184887808
+    weight: 2
+  - loot:
+      rid: 1614632079184887912
+    weight: 2
+  - loot:
+      rid: 1614632079184887913
+    weight: 1
+  - loot:
+      rid: 1614632079184887914
+    weight: 2
+  - loot:
+      rid: 1614632079184887915
+    weight: 3
+  - loot:
+      rid: 1614632079184887917
+    weight: 5
+  - loot:
+      rid: 1614632079184887916
+    weight: 0.35
+  references:
+    version: 2
+    RefIds:
+    - rid: 1614632079184887808
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: 52e345171c512984ea930617bca086c7, type: 2}
+    - rid: 1614632079184887907
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: 2f1149cf1ffdfd346bdb43420f543025, type: 2}
+    - rid: 1614632079184887908
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: 14d2c3b9785acfb49a3b460e48ebbf87, type: 2}
+    - rid: 1614632079184887912
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: 6c78cce31832fd44fa8c02c78a1a62a5, type: 2}
+    - rid: 1614632079184887913
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: f477c526b9773c54481a32e1b2700d73, type: 2}
+    - rid: 1614632079184887914
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: c63efbdc92ed01e4c9dbfe1186ba092b, type: 2}
+    - rid: 1614632079184887915
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: 7015f42f87bdaa943ac4e60db6cd86d3, type: 2}
+    - rid: 1614632079184887916
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: 0df6a82da6b92a74a91eccfbae91a21a, type: 2}
+    - rid: 1614632079184887917
+      type: {class: PooledLoot, ns: CCLBStudio.Loot, asm: Assembly-CSharp}
+      data:
+        pool: {fileID: 11400000, guid: 34101bd112eebd049a9ce2dcaddcc1be, type: 2}

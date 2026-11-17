@@ -75,7 +75,7 @@ namespace Game.Stats
     }
 
     [Serializable]
-    public struct ResistanceDescriptor
+    public class ResistanceDescriptor
     {
         public IStat<int> FlatResistance => flatResistance;
         public IStat<int> PercentageResistance => percentageResistance;

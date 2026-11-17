@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef778e96765a445d9bdf584b5ebf37a9, type: 3}
+  m_Name: LootService
+  m_EditorClassIdentifier: Assembly-CSharp::CCLBStudio.Loot.LootService
+  randomSeed: 1
+  seed: 12345
+  defaultPicker: 0

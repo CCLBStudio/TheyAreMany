@@ -21,6 +21,7 @@ namespace Game.Utils
         }
         
         public bool IsZero() => Value <= 0f;
+        public bool IsMax() => Value >= maxValue;
         
         public void Decrement(float amount)
         {

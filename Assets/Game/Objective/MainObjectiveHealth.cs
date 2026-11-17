@@ -1,3 +1,4 @@
+using System;
 using CCLBStudio.EventBus;
 using Game.Damage;
 using Game.Utils;
@@ -8,6 +9,10 @@ namespace Game.Objective
 {
     public class MainObjectiveHealth : MonoBehaviour, IHealth
     {
+        public event Action<IDamageContext> OnDeath;
+        public bool IsMaxHealth => objectiveHealth.IsMax();
+        public float CurrentHealth => objectiveHealth.Value;
+
         [SerializeField] private HealthValue objectiveHealth;
         [SerializeField] private UnityEvent<IDamageContext, Vector3?> onDamagesTaken;
         
@@ -38,6 +43,7 @@ namespace Game.Objective
         private void TriggerDeath(IDamageContext ctx)
         {
             _isDead = true;
+            OnDeath?.Invoke(ctx);
             EvtBus.Raise(new ObjectiveDestroyed(ctx));
         }
         

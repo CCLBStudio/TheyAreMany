@@ -1,5 +1,5 @@
+using System;
 using CCLBStudio.EventBus;
-using CCLBStudio.ScriptableValue;
 using Game.Damage;
 using Game.Stats;
 using Game.Utils;
@@ -12,6 +12,9 @@ namespace Game.Player.Health
     public class PlayerHealth : MonoBehaviour, IPlayerBehaviour, IHealth, IResistanceProvider
     {
         public PlayerFacade Facade { get; set; }
+        public event Action<IDamageContext> OnDeath;
+        public bool IsMaxHealth => playerHealth.IsMax();
+        public float CurrentHealth => playerHealth.Value;
         public bool IsAlive => !_isDead;
 
         [SerializeField] private HealthValue playerHealth;
@@ -59,7 +62,8 @@ namespace Game.Player.Health
         {
             playerHealth.Increment(amount);
         }
-        
+
+
         private bool CheckDeath()
         {
             return playerHealth.IsZero() && !_isDead;
@@ -68,6 +72,7 @@ namespace Game.Player.Health
         private void TriggerDeath(IDamageSource source)
         {
             _isDead = true;
+            OnDeath?.Invoke(new DamageContext(source, new ComputedDamage()));
             EvtBus.Raise(new PlayerKilled(Facade, source));
         }
         

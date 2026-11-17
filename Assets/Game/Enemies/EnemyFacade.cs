@@ -1,13 +1,19 @@
+using System;
 using CCLBStudio.GlobalUpdater;
 using CCLBStudio.ScriptablePooling;
+using CCLBStudio.WaveSystem;
 using Game.Stats;
 using UnityEngine;
 
-public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
+public class EnemyFacade : MonoBehaviour, IScriptablePooledObject, IWaveEnemy
 {
     public ScriptablePool Pool { get; set; }
     public ScriptableEnemy EnemyData => enemyData;
     public ICharacterStats Stats => _stats;
+    public bool IsSpawned { get; private set; }
+    public GameObject GameObject => gameObject;
+
+    public event Action<IWaveEnemy> Despawned;
 
     private IEnemyBehaviour[] _behaviours;
     private ICharacterStats _stats;
@@ -41,6 +47,7 @@ public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
 
     public void OnObjectRequested()
     {
+        IsSpawned = true;
         foreach (var b in _behaviours)
         {
             if (b.AutoRegisterToGlobalUpdater())
@@ -63,6 +70,27 @@ public class EnemyFacade : MonoBehaviour, IScriptablePooledObject
             
             b.OnEnemyReleased();
         }
+
+        IsSpawned = false;
+        Despawned?.Invoke(this);
+    }
+
+    #endregion
+
+    #region Wave Methods
+
+    public void OnWaveSpawn(in WaveEnemySpawnContext context)
+    {
+        transform.SetPositionAndRotation(context.Pose.position, context.Pose.rotation);
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+    }
+
+    public void Despawn()
+    {
+        ReleaseSelf();
     }
 
     #endregion

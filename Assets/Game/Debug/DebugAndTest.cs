@@ -9,7 +9,6 @@ public class DebugAndTest : MonoBehaviour
     public TransitionProfile profile;
     public TransitionId transitionId;
     public List<TransitionId> transitionIds = new();
-    public Dictionary<string, string> tsss;
     [SerializeField] private Dictionary<TransitionId, TransitionProfile> profiles = new();
 
     [Button("Start Transition")]

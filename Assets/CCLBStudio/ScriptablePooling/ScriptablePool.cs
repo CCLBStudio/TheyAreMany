@@ -113,6 +113,37 @@ namespace CCLBStudio.ScriptablePooling
             return key;
         }
 
+        public GameObject RequestObjectAsGo()
+        {
+            if (!_init)
+            {
+                Debug.LogWarning($"Pool {name} has not been initialized, performing an auto initialize.");
+                Initialize();
+            }
+            
+            if (_available.Count <= 0)
+            {
+                CreatePooledObject();
+            }
+
+            var key = _available.Keys.First();
+            var obj = _available[key];
+            
+            if(!obj)
+            {
+                ClearAllMissing();
+                return RequestObjectAsGo();
+            }
+            
+            _available.Remove(key);
+            _inUse[key] = obj;
+
+            obj.SetActive(enableObjectOnRequest);
+            key.OnObjectRequested();
+
+            return obj;
+        }
+
         public T RequestObjectAs<T>() where T : IScriptablePooledObject
         {
             if (!_init)

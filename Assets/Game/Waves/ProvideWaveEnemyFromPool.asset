@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 021d1320f3dbe6741bfb0c00e2af3b36, type: 3}
+  m_Name: ProvideWaveEnemyFromPool
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Waves.ProvideWaveEnemyFromPool
+  pool: {fileID: 11400000, guid: e767b47ae9f447347b2da93a7308e1a4, type: 2}

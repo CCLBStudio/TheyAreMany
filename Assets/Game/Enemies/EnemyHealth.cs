@@ -1,3 +1,4 @@
+using System;
 using Game.Damage;
 using Game.Stats;
 using UnityEngine;
@@ -5,9 +6,12 @@ using UnityEngine.Events;
 
 namespace Game.Enemies
 {
-    public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IDamageTarget, IResistanceProvider
+    public class EnemyHealth : MonoBehaviour, IEnemyBehaviour, IHealth, IResistanceProvider
     {
         public EnemyFacade Facade { get; set; }
+        public event Action<IDamageContext> OnDeath;
+        public bool IsMaxHealth => _currentHealth >= Facade.EnemyData.MaxHealth;
+        public float CurrentHealth => _currentHealth;
 
         [SerializeField] private UnityEvent<IDamageSource> onDeath;
         [SerializeField] private UnityEvent<IDamageContext, Vector3?> onDamageTaken;
@@ -26,6 +30,8 @@ namespace Game.Enemies
                 Debug.LogWarning("EnemyHealth: No ICharacterStats component found. Using default stats.");
                 _stats = new DefaultCharacterStats();
             }
+            
+            OnDeath += context => onDeath?.Invoke(context.Source);
         }
 
         public void OnEnemyRequested()
@@ -52,10 +58,16 @@ namespace Game.Enemies
             _currentHealth -= damageContext.Damage.FinalDamage;
             if (_currentHealth <= 0f)
             {
-                onDeath?.Invoke(damageContext.Source);
+                OnDeath?.Invoke(damageContext);
             }
             
             onDamageTaken?.Invoke(damageContext, hitPoint);
         }
+
+        public void Heal(float amount)
+        {
+            
+        }
+
     }
 }

@@ -1139,6 +1139,7 @@ GameObject:
   - component: {fileID: 8757704415675234395}
   - component: {fileID: 14987284983473464}
   - component: {fileID: 3463788943122802008}
+  - component: {fileID: 2380071372577457300}
   m_Layer: 8
   m_Name: Enemy-Skeleton
   m_TagString: Untagged
@@ -1559,6 +1560,33 @@ MonoBehaviour:
       type: {class: FloatStat, ns: Game.Stats, asm: Assembly-CSharp}
       data:
         baseValue: 0
+--- !u!114 &2380071372577457300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2882988783833478545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a461a5421f64f7eae54f48272d4c5aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Loot.SpawnLootOnDeath
+  lootTable:
+    possibleLoot:
+    - rid: 1614631789517602823
+    - rid: 1614631802325696512
+  references:
+    version: 2
+    RefIds:
+    - rid: 1614631789517602823
+      type: {class: Loot, ns: Game.Loot, asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 8830663670539978141, guid: 88726fb2b81203942b4ce99cc435c6bc, type: 3}
+    - rid: 1614631802325696512
+      type: {class: Loot, ns: Game.Loot, asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 4944385003066088190, guid: 182be97bb3fa4fc45abd65e3c1d9fe95, type: 3}
 --- !u!1 &2902120151172129857
 GameObject:
   m_ObjectHideFlags: 0
